@@ -1,0 +1,13 @@
+*/deps
+*/deps/*
+*/*.toggle
+*/*.txt
+*/lit
+*/luvit
+*/luvi
+yotogi/core
+*/*.bak
+*/settings
+*/*.log
+*/discordia.json
+*/gateway.json
