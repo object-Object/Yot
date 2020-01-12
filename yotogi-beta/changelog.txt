@@ -1,0 +1,5 @@
+**v1.0** - 2019-07-30
++ Added public commands `<prefix>changelog` and `<prefix>version`
++ Started tracking changes to the bot
+* Modified appearance of public command `<prefix>mention`
+- Removed public command `<prefix>roll`

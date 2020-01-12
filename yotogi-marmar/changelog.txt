@@ -1,0 +1,31 @@
+**v1.4.0** - 2019-12-05
++ Added public command `<prefix>members` to display guild member count.
+* Fixed a bug where no feedback would be given if a ban failed, and a message would still (erroneously) be sent to the user.
+
+**v1.3.2** - 2019-11-04
+* Fixed a bug where when auto-warning for advertising, the permissions of the user being warned were checked instead of the permissions of the bot, causing auto-warnings to always fail with an "Insufficient permissions" error
+
+**v1.3.1** - 2019-10-06
++ Added public sub-command `<prefix>changelog current`
+* Fixed bug where ban messages sent to banned users didn't use the actual server name
+
+**v1.3.0** - 2019-10-06
++ Added permission info to `<prefix>staffhelp command`
+* Made required permissions be logical for each command instead of defaulting to `manageRoles`
+* Made giving a fourth warning (to ban a user) require `banMembers` permission
+
+**v1.2.1** - 2019-09-10
+* Fixed bug in staff command `<prefix>mute` where invalid unit types would error (e.g. `1z`)
+
+**v1.2.0** - 2019-09-10
+* Modified time displays to not include any units with a value of 0
+* Modified time picker of staff command `<prefix>mute` to allow multiple unit types (e.g. `2d 1h 5m` is now valid)
+
+**v1.1.0** - 2019-08-26
++ Added public commands `<prefix>8ball` and `<prefix>avatar`
+
+**v1.0.0** - 2019-07-30
++ Added public commands `<prefix>changelog` and `<prefix>version`
++ Started tracking changes to the bot
+* Modified appearance of public command `<prefix>mention`
+- Removed public command `<prefix>roll`
