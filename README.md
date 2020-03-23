@@ -15,4 +15,3 @@ Discord bot used for moderation on a few specific servers.
 * Yotogi: The original. In use on RubyChan's Nightcore server.
 * Yotogi-Marmar: In use on MarMarChan's server. Has a couple extra commands.
 * Yotogi-Remnants: In use on a private server. Has a lot of things changed.
-* Yotogi-Beta: Beta version. Probably unstable.
