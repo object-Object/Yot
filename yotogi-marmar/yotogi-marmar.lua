@@ -28,6 +28,7 @@ local persistRoles={
 	
 local token=settings[1]
 local prefix=settings[2]
+local youtubeAPIKey=settings[3]
 local minStars=2
 local icons={"https://i.imgur.com/Nasd4Zu.jpg","https://i.imgur.com/E4gkEdu.jpg","https://i.imgur.com/c8tw60A.jpg","https://i.imgur.com/xegOTLd.jpg"}
 local starEmojis={[minStars]="⭐️",[minStars+4]="🌟",[minStars+9]="💫"}
@@ -1065,10 +1066,10 @@ local pc,err=pcall(function()
 		local start,stop=lowContent:find(lowerCaseUrl,1,true)
 		if not start then print(message.content,lowerCaseUrl) end
 		local url=message.content:sub(start,stop)
-		local _,body=http.request("GET","https://www.googleapis.com/youtube/v3/videos?id="..url.."&part=snippet&key=AIzaSyC7lU5Oua4ivekChYbbdnO8zeJqi0Q6nY0")
+		local _,body=http.request("GET","https://www.googleapis.com/youtube/v3/videos?id="..url.."&part=snippet&key="..youtubeAPIKey)
 		local channelID=body:match('"channelId": "(%S+)"')
 		if channelID then
-			local _,body=http.request("GET","https://www.googleapis.com/youtube/v3/channels?id="..channelID.."&part=snippet&key=AIzaSyC7lU5Oua4ivekChYbbdnO8zeJqi0Q6nY0")
+			local res,body=http.request("GET","https://www.googleapis.com/youtube/v3/channels?id="..channelID.."&part=snippet&key="..youtubeAPIKey)
 			local authorName=body:match('"title": (%b"")'):gsub('"',""):lower()
 			if authorName then
 				if authorName:match("marmarchan") then return end
@@ -1102,10 +1103,10 @@ local pc,err=pcall(function()
 		local _,_,lowerCaseUrl=lowContent:find("youtu%.be/([a-zA-Z0-9_%-]+)")
 		local start,stop=lowContent:find(lowerCaseUrl,1,true)
 		local url=message.content:sub(start,stop)
-		local _,body=http.request("GET","https://www.googleapis.com/youtube/v3/videos?id="..url.."&part=snippet&key=AIzaSyC7lU5Oua4ivekChYbbdnO8zeJqi0Q6nY0")
+		local _,body=http.request("GET","https://www.googleapis.com/youtube/v3/videos?id="..url.."&part=snippet&key="..youtubeAPIKey)
 		local channelID=body:match('"channelId": "(%S+)"')
 		if channelID then
-			local _,body=http.request("GET","https://www.googleapis.com/youtube/v3/channels?id="..channelID.."&part=snippet&key=AIzaSyC7lU5Oua4ivekChYbbdnO8zeJqi0Q6nY0")
+			local _,body=http.request("GET","https://www.googleapis.com/youtube/v3/channels?id="..channelID.."&part=snippet&key="..youtubeAPIKey)
 			local authorName=body:match('"title": (%b"")'):gsub('"',""):lower()
 			if authorName then
 				if authorName:match("marmarchan") then return end
