@@ -27,7 +27,8 @@ end
 
 handler.sendUsage = function(channel, prefix, commandString)
 	local command = commands[commandString]
-	return utils.sendEmbed(channel, "Usage: `"..prefix..command.usage.."`", "ff0000")
+	return utils.sendEmbed(channel, "Usage: `"..prefix..command.usage.."`", "ff0000",
+		"Angled brackets represent required arguments. Square brackets represent optional arguments. Do not include the brackets in the command.")
 end
 
 return handler
