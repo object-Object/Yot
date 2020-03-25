@@ -59,7 +59,7 @@ client:on("messageCreate", function(message)
 		guildSettings = getGuildSettings(message.guild.id)
 	end
 
-	commandHandler.doCommand(message,guildSettings, conn)
+	commandHandler.doCommand(message, guildSettings, conn)
 end)
 
 client:run("Bot "..options.token)
