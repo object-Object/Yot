@@ -59,4 +59,16 @@ commandHandler.doCommand = function(message, guildSettings, conn)
 	end
 end
 
+commandHandler.doSubcommand = function(message, argString, args, guildSettings, conn, commandString)
+	local command = commands[commandString]
+	local subcommand = command.subcommands[args[1]]
+	if subcommand then
+		argString=argString:gsub("^%S+%s*","")
+		table.remove(args,1)
+		subcommand.run(message, argString, args, guildSettings, conn)
+		return true
+	end
+	return false
+end
+
 return commandHandler
