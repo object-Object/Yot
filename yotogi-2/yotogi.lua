@@ -24,7 +24,8 @@ local jsonColumns=utils.createLookupTable{
 	"command_permissions"
 }
 local booleanColumns=utils.createLookupTable{
-	"delete_command_messages"
+	"delete_command_messages",
+	"is_active"
 }
 
 local function formatRow(row)
@@ -49,6 +50,12 @@ local function getGuildSettings(id)
 	local settings,_ = conn:exec("SELECT * FROM guild_settings WHERE guild_id="..id..";","k")
 	return formatRow(settings)
 end
+
+client:on("ready", function()
+	local _,activeWarnings = conn:exec("SELECT * FROM warnings WHERE is_active=1;")
+	local _,inactiveWarnings = conn:exec("SELECT * FROM warnings WHERE is_active=0;")
+	client:setGame({name=activeWarnings.." active / "..inactiveWarnings.." inactive warnings", url="https://www.twitch.tv/ThisIsAFakeTwitchLink"})
+end)
 
 client:on("guildCreate", function(guild)
 	if not getGuildSettings(guild.id) then
