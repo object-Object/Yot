@@ -1,7 +1,7 @@
 local fs = require("fs")
 local utils = require("./miscUtils")
 
-local handler = {}
+local commandHandler = {}
 local commands = {}
 local customPermissions = {
 	botOwner = function(member)
@@ -9,7 +9,7 @@ local customPermissions = {
 	end
 }
 
-handler.load = function()
+commandHandler.load = function()
 	for _,filename in ipairs(fs.readdirSync("commands")) do
 		if filename:match("%.lua$") then
 			local command = require("./commands/"..filename)
@@ -18,18 +18,18 @@ handler.load = function()
 	end
 end
 
-handler.sendUsage = function(channel, prefix, commandString)
+commandHandler.sendUsage = function(channel, prefix, commandString)
 	local command = commands[commandString]
 	return utils.sendEmbed(channel, "Usage: `"..prefix..command.usage.."`", "ff0000",
 		"Angled brackets represent required arguments. Square brackets represent optional arguments. Do not include the brackets in the command.")
 end
 
-handler.sendPermissionError = function(channel, commandString, missingPermissions)
+commandHandler.sendPermissionError = function(channel, commandString, missingPermissions)
 	return utils.sendEmbed(channel, "You need the following permission"..utils.s(#missingPermissions).." to use this command: `"
 		..table.concat(missingPermissions,", ").."`", "ff0000")
 end
 
-handler.doCommand = function(message, guildSettings, conn)
+commandHandler.doCommand = function(message, guildSettings, conn)
 	local content = message.content:gsub("^"..utils.escapePatterns(guildSettings.prefix),"")
 		:gsub("^%<%@%!?"..message.client.user.id.."%>%s+","")
 	local commandString = content:match("^(%S+)")
@@ -53,10 +53,10 @@ handler.doCommand = function(message, guildSettings, conn)
 			local args = argString:split("%s")
 			command.run(message, argString, args, guildSettings, conn)
 		else
-			handler.sendPermissionError(message.channel, commandString, missingPermissions)
+			commandHandler.sendPermissionError(message.channel, commandString, missingPermissions)
 		end
 		if guildSettings.delete_command_messages then message:delete() end
 	end
 end
 
-return handler
+return commandHandler
