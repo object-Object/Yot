@@ -27,6 +27,7 @@ return {
 	name = "lua",
 	description = "Execute arbitrary Lua code.",
 	usage = "lua <code (may be in a full code block)>",
+	visible = false,
 	permissions = {"yotogi.botOwner"},
 	run = function(message, argString, args, guildSettings)
 		if argString=="" then
