@@ -72,12 +72,12 @@ client:on("messageCreate", function(message)
 			guildSettings = getGuildSettings(message.guild.id)
 		end
 
-		eventHandler.doEvents("messageCreate", guildSettings, message)
+		eventHandler.doEvents("client.messageCreate", guildSettings, message)
 
 		commandHandler.doCommand(message, guildSettings, conn)
 	end)
 	if not success then
-		utils.logError(client, "client.messageCreate", err)
+		utils.logError(client, "messageCreate", err)
 	end
 end)
 
