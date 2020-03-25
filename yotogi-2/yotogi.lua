@@ -14,12 +14,12 @@ discordia.extensions()
 
 local commandHandler = require("./commandHandler")
 commandHandler.load()
-local moduleHandler = require("./moduleHandler")
-moduleHandler.load()
+local eventHandler = require("./eventHandler")
+eventHandler.load()
 
 local jsonColumns=utils.createLookupTable{
 	"disabled_commands",
-	"disabled_modules",
+	"disabled_events",
 	"persistent_roles",
 	"command_permissions"
 }
@@ -72,7 +72,7 @@ client:on("messageCreate", function(message)
 			guildSettings = getGuildSettings(message.guild.id)
 		end
 
-		moduleHandler.doModules("messageCreate", guildSettings, message)
+		eventHandler.doevents("messageCreate", guildSettings, message)
 
 		commandHandler.doCommand(message, guildSettings, conn)
 	end)
