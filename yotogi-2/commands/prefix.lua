@@ -9,12 +9,12 @@ return {
 	run = function(message, argString, args, guildSettings, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings.prefix, "prefix")
-		else
-			local newPrefix = argString:gsub("%`(.+)%`","%1")
-			local stmt = conn:prepare("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?;")
-			stmt:reset():bind(newPrefix, message.guild.id):step()
-			stmt:close()
-			utils.sendEmbed(message.channel,"Prefix updated to `"..newPrefix.."`.","00ff00")
+			return
 		end
+		local newPrefix = argString:gsub("%`(.+)%`","%1")
+		local stmt = conn:prepare("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?;")
+		stmt:reset():bind(newPrefix, message.guild.id):step()
+		stmt:close()
+		utils.sendEmbed(message.channel,"Prefix updated to `"..newPrefix.."`.","00ff00")
 	end
 }
