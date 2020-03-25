@@ -2,8 +2,10 @@ local fs = require("fs")
 local utils = require("./miscUtils")
 
 local commandHandler = {}
-local commands = {}
-local customPermissions = {
+
+commandHandler.commands = {}
+
+commandHandler.customPermissions = {
 	botOwner = function(member)
 		return member.user==member.client.owner
 	end
@@ -13,13 +15,13 @@ commandHandler.load = function()
 	for _,filename in ipairs(fs.readdirSync("commands")) do
 		if filename:match("%.lua$") then
 			local command = require("./commands/"..filename)
-			commands[command.name] = command
+			commandHandler.commands[command.name] = command
 		end
 	end
 end
 
 commandHandler.sendUsage = function(channel, prefix, commandString)
-	local command = commands[commandString]
+	local command = commandHandler.commands[commandString]
 	return utils.sendEmbed(channel, "Usage: `"..prefix..command.usage.."`", "ff0000",
 		"Angled brackets represent required arguments. Square brackets represent optional arguments. Do not include the brackets in the command.")
 end
@@ -33,13 +35,13 @@ commandHandler.doCommand = function(message, guildSettings, conn)
 	local content = message.content:gsub("^"..utils.escapePatterns(guildSettings.prefix),"")
 		:gsub("^%<%@%!?"..message.client.user.id.."%>%s+","")
 	local commandString = content:match("^(%S+)")
-	local command = commands[commandString]
+	local command = commandHandler.commands[commandString]
 	if message.content~=content and command and not guildSettings.disabled_commands[commandString] then
 		local permissions = guildSettings.command_permissions[commandString] or command.permissions
 		local missingPermissions = {}
 		for _,permission in pairs(permissions) do
 			if permission:match("^yotogi%.") then
-				if not customPermissions[permission:match("^yotogi%.(.+)")](message.member) then
+				if not commandHandler.customPermissions[permission:match("^yotogi%.(.+)")](message.member) then
 					table.insert(missingPermissions, permission)
 				end
 			else
@@ -60,7 +62,7 @@ commandHandler.doCommand = function(message, guildSettings, conn)
 end
 
 commandHandler.doSubcommand = function(message, argString, args, guildSettings, conn, commandString)
-	local command = commands[commandString]
+	local command = commandHandler.commands[commandString]
 	local subcommand = command.subcommands[args[1]]
 	if subcommand then
 		argString=argString:gsub("^%S+%s*","")
