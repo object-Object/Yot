@@ -15,11 +15,28 @@ discordia.extensions()
 local commandHandler = require("./commandHandler")
 commandHandler.load()
 
-local jsonGuildSettings=utils.createLookupTable{
+local jsonColumns=utils.createLookupTable{
 	"disabled_commands",
 	"persistent_roles",
 	"command_permissions"
 }
+local booleanColumns=utils.createLookupTable{
+	"delete_command_messages"
+}
+
+local function formatRow(row)
+	if type(row)~="table" then return end
+	for k,v in pairs(row) do
+		v=v[1]
+		if jsonColumns[k] then
+			v=json.decode(v)
+		elseif booleanColumns[k] then
+			v=v==1LL
+		end
+		row[k]=v
+	end
+	return row
+end
 
 local function setupGuild(id)
 	conn:exec("INSERT INTO guild_settings (guild_id) VALUES ("..id..")")
@@ -27,15 +44,12 @@ end
 
 local function getGuildSettings(id)
 	local settings,_ = conn:exec("SELECT * FROM guild_settings WHERE guild_id="..id..";","k")
-	for k,v in pairs(settings) do
-		v=v[1]
-		if jsonGuildSettings[k] then
-			v=json.decode(v)
-		end
-		settings[k]=v
-	end
-	return settings
+	return formatRow(settings)
 end
+
+client:on("guildCreate", function(guild)
+
+end)
 
 client:on("messageCreate", function(message)
 	if message.author.bot then return end
