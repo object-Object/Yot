@@ -72,5 +72,6 @@ return {
 
 		if lines~="" then message:reply(lines) end
 		if iolines~="" then message:reply(iolines) end
-	end
+	end,
+	subcommands = {}
 }

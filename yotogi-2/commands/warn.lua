@@ -6,5 +6,6 @@ return {
 	permissions = {"kickMembers","banMembers"},
 	run = function(message, argString, args, guildSettings, conn)
 		
-	end
+	end,
+	subcommands = {}
 }

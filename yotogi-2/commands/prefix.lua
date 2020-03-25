@@ -17,5 +17,6 @@ return {
 		stmt:reset():bind(newPrefix, message.guild.id):step()
 		stmt:close()
 		utils.sendEmbed(message.channel,"Prefix updated to `"..newPrefix.."`.","00ff00")
-	end
+	end,
+	subcommands = {}
 }
