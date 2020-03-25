@@ -17,7 +17,7 @@ eventHandler.load = function()
 	end
 end
 
-eventHandler.doevents = function(discordEvent, guildSettings, ...)
+eventHandler.doEvents = function(discordEvent, guildSettings, ...)
 	for modName, mod in pairs(events) do
 		if mod.discordEvent==discordEvent and not guildSettings.disabled_events[modName] then
 			mod.run(guildSettings, ...)

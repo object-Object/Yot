@@ -72,7 +72,7 @@ client:on("messageCreate", function(message)
 			guildSettings = getGuildSettings(message.guild.id)
 		end
 
-		eventHandler.doevents("messageCreate", guildSettings, message)
+		eventHandler.doEvents("messageCreate", guildSettings, message)
 
 		commandHandler.doCommand(message, guildSettings, conn)
 	end)
