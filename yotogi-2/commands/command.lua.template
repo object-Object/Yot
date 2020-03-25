@@ -6,9 +6,15 @@ return {
 	usage = "command <parameter> [optional parameter]", -- usage for help command and errors
 	visible = true, -- whether or not this command shows up in help and is togglable by users
 	permissions = {}, -- required permissions to use the command
-	run = function(self, message, argString, args, guildSettings, conn) -- actual function executed when the command is used
+	run = function(self, message, argString, args, guildSettings, conn) -- function called when the command is used
 		if commandHandler.doSubcommand(message, argString, args, guildSettings, conn, self.name) then return end -- required for subcommands to work
 		message:reply("Hello World!")
+	end,
+	onEnable = function(self, message, guildSettings) -- function called when this command is enabled, return true if enabling can proceed
+		return true
+	end,
+	onDisable = function(self, message, guildSettings) -- function called when this command is disabled, return true if disabling can proceed
+		return true
 	end,
 	subcommands = { -- table of subcommands for this command (can be empty, and multiple levels of subcommands should work)
 
@@ -17,7 +23,7 @@ return {
 			description = "This is an example subcommand.", -- description for help command
 			usage = "command subcommand <parameter> [optional parameter]", -- usage for help command and errors
 			visible = true, -- whether or not this command shows up in help
-			run = function(self, message, argString, args, guildSettings, conn) -- actual function executed when the command is used
+			run = function(self, message, argString, args, guildSettings, conn) -- function called when the command is used
 				message:reply("Hello World 2!")
 			end
 		}

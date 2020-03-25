@@ -73,5 +73,11 @@ return {
 		if lines~="" then message:reply(lines) end
 		if iolines~="" then message:reply(iolines) end
 	end,
+	onEnable = function(self, message, guildSettings)
+		return true
+	end,
+	onDisable = function(self, message, guildSettings)
+		return true
+	end,
 	subcommands = {}
 }

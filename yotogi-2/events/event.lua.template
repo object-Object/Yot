@@ -3,9 +3,15 @@ return {
 	description = "This is an example event.", -- description of the event, used in the events command
 	visible = true, -- whether or not this event shows up in events and is togglable by users
 	discordEvent = "client.messageCreate", -- Discord event in which the event is run
-	run = function(guildSettings, message) -- function that runs each time the event happens
+	run = function(guildSettings, message) -- function called each time the event happens
 		if message.content:match("Hello There") then
 			message:reply("General Kenobi!")
 		end
+	end,
+	onEnable = function(self, message, guildSettings) -- function called when this event is enabled, return true if enabling can proceed
+		return true
+	end,
+	onDisable = function(self, message, guildSettings) -- function called when this event is disabled, return true if disabling can proceed
+		return true
 	end
 }

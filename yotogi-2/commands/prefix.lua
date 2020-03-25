@@ -21,6 +21,12 @@ return {
 		stmt:close()
 		utils.sendEmbed(message.channel,"Prefix updated to `"..newPrefix.."`.","00ff00")
 	end,
+	onEnable = function(self, message, guildSettings)
+		return true
+	end,
+	onDisable = function(self, message, guildSettings)
+		return true
+	end,
 	subcommands = {
 
 		reset = {
