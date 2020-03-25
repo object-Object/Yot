@@ -30,4 +30,8 @@ utils.sendEmbed = function(channel,text,color,footer_text,footer_icon)
 	return msg
 end
 
+utils.s = function(num)
+	return num==1 and "" or "s"
+end
+
 return utils
