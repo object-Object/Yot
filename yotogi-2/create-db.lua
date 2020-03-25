@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS guild_settings (
 	persistent_roles TEXT DEFAULT "{}",
 	disabled_commands TEXT DEFAULT "{}",
 	command_permissions TEXT DEFAULT "{}",
+	delete_command_messages BOOLEAN DEFAULT 0 NOT NULL CHECK (delete_command_messages IN (0,1)),
 	prefix TEXT DEFAULT "]]..options.defaultPrefix..[[",
 	warning_length REAL DEFAULT ]]..options.warningLength..[[,
 	default_mute_length REAL DEFAULT ]]..options.muteLength..[[,
@@ -20,7 +21,7 @@ CREATE TABLE IF NOT EXISTS warnings (
 	user_id TEXT,
 	level REAL,
 	end_timestamp REAL,
-	is_active BOOLEAN NOT NULL CHECK (is_active IN (0,1)),
+	is_active BOOLEAN DEFAULT 1 NOT NULL CHECK (is_active IN (0,1)),
 	PRIMARY KEY (guild_id, user_id),
 	FOREIGN KEY (guild_id) REFERENCES guild_settings(guild_id)
 );
@@ -29,7 +30,7 @@ CREATE TABLE IF NOT EXISTS mutes (
 	user_id TEXT,
 	duration REAL,
 	end_timestamp REAL,
-	is_active BOOLEAN NOT NULL CHECK (is_active IN (0,1)),
+	is_active BOOLEAN DEFAULT 1 NOT NULL CHECK (is_active IN (0,1)),
 	PRIMARY KEY (guild_id, user_id),
 	FOREIGN KEY (guild_id) REFERENCES guild_settings(guild_id)
 );
