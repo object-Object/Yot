@@ -2,7 +2,7 @@ return {
 	name = "command",
 	description = "This is an example command.",
 	usage = "command <parameter> [optional parameter]",
-	requiredPermissions = {},
+	permissions = {},
 	run = function(message, argString, args, guildSettings, conn)
 		message:reply("Hello World!")
 	end

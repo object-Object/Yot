@@ -5,7 +5,7 @@ return {
 	name = "prefix",
 	description = "Change the command prefix for this bot in this server.",
 	usage = "prefix <new prefix (may be in an inline code block)>",
-	requiredPermissions = {"administrator"},
+	permissions = {"administrator"},
 	run = function(message, argString, args, guildSettings, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings.prefix, "prefix")
