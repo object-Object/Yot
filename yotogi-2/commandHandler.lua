@@ -34,7 +34,7 @@ commandHandler.doCommand = function(message, guildSettings, conn)
 		:gsub("^%<%@%!?"..message.client.user.id.."%>%s+","")
 	local commandString = content:match("^(%S+)")
 	local command = commands[commandString]
-	if command and not guildSettings.disabled_commands[commandString] then
+	if message.content~=content and command and not guildSettings.disabled_commands[commandString] then
 		local permissions = guildSettings.command_permissions[commandString] or command.permissions
 		local missingPermissions = {}
 		for _,permission in pairs(permissions) do
