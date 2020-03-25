@@ -2,7 +2,7 @@ return {
 	name = "event", -- name of the event, used in the events command
 	description = "This is an example event.", -- description of the event, used in the events command
 	visible = true, -- whether or not this event shows up in events and is togglable by users
-	discordEvent = "messageCreate", -- Discord event in which the event is run
+	discordEvent = "client.messageCreate", -- Discord event in which the event is run
 	run = function(guildSettings, message) -- function that runs each time the event happens
 		if message.content:match("Hello There") then
 			message:reply("General Kenobi!")

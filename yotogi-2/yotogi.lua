@@ -77,7 +77,7 @@ client:on("messageCreate", function(message)
 		commandHandler.doCommand(message, guildSettings, conn)
 	end)
 	if not success then
-		utils.logError(client, "messageCreate", err)
+		utils.logError(client, "client.messageCreate", err)
 	end
 end)
 
