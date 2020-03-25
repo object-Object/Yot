@@ -1,9 +1,10 @@
 return {
-	name = "command",
-	description = "This is an example command.",
-	usage = "command <parameter> [optional parameter]",
-	permissions = {},
-	run = function(message, argString, args, guildSettings, conn)
+	name = "command", -- name of the command and what users type to use it
+	description = "This is an example command.", -- description for help command
+	usage = "command <parameter> [optional parameter]", -- usage for help command and errors
+	visible = true, -- whether or not this command shows up in help and is togglable by users
+	permissions = {}, -- required permissions to use the command
+	run = function(message, argString, args, guildSettings, conn) -- actual function executed when the command is used
 		message:reply("Hello World!")
 	end
 }
