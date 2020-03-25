@@ -1,0 +1,10 @@
+return {
+	name = "module",
+	description = "This is an example module.",
+	event = "messageCreate",
+	run = function(guildSettings, message)
+		if message.content:match("Hello There") then
+			message:reply("General Kenobi!")
+		end
+	end
+}

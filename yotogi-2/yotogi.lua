@@ -14,9 +14,12 @@ discordia.extensions()
 
 local commandHandler = require("./commandHandler")
 commandHandler.load()
+local moduleHandler = require("./moduleHandler")
+moduleHandler.load()
 
 local jsonColumns=utils.createLookupTable{
 	"disabled_commands",
+	"disabled_modules",
 	"persistent_roles",
 	"command_permissions"
 }
@@ -48,7 +51,9 @@ local function getGuildSettings(id)
 end
 
 client:on("guildCreate", function(guild)
-
+	if not getGuildSettings(guild.id) then
+		setupGuild(guild.id)
+	end
 end)
 
 client:on("messageCreate", function(message)
@@ -58,6 +63,8 @@ client:on("messageCreate", function(message)
 		setupGuild(message.guild.id)
 		guildSettings = getGuildSettings(message.guild.id)
 	end
+
+	moduleHandler.doModules("messageCreate", guildSettings, message)
 
 	commandHandler.doCommand(message, guildSettings, conn)
 end)

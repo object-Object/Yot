@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS guild_settings (
 	guild_id TEXT PRIMARY KEY,
 	persistent_roles TEXT DEFAULT "{}",
 	disabled_commands TEXT DEFAULT "{}",
+	disabled_modules TEXT DEFAULT "{}",
 	command_permissions TEXT DEFAULT "{}",
 	delete_command_messages BOOLEAN DEFAULT 0 NOT NULL CHECK (delete_command_messages IN (0,1)),
 	prefix TEXT DEFAULT "]]..options.defaultPrefix..[[",
