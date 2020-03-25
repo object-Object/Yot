@@ -30,6 +30,17 @@ utils.sendEmbed = function(channel,text,color,footer_text,footer_icon)
 	return msg
 end
 
+utils.logError = function(client, section, err)
+	return client.owner:send{
+		embed = {
+			title = "Bot crashed!",
+			description = "```\n"..err.."```",
+			color = discordia.Color.fromHex("ff0000").value,
+			timestamp = discordia.Date():toISO('T', 'Z')
+		}
+	}
+end
+
 utils.s = function(num)
 	return num==1 and "" or "s"
 end

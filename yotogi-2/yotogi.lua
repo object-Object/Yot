@@ -57,16 +57,21 @@ client:on("guildCreate", function(guild)
 end)
 
 client:on("messageCreate", function(message)
-	if message.author.bot then return end
-	local guildSettings = getGuildSettings(message.guild.id)
-	if not guildSettings then
-		setupGuild(message.guild.id)
-		guildSettings = getGuildSettings(message.guild.id)
+	local success, err = pcall(function()
+		if message.author.bot then return end
+		local guildSettings = getGuildSettings(message.guild.id)
+		if not guildSettings then
+			setupGuild(message.guild.id)
+			guildSettings = getGuildSettings(message.guild.id)
+		end
+
+		moduleHandler.doModules("messageCreate", guildSettings, message)
+
+		commandHandler.doCommand(message, guildSettings, conn)
+	end)
+	if not success then
+		utils.logError(client, "messageCreate", err)
 	end
-
-	moduleHandler.doModules("messageCreate", guildSettings, message)
-
-	commandHandler.doCommand(message, guildSettings, conn)
 end)
 
 client:run("Bot "..options.token)
