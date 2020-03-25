@@ -53,7 +53,7 @@ commandHandler.doCommand = function(message, guildSettings, conn)
 		if #missingPermissions==0 then
 			local argString = content:gsub("^"..commandString.."%s*","")
 			local args = argString:split("%s")
-			command.run(message, argString, args, guildSettings, conn)
+			command:run(message, argString, args, guildSettings, conn)
 		else
 			commandHandler.sendPermissionError(message.channel, commandString, missingPermissions)
 		end
@@ -67,7 +67,7 @@ commandHandler.doSubcommand = function(message, argString, args, guildSettings, 
 	if subcommand then
 		argString=argString:gsub("^%S+%s*","")
 		table.remove(args,1)
-		subcommand.run(message, argString, args, guildSettings, conn)
+		subcommand:run(message, argString, args, guildSettings, conn)
 		return true
 	end
 	return false
