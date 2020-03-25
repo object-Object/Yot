@@ -1,0 +1,17 @@
+local settings={
+	token="token", -- Discord bot token
+	youtubeAPIKey="key", -- your API key for the YouTube API, used for checking video posts for advertising
+	clientOptions={ -- client options for Discordia
+		cacheAllMembers=true
+	},
+	-- the following settings are defaults used in the database setup
+	-- changing them here after setting up the database WILL NOT affect the values in the database
+	-- they are here because the bot uses them in certain messages to users
+	defaultPrefix="$", -- default command prefix
+	warningLength=604800, -- default warning length in seconds
+	warningKickLevel=-1, -- default warning level at which to kick the user when reached (-1 to disable)
+	warningBanLevel=4, -- default warning level at which to ban the user when reached (-1 to disable)
+	muteLength=3600, -- default mute length in seconds
+}
+
+return settings
