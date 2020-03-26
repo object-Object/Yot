@@ -15,7 +15,6 @@ utils.createLookupTable = function(input)
 end
 
 utils.sendEmbed = function(channel,text,color,footer_text,footer_icon)
-	if not (channel and text) then return end
 	local colorValue=color and discordia.Color.fromHex(color).value or nil
 	local msg=channel:send{
 		embed={
