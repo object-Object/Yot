@@ -4,6 +4,7 @@ local utils = require("./miscUtils")
 local commandHandler = {}
 
 commandHandler.commands = {}
+commandHandler.sortedCommandNames = {}
 
 commandHandler.customPermissions = {
 	botOwner = function(member)
@@ -11,19 +12,28 @@ commandHandler.customPermissions = {
 	end
 }
 
+commandHandler.strings = { -- bits of text used in multiple places that should be consistent
+	usageFooter = "Angled brackets represent required arguments. Square brackets represent optional arguments. Do not include the brackets in the command."
+}
+
 commandHandler.load = function()
 	for _,filename in ipairs(fs.readdirSync("commands")) do
 		if filename:match("%.lua$") then
 			local command = require("./commands/"..filename)
 			commandHandler.commands[command.name] = command
+			table.insert(commandHandler.sortedCommandNames, command.name)
 		end
 	end
+	table.sort(commandHandler.sortedCommandNames)
+end
+
+commandHandler.stripPrefix = function(str, guildSettings, client)
+	return str:gsub("^"..utils.escapePatterns(guildSettings.prefix),""):gsub("^%<%@%!?"..client.user.id.."%>%s+","")
 end
 
 commandHandler.sendUsage = function(channel, prefix, commandString)
 	local command = commandHandler.commands[commandString]
-	return utils.sendEmbed(channel, "Usage: `"..prefix..command.usage.."`", "ff0000",
-		"Angled brackets represent required arguments. Square brackets represent optional arguments. Do not include the brackets in the command.")
+	return utils.sendEmbed(channel, "Usage: `"..prefix..command.usage.."`", "ff0000", commandHandler.strings.usageFooter)
 end
 
 commandHandler.sendPermissionError = function(channel, commandString, missingPermissions)
@@ -32,8 +42,7 @@ commandHandler.sendPermissionError = function(channel, commandString, missingPer
 end
 
 commandHandler.doCommand = function(message, guildSettings, conn)
-	local content = message.content:gsub("^"..utils.escapePatterns(guildSettings.prefix),"")
-		:gsub("^%<%@%!?"..message.client.user.id.."%>%s+","")
+	local content = commandHandler.stripPrefix(message.content, guildSettings, message.client)
 	local commandString = content:match("^(%S+)")
 	local command = commandHandler.commands[commandString]
 	if message.content~=content and command and not guildSettings.disabled_commands[commandString] then
