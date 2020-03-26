@@ -19,13 +19,13 @@ return {
 	subcommands = { -- table of subcommands for this command (can be empty, and multiple levels of subcommands should work)
 
 		subcommand = {
-			name = "subcommand", -- name of the command and what users type to use it
+			name = "command subcommand", -- name of the command and what users type to use it
 			description = "This is an example subcommand.", -- description for help command
 			usage = "command subcommand <parameter> [optional parameter]", -- usage for help command and errors
-			visible = true, -- whether or not this command shows up in help
 			run = function(self, message, argString, args, guildSettings, conn) -- function called when the command is used
 				message:reply("Hello World 2!")
-			end
+			end,
+			subcommands = {}
 		}
 
 	}

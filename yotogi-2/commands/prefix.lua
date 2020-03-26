@@ -30,17 +30,16 @@ return {
 	subcommands = {
 
 		reset = {
-			name = "reset",
+			name = "prefix reset",
 			description = "Reset the command prefix for Yotogi in this server.",
 			usage = "prefix reset",
-			visible = true,
-			permissions = {"administrator"},
 			run = function(self, message, argString, args, guildSettings, conn)
 				local stmt = conn:prepare("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?;")
 				stmt:reset():bind(options.defaultPrefix, message.guild.id):step()
 				stmt:close()
 				utils.sendEmbed(message.channel,"Prefix reset to `"..options.defaultPrefix.."`.","00ff00")
-			end
+			end,
+			subcommands = {}
 		}
 
 	}
