@@ -52,8 +52,8 @@ local function getGuildSettings(id)
 end
 
 client:on("ready", function()
-	local _,activeWarnings = conn:exec("SELECT * FROM warnings WHERE is_active=1;")
-	local _,inactiveWarnings = conn:exec("SELECT * FROM warnings WHERE is_active=0;")
+	local _,activeWarnings = conn:exec("SELECT * FROM warnings WHERE is_active=1;","k")
+	local _,inactiveWarnings = conn:exec("SELECT * FROM warnings WHERE is_active=0;","k")
 	client:setGame({name=activeWarnings.." active / "..inactiveWarnings.." inactive warnings", url="https://www.twitch.tv/ThisIsAFakeTwitchLink"})
 end)
 
