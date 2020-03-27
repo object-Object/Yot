@@ -2,11 +2,23 @@ local discordia = require("discordia")
 local commandHandler = require("../commandHandler")
 local utils = require("../miscUtils")
 
-local function showMainHelp(message, guildSettings)
+local function appendSubcommands(str, indent, command)
+	for subcommandString, subcommand in pairs(command.subcommands) do
+		str = str..indent..subcommandString.."\n"
+		str = appendSubcommands(str, indent.."  ", subcommand)
+	end
+	return str
+end
+
+local function showMainHelp(message, guildSettings, showSubcommands)
 	local output = "```\n"
 	for _, commandString in ipairs(commandHandler.sortedCommandNames) do
-		if commandHandler.commands[commandString].visible and not guildSettings.disabled_commands[commandString] then
+		local command = commandHandler.commands[commandString]
+		if command.visible and not guildSettings.disabled_commands[commandString] then
 			output = output..guildSettings.prefix..commandString.."\n"
+			if showSubcommands then
+				output = appendSubcommands(output, "  ", command)
+			end
 		end
 	end
 	output = output:gsub("\n$","").."```"
@@ -60,9 +72,10 @@ return {
 	visible = true, -- whether or not this command shows up in help and is togglable by users
 	permissions = {}, -- required permissions to use the command
 	run = function(self, message, argString, args, guildSettings, conn) -- function called when the command is used
+		if commandHandler.doSubcommand(message, argString, args, guildSettings, conn, self.name) then return end
 		if argString=="" then
 			-- show normal help menu
-			showMainHelp(message, guildSettings)
+			showMainHelp(message, guildSettings, false)
 		else
 			-- show command-specific help
 			local baseCommandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
@@ -90,7 +103,7 @@ return {
 				end
 			else
 				-- command not found
-				showMainHelp(message, guildSettings)
+				showMainHelp(message, guildSettings, false)
 			end
 		end
 	end,
@@ -100,5 +113,17 @@ return {
 	onDisable = function(self, message, guildSettings) -- function called when this command is disabled, return true if disabling can proceed
 		return true
 	end,
-	subcommands = {}
+	subcommands = {
+
+		subcommands = {
+			name = "help subcommands",
+			description = "Show the help menu with the subcommands for each command listed.",
+			usage = "help subcommands",
+			run = function(self, message, argString, args, guildSettings, conn)
+				showMainHelp(message, guildSettings, true)
+			end,
+			subcommands = {}
+		}
+
+	}
 }
