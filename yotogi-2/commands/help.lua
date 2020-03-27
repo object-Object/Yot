@@ -39,7 +39,7 @@ local function showCommandHelp(message, guildSettings, baseCommandString, comman
 		message.channel:send{
 			embed = {
 				title = guildSettings.prefix..command.name,
-				description = guildSettings.prefix..baseCommandString.." is disabled in this server.",
+				description = "`"..guildSettings.prefix..baseCommandString.."` is disabled in this server.",
 				color = discordia.Color.fromHex("ff0000").value
 			}
 		}
