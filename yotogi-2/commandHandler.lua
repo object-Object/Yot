@@ -1,10 +1,12 @@
 local fs = require("fs")
 local utils = require("./miscUtils")
+local discordia = require("discordia")
 
 local commandHandler = {}
 
 commandHandler.commands = {}
 commandHandler.sortedCommandNames = {}
+commandHandler.sortedPermissionNames = {}
 
 commandHandler.customPermissions = {
 	botOwner = function(member)
@@ -25,6 +27,8 @@ commandHandler.load = function()
 		end
 	end
 	table.sort(commandHandler.sortedCommandNames)
+	commandHandler.sortedPermissionNames = table.keys(discordia.enums.permission)
+	table.sort(commandHandler.sortedPermissionNames)
 end
 
 commandHandler.stripPrefix = function(str, guildSettings, client)
@@ -71,7 +75,12 @@ commandHandler.doCommand = function(message, guildSettings, conn)
 end
 
 commandHandler.doSubcommand = function(message, argString, args, guildSettings, conn, commandString)
-	local command = commandHandler.commands[commandString]
+	local splitCommandString = string.split(commandString, " ")
+	local command = commandHandler.commands[splitCommandString[1]]
+	for i=2, #splitCommandString do -- go through commandString to get the command object of the deepest subcommand
+		command = command.subcommands[splitCommandString[i]]
+	end
+
 	local subcommand = command.subcommands[args[1]]
 	if subcommand then
 		argString=argString:gsub("^%S+%s*","")
