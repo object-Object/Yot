@@ -72,7 +72,7 @@ return {
 	visible = true, -- whether or not this command shows up in help and is togglable by users
 	permissions = {}, -- required permissions to use the command
 	run = function(self, message, argString, args, guildSettings, conn) -- function called when the command is used
-		if commandHandler.doSubcommand(message, argString, args, guildSettings, conn, self.name) then return end
+		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
 		if argString=="" then
 			-- show normal help menu
 			showMainHelp(message, guildSettings, false)

@@ -8,7 +8,7 @@ return {
 	visible = true,
 	permissions = {"administrator"},
 	run = function(self, message, argString, args, guildSettings, conn)
-		if commandHandler.doSubcommand(message, argString, args, guildSettings, conn, self.name) then return end
+		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
 		
 	end,
 	onEnable = function(self, message, guildSettings)
@@ -24,7 +24,7 @@ return {
 			description = "List all commands and whether they are enabled or disabled.",
 			usage = "settings commands",
 			run = function(self, message, argString, args, guildSettings, conn)
-				if commandHandler.doSubcommand(message, argString, args, guildSettings, conn, self.name) then return end
+				if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
 
 			end,
 			subcommands = {
@@ -54,7 +54,7 @@ return {
 					description = "Set the permissions required to use a command.",
 					usage = "settings commands permissions <command> <permission1> [permission2 permission3 ...]",
 					run = function(self, message, argString, args, guildSettings, conn)
-						if commandHandler.doSubcommand(message, argString, args, guildSettings, conn, self.name) then return end
+						if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
 
 					end,
 					subcommands = {

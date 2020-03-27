@@ -45,7 +45,7 @@ commandHandler.sendPermissionError = function(channel, commandString, missingPer
 		..table.concat(missingPermissions,", ").."`", "ff0000")
 end
 
-commandHandler.doCommand = function(message, guildSettings, conn)
+commandHandler.doCommands = function(message, guildSettings, conn)
 	local content = commandHandler.stripPrefix(message.content, guildSettings, message.client)
 	local commandString = content:match("^(%S+)")
 	local command = commandHandler.commands[commandString]
@@ -74,7 +74,7 @@ commandHandler.doCommand = function(message, guildSettings, conn)
 	end
 end
 
-commandHandler.doSubcommand = function(message, argString, args, guildSettings, conn, commandString)
+commandHandler.doSubcommands = function(message, argString, args, guildSettings, conn, commandString)
 	local splitCommandString = string.split(commandString, " ")
 	local command = commandHandler.commands[splitCommandString[1]]
 	for i=2, #splitCommandString do -- go through commandString to get the command object of the deepest subcommand

@@ -9,7 +9,7 @@ return {
 	visible = true,
 	permissions = {"administrator"},
 	run = function(self, message, argString, args, guildSettings, conn)
-		if commandHandler.doSubcommand(message, argString, args, guildSettings, conn, self.name) then return end
+		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
 
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
