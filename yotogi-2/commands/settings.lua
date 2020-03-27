@@ -1,5 +1,7 @@
 local commandHandler = require("../commandHandler")
 local discordia = require("discordia")
+local utils = require("../miscUtils")
+local json = require("json")
 
 return {
 	name = "settings",
@@ -34,7 +36,23 @@ return {
 					description = "Enable a disabled command.",
 					usage = "settings commands enable <command>",
 					run = function(self, message, argString, args, guildSettings, conn)
-						
+						local commandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
+						if commandString=="settings" then
+							utils.sendEmbed(message.channel, "Enabling/disabling `"..guildSettings.prefix.."settings` is not permitted.", "ff0000")
+						elseif commandHandler.commands[commandString] then
+							if guildSettings.disabled_commands[commandString] then
+								guildSettings.disabled_commands[commandString] = nil
+								local encodedSetting = json.encode(guildSettings.disabled_commands)
+								local stmt = conn:prepare("UPDATE guild_settings SET disabled_commands = ? WHERE guild_id = ?;")
+								stmt:reset():bind(encodedSetting, message.guild.id):step()
+								stmt:close()
+								utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is now enabled.", "00ff00")
+							else
+								utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already enabled.", "ff0000")
+							end
+						else
+							utils.sendEmbed(message.channel, "Command `"..guildSettings.prefix..commandString.."` not found.", "ff0000")
+						end
 					end,
 					subcommands = {}
 				},
@@ -44,7 +62,23 @@ return {
 					description = "Disable a command.",
 					usage = "settings commands disable <command>",
 					run = function(self, message, argString, args, guildSettings, conn)
-						
+						local commandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
+						if commandString=="settings" then
+							utils.sendEmbed(message.channel, "Enabling/disabling `"..guildSettings.prefix.."settings` is not permitted.", "ff0000")
+						elseif commandHandler.commands[commandString] then
+							if not guildSettings.disabled_commands[commandString] then
+								guildSettings.disabled_commands[commandString] = true
+								local encodedSetting = json.encode(guildSettings.disabled_commands)
+								local stmt = conn:prepare("UPDATE guild_settings SET disabled_commands = ? WHERE guild_id = ?;")
+								stmt:reset():bind(encodedSetting, message.guild.id):step()
+								stmt:close()
+								utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is now disabled.", "00ff00")
+							else
+								utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already disabled.", "ff0000")
+							end
+						else
+							utils.sendEmbed(message.channel, "Command `"..guildSettings.prefix..commandString.."` not found.", "ff0000")
+						end
 					end,
 					subcommands = {}
 				},
