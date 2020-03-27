@@ -1,0 +1,32 @@
+local commandHandler = require("../commandHandler")
+
+return {
+	name = "command",
+	description = "",
+	usage = "",
+	visible = true,
+	permissions = {},
+	run = function(self, message, argString, args, guildSettings, conn)
+		if commandHandler.doSubcommand(message, argString, args, guildSettings, conn, self.name) then return end
+		
+	end,
+	onEnable = function(self, message, guildSettings)
+		return true
+	end,
+	onDisable = function(self, message, guildSettings)
+		return true
+	end,
+	subcommands = {
+
+		subcommand = {
+			name = "command subcommand",
+			description = "",
+			usage = "",
+			run = function(self, message, argString, args, guildSettings, conn)
+				
+			end,
+			subcommands = {}
+		}
+
+	}
+}
