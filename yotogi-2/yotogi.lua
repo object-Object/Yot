@@ -66,6 +66,7 @@ end)
 client:on("messageCreate", function(message)
 	local success, err = pcall(function()
 		if message.author.bot then return end
+		if not message.guild then return end
 		local guildSettings = getGuildSettings(message.guild.id)
 		if not guildSettings then
 			setupGuild(message.guild.id)
