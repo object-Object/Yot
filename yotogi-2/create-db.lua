@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS guild_settings (
 	warning_length REAL DEFAULT ]]..options.warningLength..[[,
 	default_mute_length REAL DEFAULT ]]..options.muteLength..[[,
 	warning_kick_level REAL DEFAULT ]]..options.warningKickLevel..[[,
-	warning_ban_level REAL DEFAULT ]]..options.warningBanLevel..[[
+	warning_ban_level REAL DEFAULT ]]..options.warningBanLevel..[[,
+	log_channel TEXT
 );
 CREATE TABLE IF NOT EXISTS warnings (
 	guild_id TEXT,
