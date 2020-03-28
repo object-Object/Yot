@@ -34,37 +34,6 @@ local function showMainHelp(message, guildSettings, showSubcommands)
 	}
 end
 
-local function showCommandHelp(message, guildSettings, baseCommandString, command, permissions)
-	if guildSettings.disabled_commands[baseCommandString] then
-		message.channel:send{
-			embed = {
-				title = guildSettings.prefix..command.name,
-				description = "`"..guildSettings.prefix..baseCommandString.."` is disabled in this server.",
-				color = discordia.Color.fromHex("ff0000").value
-			}
-		}
-	else
-		local subcommandsKeys = table.keys(command.subcommands)
-		local permissionsString = #permissions>0 and "`"..table.concat(permissions, ", ").."`" or "None"
-		local subcommandsString = #subcommandsKeys>0 and "`"..table.concat(subcommandsKeys, "`, `").."`" or "None"
-		message.channel:send{
-			embed = {
-				title = guildSettings.prefix..command.name,
-				description = command.description,
-				fields = {
-					{name = "Required permissions", value = permissionsString},
-					{name = "Subcommands", value = subcommandsString},
-					{name = "Usage", value = "`"..guildSettings.prefix..command.usage.."`"}
-				},
-				color = discordia.Color.fromHex("00ff00").value,
-				footer = {
-					text = commandHandler.strings.usageFooter
-				}
-			}
-		}
-	end
-end
-
 return {
 	name = "help", -- name of the command and what users type to use it
 	description = "Show the help menu or info for a command.", -- description for help command
@@ -94,12 +63,12 @@ return {
 						end
 					end
 					if subcommand then
-						showCommandHelp(message, guildSettings, baseCommandString, subcommand, permissions)
+						commandHandler.sendCommandHelp(message, guildSettings, baseCommandString, subcommand, permissions)
 					else
-						showCommandHelp(message, guildSettings, baseCommandString, currentCommand, permissions)
+						commandHandler.sendCommandHelp(message, guildSettings, baseCommandString, currentCommand, permissions)
 					end
 				else
-					showCommandHelp(message, guildSettings, baseCommandString, command, permissions)
+					commandHandler.sendCommandHelp(message, guildSettings, baseCommandString, command, permissions)
 				end
 			else
 				-- command not found
