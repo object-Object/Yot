@@ -45,24 +45,34 @@ commandHandler.sendUsage = function(channel, prefix, commandString)
 end
 
 commandHandler.sendCommandHelp = function(message, guildSettings, baseCommandString, command, permissions)
-	local subcommandsKeys = table.keys(command.subcommands)
-	local permissionsString = #permissions>0 and "`"..table.concat(permissions, ", ").."`" or "None"
-	local subcommandsString = #subcommandsKeys>0 and "`"..table.concat(subcommandsKeys, "`, `").."`" or "None"
-	message.channel:send{
-		embed = {
-			title = guildSettings.prefix..command.name,
-			description = command.description,
-			fields = {
-				{name = "Required permissions", value = permissionsString},
-				{name = "Subcommands", value = subcommandsString},
-				{name = "Usage", value = "`"..guildSettings.prefix..command.usage.."`"}
-			},
-			color = discordia.Color.fromHex("00ff00").value,
-			footer = {
-				text = commandHandler.strings.usageFooter
+	if guildSettings.disabled_commands[baseCommandString] then
+		message.channel:send{
+			embed = {
+				title = guildSettings.prefix..command.name,
+				description = "`"..guildSettings.prefix..baseCommandString.."` is disabled in this server.",
+				color = discordia.Color.fromHex("ff0000").value
 			}
 		}
-	}
+	else
+		local subcommandsKeys = table.keys(command.subcommands)
+		local permissionsString = #permissions>0 and "`"..table.concat(permissions, ", ").."`" or "None"
+		local subcommandsString = #subcommandsKeys>0 and "`"..table.concat(subcommandsKeys, "`, `").."`" or "None"
+		message.channel:send{
+			embed = {
+				title = guildSettings.prefix..command.name,
+				description = command.description,
+				fields = {
+					{name = "Required permissions", value = permissionsString},
+					{name = "Subcommands", value = subcommandsString},
+					{name = "Usage", value = "`"..guildSettings.prefix..command.usage.."`"}
+				},
+				color = discordia.Color.fromHex("00ff00").value,
+				footer = {
+					text = commandHandler.strings.usageFooter
+				}
+			}
+		}
+	end
 end
 
 commandHandler.sendPermissionError = function(channel, commandString, missingPermissions)
