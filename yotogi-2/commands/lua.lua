@@ -44,6 +44,7 @@ return {
 		sandbox.message = message
 		sandbox.client = message.client
 		sandbox.guildSettings = guildSettings
+		sandbox.commandHandler = commandHandler
 		sandbox.code = code
 		sandbox.timer = require("timer")
 		sandbox.discordia = require("discordia")
