@@ -63,12 +63,12 @@ return {
 						end
 					end
 					if subcommand then
-						commandHandler.sendCommandHelp(message, guildSettings, baseCommandString, subcommand, permissions)
+						commandHandler.sendCommandHelp(message.channel, guildSettings, baseCommandString, subcommand, permissions)
 					else
-						commandHandler.sendCommandHelp(message, guildSettings, baseCommandString, currentCommand, permissions)
+						commandHandler.sendCommandHelp(message.channel, guildSettings, baseCommandString, currentCommand, permissions)
 					end
 				else
-					commandHandler.sendCommandHelp(message, guildSettings, baseCommandString, command, permissions)
+					commandHandler.sendCommandHelp(message.channel, guildSettings, baseCommandString, command, permissions)
 				end
 			else
 				-- command not found
