@@ -36,8 +36,33 @@ commandHandler.stripPrefix = function(str, guildSettings, client)
 end
 
 commandHandler.sendUsage = function(channel, prefix, commandString)
-	local command = commandHandler.commands[commandString]
+	local splitCommandString = string.split(commandString, " ")
+	local command = commandHandler.commands[splitCommandString[1]]
+	for i=2, #splitCommandString do -- go through commandString to get the command object of the deepest subcommand
+		command = command.subcommands[splitCommandString[i]]
+	end
 	return utils.sendEmbed(channel, "Usage: `"..prefix..command.usage.."`", "ff0000", commandHandler.strings.usageFooter)
+end
+
+commandHandler.sendCommandHelp = function(message, guildSettings, baseCommandString, command, permissions)
+	local subcommandsKeys = table.keys(command.subcommands)
+	local permissionsString = #permissions>0 and "`"..table.concat(permissions, ", ").."`" or "None"
+	local subcommandsString = #subcommandsKeys>0 and "`"..table.concat(subcommandsKeys, "`, `").."`" or "None"
+	message.channel:send{
+		embed = {
+			title = guildSettings.prefix..command.name,
+			description = command.description,
+			fields = {
+				{name = "Required permissions", value = permissionsString},
+				{name = "Subcommands", value = subcommandsString},
+				{name = "Usage", value = "`"..guildSettings.prefix..command.usage.."`"}
+			},
+			color = discordia.Color.fromHex("00ff00").value,
+			footer = {
+				text = commandHandler.strings.usageFooter
+			}
+		}
+	}
 end
 
 commandHandler.sendPermissionError = function(channel, commandString, missingPermissions)
