@@ -5,30 +5,45 @@ local json = require("json")
 
 local settings = {
 	name = "settings",
-	description = "Change settings for Yotogi in this server.",
+	description = "Change settings for Yotogi in this server. Does nothing without subcommands.",
 	usage = "settings",
 	visible = true,
 	permissions = {"administrator"},
 	run = function(self, message, argString, args, guildSettings, conn)
 		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
-		
+		commandHandler.sendCommandHelp(message.channel, guildSettings, self.name, self, self.permissions)
 	end,
 	onEnable = function(self, message, guildSettings)
 		return true
 	end,
 	onDisable = function(self, message, guildSettings)
-		return true
+		utils.sendEmbed(message.channel, "Disabling `"..guildSettings.prefix..self.name.."` is not permitted.", "ff0000")
+		return false
 	end,
 	subcommands = {}
 }
 
 settings.subcommands.commands = {
 	name = "settings commands",
-	description = "List all commands and whether they are enabled or disabled.",
+	description = "List all commands, whether they are enabled or disabled, and whether their permissions have been modified or not.",
 	usage = "settings commands",
 	run = function(self, message, argString, args, guildSettings, conn)
 		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
-
+		local output = "```\n"
+		for _, commandString in ipairs(commandHandler.sortedCommandNames) do
+			local command = commandHandler.commands[commandString]
+			if command.visible then
+				output = output..guildSettings.prefix..commandString.." - "..(guildSettings.disabled_commands[commandString] and "disabled" or "enabled").." - "..(guildSettings.command_permissions[commandString] and "modified perms" or "default perms").."\n"
+			end
+		end
+		output = output:gsub("\n$","").."```"
+		message.channel:send{
+			embed = {
+				title = "Command list",
+				description = output,
+				color = discordia.Color.fromHex("00ff00").value
+			}
+		}
 	end,
 	subcommands = {}
 }
@@ -39,22 +54,20 @@ settings.subcommands.commands.subcommands.enable = {
 	usage = "settings commands enable <command>",
 	run = function(self, message, argString, args, guildSettings, conn)
 		local commandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
-		if commandString=="settings" then
-			utils.sendEmbed(message.channel, "Enabling/disabling `"..guildSettings.prefix.."settings` is not permitted.", "ff0000")
-		elseif commandHandler.commands[commandString] then
-			if guildSettings.disabled_commands[commandString] then
-				guildSettings.disabled_commands[commandString] = nil
-				local encodedSetting = json.encode(guildSettings.disabled_commands)
-				local stmt = conn:prepare("UPDATE guild_settings SET disabled_commands = ? WHERE guild_id = ?;")
-				stmt:reset():bind(encodedSetting, message.guild.id):step()
-				stmt:close()
-				utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is now enabled.", "00ff00")
-			else
-				utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already enabled.", "ff0000")
-			end
-		else
+		if not commandHandler.commands[commandString] then
 			utils.sendEmbed(message.channel, "Command `"..guildSettings.prefix..commandString.."` not found.", "ff0000")
+			return
+		elseif not guildSettings.disabled_commands[commandString] then
+			utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already enabled.", "ff0000")
+			return
 		end
+		if not commandHandler.commands[commandString]:onEnable(message, guildSettings) then return end
+		guildSettings.disabled_commands[commandString] = nil
+		local encodedSetting = json.encode(guildSettings.disabled_commands)
+		local stmt = conn:prepare("UPDATE guild_settings SET disabled_commands = ? WHERE guild_id = ?;")
+		stmt:reset():bind(encodedSetting, message.guild.id):step()
+		stmt:close()
+		utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is now enabled.", "00ff00")
 	end,
 	subcommands = {}
 }
@@ -65,29 +78,27 @@ settings.subcommands.commands.subcommands.disable = {
 	usage = "settings commands disable <command>",
 	run = function(self, message, argString, args, guildSettings, conn)
 		local commandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
-		if commandString=="settings" then
-			utils.sendEmbed(message.channel, "Enabling/disabling `"..guildSettings.prefix.."settings` is not permitted.", "ff0000")
-		elseif commandHandler.commands[commandString] then
-			if not guildSettings.disabled_commands[commandString] then
-				guildSettings.disabled_commands[commandString] = true
-				local encodedSetting = json.encode(guildSettings.disabled_commands)
-				local stmt = conn:prepare("UPDATE guild_settings SET disabled_commands = ? WHERE guild_id = ?;")
-				stmt:reset():bind(encodedSetting, message.guild.id):step()
-				stmt:close()
-				utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is now disabled.", "00ff00")
-			else
-				utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already disabled.", "ff0000")
-			end
-		else
+		if not commandHandler.commands[commandString] then
 			utils.sendEmbed(message.channel, "Command `"..guildSettings.prefix..commandString.."` not found.", "ff0000")
+			return
+		elseif guildSettings.disabled_commands[commandString] then
+			utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already disabled.", "ff0000")
+			return
 		end
+		if not commandHandler.commands[commandString]:onDisable(message, guildSettings) then return end
+		guildSettings.disabled_commands[commandString] = true
+		local encodedSetting = json.encode(guildSettings.disabled_commands)
+		local stmt = conn:prepare("UPDATE guild_settings SET disabled_commands = ? WHERE guild_id = ?;")
+		stmt:reset():bind(encodedSetting, message.guild.id):step()
+		stmt:close()
+		utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is now disabled.", "00ff00")
 	end,
 	subcommands = {}
 }
 
 settings.subcommands.commands.subcommands.permissions = {
 	name = "settings commands permissions",
-	description = "Set the permissions required to use a command.",
+	description = "Set the permissions required to use a command. To view the permissions currently required for a command, use the `&prefix;help` command.",
 	usage = "settings commands permissions <command> <permission1> [permission2 permission3 ...]",
 	run = function(self, message, argString, args, guildSettings, conn)
 		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
