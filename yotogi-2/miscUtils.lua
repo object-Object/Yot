@@ -1,4 +1,5 @@
 local discordia = require("discordia")
+local json = require("json")
 
 local utils = {}
 
@@ -12,6 +13,63 @@ utils.createLookupTable = function(input)
 		output[v]=true
 	end
 	return output
+end
+
+local jsonColumns=utils.createLookupTable{
+	"disabled_commands",
+	"disabled_events",
+	"persistent_roles",
+	"command_permissions"
+}
+local booleanColumns=utils.createLookupTable{
+	"delete_command_messages",
+	"is_active"
+}
+
+utils.secondsToTime = function(seconds)
+	local function s(num)
+		if num=="01" then return "" end return "s"
+	end
+	local function t(num)
+		if num:match("%d")=="0" then num=num:sub(2,2) end
+		return num
+	end
+	local seconds = tonumber(seconds)
+	if seconds<=0 then
+		return "N/A"
+	else
+		days=string.format("%02.f", math.floor(seconds/86400))
+		hours=string.format("%02.f", math.floor(seconds/3600 - days*24))
+		mins=string.format("%02.f", math.floor(seconds/60 - days*1440 - hours*60))
+		secs=string.format("%02.f", math.floor(seconds - days*86400 - hours*3600 - mins*60))
+		local returnString=""
+		if t(days)~="0" then returnString=returnString..t(days).." day"..s(days)..", " end
+		if t(hours)~="0" then returnString=returnString..t(hours).." hour"..s(hours)..", " end
+		if t(mins)~="0" then returnString=returnString..t(mins).." minute"..s(mins)..", " end
+		if t(secs)~="0" then returnString=returnString..t(secs).." second"..s(secs) end
+		returnString=returnString:gsub("%, $","")
+		return returnString
+	end
+end
+
+utils.formatRow = function(row)
+	if type(row)~="table" then return end
+	for k,v in pairs(row) do
+		v=v[1]
+		if jsonColumns[k] then
+			v=json.decode(v)
+		elseif booleanColumns[k] then
+			v=v==1LL
+		end
+		row[k]=v
+	end
+	return row
+end
+
+utils.setGame = function(client, conn)
+	local _,activeWarnings = conn:exec("SELECT * FROM warnings WHERE is_active=1;","k")
+	local _,inactiveWarnings = conn:exec("SELECT * FROM warnings WHERE is_active=0;","k")
+	client:setGame({name=activeWarnings.." active / "..inactiveWarnings.." inactive warnings", url="https://www.twitch.tv/ThisIsAFakeTwitchLink"})
 end
 
 utils.sendEmbed = function(channel,text,color,footer_text,footer_icon)
@@ -38,6 +96,18 @@ utils.logError = function(client, section, err)
 			timestamp = discordia.Date():toISO('T', 'Z')
 		}
 	}
+end
+
+utils.memberFromString = function(str, guild)
+	local id = str:match("^%<%@%!?(%d+)%>$") or str:match("^(%d+)$")
+	if not id then return end
+	return guild:getMember(id)
+end
+
+utils.userFromString = function(str, client)
+	local id = str:match("^%<%@%!?(%d+)%>$") or str:match("^(%d+)$")
+	if not id then return end
+	return client:getUser(id)
 end
 
 utils.s = function(num)
