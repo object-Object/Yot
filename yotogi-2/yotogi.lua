@@ -20,17 +20,12 @@ local function setupGuild(id)
 	conn:exec("INSERT INTO guild_settings (guild_id) VALUES ("..id..")")
 end
 
-local function getGuildSettings(id)
-	local settings,_ = conn:exec("SELECT * FROM guild_settings WHERE guild_id="..id..";","k")
-	return utils.formatRow(settings)
-end
-
 client:on("ready", function()
 	utils.setGame(client, conn)
 end)
 
 client:on("guildCreate", function(guild)
-	if not getGuildSettings(guild.id) then
+	if not utils.getGuildSettings(guild.id, conn) then
 		setupGuild(guild.id)
 	end
 end)
@@ -45,10 +40,10 @@ client:on("messageCreate", function(message)
 			return
 		end
 		if not message.guild then return end
-		local guildSettings = getGuildSettings(message.guild.id)
+		local guildSettings = utils.getGuildSettings(message.guild.id, conn)
 		if not guildSettings then
 			setupGuild(message.guild.id)
-			guildSettings = getGuildSettings(message.guild.id)
+			guildSettings = utils.getGuildSettings(message.guild.id, conn)
 		end
 
 		eventHandler.doEvents("client.messageCreate", guildSettings, message)

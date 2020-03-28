@@ -1,5 +1,6 @@
 local discordia = require("discordia")
 local json = require("json")
+local options = require("../options")
 
 local utils = {}
 
@@ -66,10 +67,15 @@ utils.formatRow = function(row)
 	return row
 end
 
+utils.getGuildSettings = function(id, conn)
+	local settings,_ = conn:exec("SELECT * FROM guild_settings WHERE guild_id="..id..";","k")
+	return utils.formatRow(settings)
+end
+
 utils.setGame = function(client, conn)
 	local _,activeWarnings = conn:exec("SELECT * FROM warnings WHERE is_active=1;","k")
 	local _,inactiveWarnings = conn:exec("SELECT * FROM warnings WHERE is_active=0;","k")
-	client:setGame({name=activeWarnings.." active / "..inactiveWarnings.." inactive warnings", url="https://www.twitch.tv/ThisIsAFakeTwitchLink"})
+	client:setGame({name=options.defaultPrefix.."help | "..activeWarnings.." active / "..inactiveWarnings.." inactive warnings", url="https://www.twitch.tv/ThisIsAFakeTwitchLink"})
 end
 
 utils.sendEmbed = function(channel,text,color,footer_text,footer_icon)
