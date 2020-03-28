@@ -15,7 +15,13 @@ commandHandler.customPermissions = {
 }
 
 commandHandler.strings = { -- bits of text used in multiple places that should be consistent
-	usageFooter = "Angled brackets represent required arguments. Square brackets represent optional arguments. Do not include the brackets in the command."
+	usageFooter = "Angled brackets represent required arguments. Square brackets represent optional arguments. Do not include the brackets in the command.",
+	warnFooter = function(guildSettings, entry)
+		return "Time until a warning is removed: "..utils.secondsToTime(entry.end_timestamp-os.time()).."\n"
+			..(entry.level<guildSettings.warning_kick_level and "Warnings until kick: "..guildSettings.warning_kick_level-entry.level.."\n" or "")
+			..(entry.level<guildSettings.warning_ban_level and "Warnings until ban: "..guildSettings.warning_ban_level-entry.level.."\n" or "")
+			.."Active: "..(entry.is_active and "yes" or "no")
+	end
 }
 
 commandHandler.load = function()
@@ -44,9 +50,9 @@ commandHandler.sendUsage = function(channel, prefix, commandString)
 	return utils.sendEmbed(channel, "Usage: `"..prefix..command.usage.."`", "ff0000", commandHandler.strings.usageFooter)
 end
 
-commandHandler.sendCommandHelp = function(message, guildSettings, baseCommandString, command, permissions)
+commandHandler.sendCommandHelp = function(channel, guildSettings, baseCommandString, command, permissions)
 	if guildSettings.disabled_commands[baseCommandString] then
-		message.channel:send{
+		channel:send{
 			embed = {
 				title = guildSettings.prefix..command.name,
 				description = "`"..guildSettings.prefix..baseCommandString.."` is disabled in this server.",
@@ -57,10 +63,10 @@ commandHandler.sendCommandHelp = function(message, guildSettings, baseCommandStr
 		local subcommandsKeys = table.keys(command.subcommands)
 		local permissionsString = #permissions>0 and "`"..table.concat(permissions, ", ").."`" or "None"
 		local subcommandsString = #subcommandsKeys>0 and "`"..table.concat(subcommandsKeys, "`, `").."`" or "None"
-		message.channel:send{
+		channel:send{
 			embed = {
 				title = guildSettings.prefix..command.name,
-				description = command.description,
+				description = command.description:gsub("%&prefix%;", guildSettings.prefix),
 				fields = {
 					{name = "Required permissions", value = permissionsString},
 					{name = "Subcommands", value = subcommandsString},
