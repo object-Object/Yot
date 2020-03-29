@@ -49,7 +49,7 @@ return {
 			-- show command-specific help
 			local baseCommandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
 			local command = commandHandler.commands[baseCommandString]
-			if command then
+			if command and command.visible then
 				local permissions = guildSettings.command_permissions[baseCommandString] or command.permissions
 				if #args>1 then
 					local currentCommand = command
