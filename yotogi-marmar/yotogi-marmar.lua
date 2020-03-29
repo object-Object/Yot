@@ -1354,6 +1354,11 @@ local pc,err=pcall(function()
 		sendEmbed(channel,"Version: "..version)
 	end
 
+	if cmd == prefix.."warm" and arg then
+		sendEmbed(channel, "Now warming "..arg.." :fire:")
+		return
+	end
+
 	if cmd == prefix.."mention" then
 		if not arg then return end
 		--for m in guild:findMembers(function(e) return e.discriminator == discrim and e.username == name end) do print(m) end
