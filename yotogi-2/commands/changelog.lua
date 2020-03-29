@@ -5,7 +5,7 @@ local timer = require("timer")
 
 local function sendChangelog(channel, prefix, latestOnly)
 	local changelog=fs.readFileSync("changelog.txt")
-	changelog=changelog:gsub("%<prefix%>", prefix)
+	changelog=changelog:gsub("%&prefix%;", prefix)
 	if latestOnly then
 		changelog=changelog:gsub("\n\n.*","")
 	end
@@ -31,7 +31,7 @@ local function sendChangelog(channel, prefix, latestOnly)
 				embed={
 					title=title,
 					description=currentPortion,
-					color=discordia.Color.fromRGB(255,0,0).value
+					color=discordia.Color.fromHex("00ff00").value
 				}
 			}
 			timer.sleep(1000)
@@ -41,7 +41,7 @@ local function sendChangelog(channel, prefix, latestOnly)
 			embed={
 				title="Changelog",
 				description=changelog,
-				color=discordia.Color.fromRGB(255,0,0).value
+				color=discordia.Color.fromHex("00ff00").value
 			}
 		}
 	end
