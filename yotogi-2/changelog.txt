@@ -1,0 +1,4 @@
+**v2.0.0** - 
+* Complete rewrite of the entire bot!
+* Many stylistic changes
+- Messages are no longer posted in #general when warnings are removed

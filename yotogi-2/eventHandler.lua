@@ -11,16 +11,16 @@ local events = {}
 eventHandler.load = function()
 	for _,filename in ipairs(fs.readdirSync("events")) do
 		if filename:match("%.lua$") then
-			local mod = require("./events/"..filename)
-			events[mod.name] = mod
+			local event = require("./events/"..filename)
+			events[event.name] = event
 		end
 	end
 end
 
 eventHandler.doEvents = function(discordEvent, guildSettings, ...)
-	for modName, mod in pairs(events) do
-		if mod.discordEvent==discordEvent and not guildSettings.disabled_events[modName] then
-			mod.run(guildSettings, ...)
+	for eventName, event in pairs(events) do
+		if event.discordEvent==discordEvent and not guildSettings.disabled_events[eventName] then
+			event.run(guildSettings, ...)
 		end
 	end
 end

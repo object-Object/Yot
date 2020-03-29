@@ -1,5 +1,6 @@
 local commandHandler = require("../commandHandler")
 local discordia = require("discordia")
+local fs = require("fs")
 
 return {
 	name = "about",
@@ -8,6 +9,8 @@ return {
 	visible = true,
 	permissions = {},
 	run = function(self, message, argString, args, guildSettings, conn)
+		local changelog=fs.readFileSync("changelog.txt")
+		local version=changelog and changelog:match("%*%*([^%*]+)%*%*") or "error"
 		message.channel:send{
 			embed = {
 				title = "About Yotogi",
@@ -17,6 +20,9 @@ return {
 					{name = "Servers", value = #message.client.guilds},
 					{name = "GitHub", value = "https://github.com/object-Object/Yotogi"},
 					{name = "Invite link", value = "https://discordapp.com/api/oauth2/authorize?client_id=316932415840845865&permissions=805431366&scope=bot"}
+				},
+				footer = {
+					text = "Version "..version
 				}
 			}
 		}

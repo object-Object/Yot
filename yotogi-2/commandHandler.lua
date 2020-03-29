@@ -17,7 +17,7 @@ commandHandler.customPermissions = {
 commandHandler.strings = { -- bits of text used in multiple places that should be consistent
 	usageFooter = "Angled brackets represent required arguments. Square brackets represent optional arguments. Do not include the brackets in the command.",
 	warnFooter = function(guildSettings, entry)
-		return "Time until a warning is removed: "..utils.secondsToTime(entry.end_timestamp-os.time()).."\n"
+		return "Time until a warning is removed: "..(entry.is_active and utils.secondsToTime(entry.end_timestamp-os.time()) or "N/A").."\n"
 			..(entry.level<guildSettings.warning_kick_level and "Warnings until kick: "..guildSettings.warning_kick_level-entry.level.."\n" or "")
 			..(entry.level<guildSettings.warning_ban_level and "Warnings until ban: "..guildSettings.warning_ban_level-entry.level.."\n" or "")
 			.."Active: "..(entry.is_active and "yes" or "no")

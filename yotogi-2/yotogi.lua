@@ -5,7 +5,7 @@ local utils = require("./miscUtils")
 local sql = require("sqlite3")
 local options = require("options")
 
-conn = sql.open("yotogi.db")
+local conn = sql.open("yotogi.db")
 
 local client = discordia.Client(options.clientOptions)
 local clock = discordia.Clock()
@@ -19,6 +19,19 @@ eventHandler.load()
 local function setupGuild(id)
 	conn:exec("INSERT INTO guild_settings (guild_id) VALUES ("..id..")")
 end
+
+clock:on("min", function()
+	local success, err = pcall(function()
+		for guild in client.guilds:iter() do
+			local guildSettings = utils.getGuildSettings(guild.id, conn)
+			eventHandler.doEvents("clock.min", guildSettings, guild, conn)
+		end
+	end)
+	if not success then
+		utils.logError(client, "messageCreate", err)
+		print("Bot crashed! "..err)
+	end
+end)
 
 client:on("ready", function()
 	utils.setGame(client, conn)
@@ -56,4 +69,5 @@ client:on("messageCreate", function(message)
 	end
 end)
 
+clock:start()
 client:run("Bot "..options.token)
