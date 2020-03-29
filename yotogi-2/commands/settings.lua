@@ -54,14 +54,15 @@ settings.subcommands.commands.subcommands.enable = {
 	usage = "settings commands enable <command>",
 	run = function(self, message, argString, args, guildSettings, conn)
 		local commandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
-		if not commandHandler.commands[commandString] then
+		local command = commandHandler.commands[commandString]
+		if not (command and command.visible) then
 			utils.sendEmbed(message.channel, "Command `"..guildSettings.prefix..commandString.."` not found.", "ff0000")
 			return
 		elseif not guildSettings.disabled_commands[commandString] then
 			utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already enabled.", "ff0000")
 			return
 		end
-		if not commandHandler.commands[commandString]:onEnable(message, guildSettings) then return end
+		if not command:onEnable(message, guildSettings) then return end
 		guildSettings.disabled_commands[commandString] = nil
 		local encodedSetting = json.encode(guildSettings.disabled_commands)
 		local stmt = conn:prepare("UPDATE guild_settings SET disabled_commands = ? WHERE guild_id = ?;")
@@ -78,14 +79,15 @@ settings.subcommands.commands.subcommands.disable = {
 	usage = "settings commands disable <command>",
 	run = function(self, message, argString, args, guildSettings, conn)
 		local commandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
-		if not commandHandler.commands[commandString] then
+		local command = commandHandler.commands[commandString]
+		if not (command and command.visible) then
 			utils.sendEmbed(message.channel, "Command `"..guildSettings.prefix..commandString.."` not found.", "ff0000")
 			return
 		elseif guildSettings.disabled_commands[commandString] then
 			utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already disabled.", "ff0000")
 			return
 		end
-		if not commandHandler.commands[commandString]:onDisable(message, guildSettings) then return end
+		if not command:onDisable(message, guildSettings) then return end
 		guildSettings.disabled_commands[commandString] = true
 		local encodedSetting = json.encode(guildSettings.disabled_commands)
 		local stmt = conn:prepare("UPDATE guild_settings SET disabled_commands = ? WHERE guild_id = ?;")
