@@ -63,7 +63,7 @@ client:on("memberJoin", function(member)
 			setupGuild(member.guild.id)
 			guildSettings = utils.getGuildSettings(member.guild.id, conn)
 		end
-		moduleHandler.doModules("client.memberJoin", guildSettings, member.guild, conn)
+		moduleHandler.doModules("client.memberJoin", guildSettings, member, conn)
 	end)
 	if not success then
 		utils.logError(member.guild, "messageCreate", err)
@@ -78,7 +78,7 @@ client:on("memberLeave", function(member)
 			setupGuild(member.guild.id)
 			guildSettings = utils.getGuildSettings(member.guild.id, conn)
 		end
-		moduleHandler.doModules("client.memberLeave", guildSettings, member.guild, conn)
+		moduleHandler.doModules("client.memberLeave", guildSettings, member, conn)
 	end)
 	if not success then
 		utils.logError(member.guild, "messageCreate", err)
