@@ -56,8 +56,34 @@ client:on("guildCreate", function(guild)
 	end
 end)
 
-client:on("memberLeave", function(member)
+client:on("memberJoin", function(member)
+	local success, err = pcall(function()
+		local guildSettings = utils.getGuildSettings(member.guild.id, conn)
+		if not guildSettings then
+			setupGuild(member.guild.id)
+			guildSettings = utils.getGuildSettings(member.guild.id, conn)
+		end
+		moduleHandler.doModules("client.memberJoin", guildSettings, member.guild, conn)
+	end)
+	if not success then
+		utils.logError(member.guild, "messageCreate", err)
+		print("Bot crashed! Guild: "..member.guild.name.." ("..member.guild.id..")\n"..err)
+	end
+end)
 
+client:on("memberLeave", function(member)
+	local success, err = pcall(function()
+		local guildSettings = utils.getGuildSettings(member.guild.id, conn)
+		if not guildSettings then
+			setupGuild(member.guild.id)
+			guildSettings = utils.getGuildSettings(member.guild.id, conn)
+		end
+		moduleHandler.doModules("client.memberLeave", guildSettings, member.guild, conn)
+	end)
+	if not success then
+		utils.logError(member.guild, "messageCreate", err)
+		print("Bot crashed! Guild: "..member.guild.name.." ("..member.guild.id..")\n"..err)
+	end
 end)
 
 client:on("messageCreate", function(message)
