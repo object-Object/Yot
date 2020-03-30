@@ -4,7 +4,7 @@ return {
 	visible = true,
 	event = "",
 	disabledByDefault = false,
-	run = function(self, guildSettings, message)
+	run = function(self, guildSettings, )
 		
 	end,
 	onEnable = function(self, message, guildSettings, conn)
