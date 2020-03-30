@@ -44,15 +44,11 @@ return {
 		end
 	end,
 	onEnable = function(self, message, guildSettings, conn)
-		moduleHandler.enable("warning-manager-join", message, guildSettings, conn)
-		moduleHandler.enable("warning-manager-leave", message, guildSettings, conn)
 		conn:exec("UPDATE guild_settings SET warning_length = "..options.warningLength.." WHERE guild_id = '"..message.guild.id.."';")
 		utils.sendEmbed(message.channel, "Warnings will now expire. The warning_length setting has been set to "..options.warningLength..".", "00ff00")
 		return true
 	end,
 	onDisable = function(self, message, guildSettings, conn)
-		moduleHandler.disable("warning-manager-join", message, guildSettings, conn)
-		moduleHandler.disable("warning-manager-leave", message, guildSettings, conn)
 		conn:exec("UPDATE guild_settings SET warning_length = 0 WHERE guild_id = '"..message.guild.id.."';")
 		utils.sendEmbed(message.channel, "Warnings will no longer expire. The warning_length setting has been set to 0.", "00ff00")
 		return true
