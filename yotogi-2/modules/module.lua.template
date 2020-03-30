@@ -1,0 +1,18 @@
+return {
+	name = "module", -- name of the module, used in the settings modules command
+	description = "This is an example module.", -- description of the module, used in the settings modules command
+	visible = true, -- whether or not this module shows up in events and is togglable by users
+	event = "client.messageCreate", -- event in which the module is run
+	disabledByDefault = false, -- whether or not the module starts disabled in a new guild
+	run = function(self, guildSettings, message) -- method called when the module's event happens
+		if message.content:match("Hello There") then
+			message:reply("General Kenobi!")
+		end
+	end,
+	onEnable = function(self, message, guildSettings) -- method called when this module is enabled, return true if enabling can proceed
+		return true
+	end,
+	onDisable = function(self, message, guildSettings) -- method called when this module is disabled, return true if disabling can proceed
+		return true
+	end
+}

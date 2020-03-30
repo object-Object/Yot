@@ -13,8 +13,8 @@ discordia.extensions()
 
 local commandHandler = require("./commandHandler")
 commandHandler.load()
-local eventHandler = require("./eventHandler")
-eventHandler.load()
+local moduleHandler = require("./moduleHandler")
+moduleHandler.load()
 
 local function setupGuild(id)
 	conn:exec("INSERT INTO guild_settings (guild_id) VALUES ("..id..")")
@@ -24,7 +24,11 @@ clock:on("min", function()
 	local success, err = pcall(function()
 		for guild in client.guilds:iter() do
 			local guildSettings = utils.getGuildSettings(guild.id, conn)
-			eventHandler.doEvents("clock.min", guildSettings, guild, conn)
+			if not guildSettings then
+				setupGuild(guild.id)
+				guildSettings = utils.getGuildSettings(guild.id, conn)
+			end
+			moduleHandler.doModules("clock.min", guildSettings, guild, conn)
 		end
 	end)
 	if not success then
@@ -59,7 +63,7 @@ client:on("messageCreate", function(message)
 			guildSettings = utils.getGuildSettings(message.guild.id, conn)
 		end
 
-		eventHandler.doEvents("client.messageCreate", guildSettings, message)
+		moduleHandler.doModules("client.messageCreate", guildSettings, message)
 
 		commandHandler.doCommands(message, guildSettings, conn)
 	end)
