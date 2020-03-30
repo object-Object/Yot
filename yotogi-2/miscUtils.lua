@@ -93,13 +93,16 @@ utils.sendEmbed = function(channel,text,color,footer_text,footer_icon)
 	return msg
 end
 
-utils.logError = function(client, section, err)
-	return client.owner:send{
+utils.logError = function(guild, section, err)
+	return guild.client.owner:send{
 		embed = {
 			title = "Bot crashed!",
 			description = "```\n"..err.."```",
 			color = discordia.Color.fromHex("ff0000").value,
-			timestamp = discordia.Date():toISO('T', 'Z')
+			timestamp = discordia.Date():toISO('T', 'Z'),
+			footer = {
+				text = "Guild: "..guild.name.." ("..guild.id..")"
+			}
 		}
 	}
 end
