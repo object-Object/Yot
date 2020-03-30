@@ -31,13 +31,10 @@ warnUtils.warn = function(warnMember, warnUser, message, guildSettings, conn, re
 		elseif warnUser.id==message.guild.ownerId then
 			utils.sendEmbed(message.channel, name.." could not be kicked because they are the server owner.", "ff0000")
 		else
-			entry.is_active = false
-			conn:exec('UPDATE warnings SET is_active = 0 WHERE guild_id = "'..message.guild.id..'" AND user_id = "'..warnUser.id..'";')
 			utils.sendEmbed(message.channel, name.." has been kicked for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00")
 			utils.sendEmbed(warnUser:getPrivateChannel(), "You have been kicked from **"..message.guild.name.."** for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00")
 			if staffLogChannel then
-				utils.sendEmbed(staffLogChannel, name.." has been kicked for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00",
-					"Responsible user: "..staffMember.name.."#"..staffMember.discriminator)
+				utils.sendEmbed(staffLogChannel, name.." has been kicked for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", "Responsible user: "..staffMember.name.."#"..staffMember.discriminator)
 			end
 			warnMember:kick(reason)
 			utils.setGame(message.client, conn)
@@ -51,13 +48,10 @@ warnUtils.warn = function(warnMember, warnUser, message, guildSettings, conn, re
 		elseif warnUser.id==message.guild.ownerId then
 			utils.sendEmbed(message.channel, name.." could not be banned because they are the server owner.", "ff0000")
 		else
-			entry.is_active = false
-			conn:exec('UPDATE warnings SET is_active = 0 WHERE guild_id = "'..message.guild.id..'" AND user_id = "'..warnUser.id..'";')
 			utils.sendEmbed(message.channel, name.." has been banned for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00")
 			utils.sendEmbed(warnUser:getPrivateChannel(), "You have been banned from **"..message.guild.name.."** for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00")
 			if staffLogChannel then
-				utils.sendEmbed(staffLogChannel, name.." has been banned for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00",
-					"Responsible user: "..staffMember.name.."#"..staffMember.discriminator)
+				utils.sendEmbed(staffLogChannel, name.." has been banned for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", "Responsible user: "..staffMember.name.."#"..staffMember.discriminator)
 			end
 			warnMember:ban(reason)
 			utils.setGame(message.client, conn)
@@ -68,8 +62,7 @@ warnUtils.warn = function(warnMember, warnUser, message, guildSettings, conn, re
 	utils.sendEmbed(message.channel, name.." has been warned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", warnFooter)
 	utils.sendEmbed(warnUser:getPrivateChannel(), "You have been warned in **"..message.guild.name.."**. You now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", warnFooter)
 	if staffLogChannel then
-		utils.sendEmbed(staffLogChannel, name.." has been warned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00",
-			"Responsible user: "..staffMember.name.."#"..staffMember.discriminator.."\n"..warnFooter)
+		utils.sendEmbed(staffLogChannel, name.." has been warned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", "Responsible user: "..staffMember.name.."#"..staffMember.discriminator.."\n"..warnFooter)
 	end
 	utils.setGame(message.client, conn)
 end
@@ -101,8 +94,7 @@ warnUtils.unwarn = function(warnMember, warnUser, message, guildSettings, conn, 
 	utils.sendEmbed(message.channel, name.." has been unwarned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", warnFooter)
 	utils.sendEmbed(warnUser:getPrivateChannel(), "You have been unwarned in **"..message.guild.name.."**. You now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", warnFooter)
 	if staffLogChannel then
-		utils.sendEmbed(staffLogChannel, name.." has been unwarned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00",
-			"Responsible user: "..staffMember.name.."#"..staffMember.discriminator.."\n"..warnFooter)
+		utils.sendEmbed(staffLogChannel, name.." has been unwarned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", "Responsible user: "..staffMember.name.."#"..staffMember.discriminator.."\n"..warnFooter)
 	end
 	utils.setGame(message.client, conn)
 end
