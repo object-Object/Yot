@@ -62,12 +62,7 @@ settings.subcommands.commands.subcommands.enable = {
 			utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already enabled.", "ff0000")
 			return
 		end
-		if not command:onEnable(message, guildSettings) then return end
-		guildSettings.disabled_commands[commandString] = nil
-		local encodedSetting = json.encode(guildSettings.disabled_commands)
-		local stmt = conn:prepare("UPDATE guild_settings SET disabled_commands = ? WHERE guild_id = ?;")
-		stmt:reset():bind(encodedSetting, message.guild.id):step()
-		stmt:close()
+		if not commandHandler.enable(commandString, message.guild.id, guildSettings, conn) then return end
 		utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is now enabled.", "00ff00")
 	end,
 	subcommands = {}
@@ -87,12 +82,7 @@ settings.subcommands.commands.subcommands.disable = {
 			utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already disabled.", "ff0000")
 			return
 		end
-		if not command:onDisable(message, guildSettings) then return end
-		guildSettings.disabled_commands[commandString] = true
-		local encodedSetting = json.encode(guildSettings.disabled_commands)
-		local stmt = conn:prepare("UPDATE guild_settings SET disabled_commands = ? WHERE guild_id = ?;")
-		stmt:reset():bind(encodedSetting, message.guild.id):step()
-		stmt:close()
+		if not commandHandler.disable(commandString, message.guild.id, guildSettings, conn) then return end
 		utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is now disabled.", "00ff00")
 	end,
 	subcommands = {}

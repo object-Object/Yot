@@ -86,6 +86,30 @@ commandHandler.sendPermissionError = function(channel, commandString, missingPer
 		..table.concat(missingPermissions,", ").."`", "ff0000")
 end
 
+commandHandler.enable = function(commandString, message, guildSettings, conn)
+	if not commandHandler.commands[commandString]:onDisable(message, guildSettings, conn) then
+		return false
+	end
+	guildSettings.disabled_commands[commandString] = nil
+	local encodedSetting = json.encode(guildSettings.disabled_commands)
+	local stmt = conn:prepare("UPDATE guild_settings SET disabled_commands = ? WHERE guild_id = ?;")
+	stmt:reset():bind(encodedSetting, message.guild.id):step()
+	stmt:close()
+	return true
+end
+
+commandHandler.disable = function(commandString, message, guildSettings, conn)
+	if not commandHandler.commands[commandString]:onDisable(message, guildSettings, conn) then
+		return false
+	end
+	guildSettings.disabled_commands[commandString] = true
+	local encodedSetting = json.encode(guildSettings.disabled_commands)
+	local stmt = conn:prepare("UPDATE guild_settings SET disabled_commands = ? WHERE guild_id = ?;")
+	stmt:reset():bind(encodedSetting, message.guild.id):step()
+	stmt:close()
+	return true
+end
+
 commandHandler.doCommands = function(message, guildSettings, conn)
 	local content = commandHandler.stripPrefix(message.content, guildSettings, message.client)
 	local commandString = content:match("^(%S+)")
