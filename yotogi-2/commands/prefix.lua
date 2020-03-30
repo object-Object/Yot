@@ -4,15 +4,14 @@ local options = require("../options")
 
 return {
 	name = "prefix",
-	description = "Change the command prefix for Yotogi in this server.",
-	usage = "prefix <new prefix (may be in an inline code block)>",
+	description = "Show or change the command prefix for Yotogi in this server.",
+	usage = "prefix [new prefix (may be in an inline code block)]",
 	visible = true,
 	permissions = {"administrator"},
 	run = function(self, message, argString, args, guildSettings, conn)
 		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
-
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
+			utils.sendEmbed(message.channel, "Prefix is currently `"..guildSettings.prefix.."`.", "00ff00")
 			return
 		end
 		local newPrefix = argString:gsub("%`(.+)%`","%1")
