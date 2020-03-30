@@ -1,6 +1,7 @@
 local discordia = require("discordia")
 local http = require("coro-http")
 local timer = require("timer")
+local json = require("json")
 local utils = require("./miscUtils")
 local sql = require("sqlite3")
 local options = require("options")
@@ -17,7 +18,14 @@ local moduleHandler = require("./moduleHandler")
 moduleHandler.load()
 
 local function setupGuild(id)
-	conn:exec("INSERT INTO guild_settings (guild_id) VALUES ("..id..")")
+	local disabledModules = {}
+	for modName, mod in pairs(moduleHandler.modules) do
+		if mod.disabledByDefault then
+			disabledModules[modName] = true
+		end
+	end
+	local disabledModulesStr = json.encode(disabledModules)
+	conn:exec("INSERT INTO guild_settings (guild_id, disabled_modules) VALUES ('"..id.."', '"..disabledModulesStr.."')")
 end
 
 clock:on("min", function()
