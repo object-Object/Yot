@@ -27,7 +27,7 @@ return {
 				local name = warnMember and warnMember.name.."#"..warnUser.discriminator or warnUser.tag
 				utils.sendEmbed(warnUser:getPrivateChannel(), "You have been automatically unwarned in **"..guild.name.."**. You now have "..level.." warning"..utils.s(level)..".", "00ff00", warnFooter)
 				if staffLogChannel then
-					utils.sendEmbed(logChannel, name.." has been automatically unwarned. They now have "..level.." warning"..utils.s(level)..".", "00ff00", warnFooter)
+					utils.sendEmbed(staffLogChannel, name.." has been automatically unwarned. They now have "..level.." warning"..utils.s(level)..".", "00ff00", warnFooter)
 				end
 			end
 			decreaseStmt:close()
