@@ -33,7 +33,7 @@ return {
 			entry = {level=1, end_timestamp=os.time()+guildSettings.warning_length, is_active=(warnMember and true or false)}
 			conn:exec('INSERT INTO warnings (guild_id, user_id, level, end_timestamp, is_active) VALUES ("'..message.guild.id..'", "'..warnUser.id..'", '..entry.level..', '..entry.end_timestamp..', '..(entry.is_active and 1 or 0)..');')
 		end
-		local logChannel = guildSettings.log_channel and message.guild:getChannel(guildSettings.log_channel)
+		local staffLogChannel = guildSettings.staff_log_channel and message.guild:getChannel(guildSettings.staff_log_channel)
 		local reason = argString:match("%|%s+(.+)")
 		reason = reason and " (Reason: "..reason..")" or ""
 		local selfMember = message.guild:getMember(message.client.user.id)
@@ -49,8 +49,8 @@ return {
 				conn:exec('UPDATE warnings SET is_active = 0 WHERE guild_id = "'..message.guild.id..'" AND user_id = "'..warnUser.id..'";')
 				utils.sendEmbed(message.channel, name.." has been kicked for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00")
 				utils.sendEmbed(warnUser:getPrivateChannel(), "You have been kicked from **"..message.guild.name.."** for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00")
-				if logChannel then
-					utils.sendEmbed(logChannel, name.." has been kicked for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00",
+				if staffLogChannel then
+					utils.sendEmbed(staffLogChannel, name.." has been kicked for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00",
 						"Responsible user: "..(message.member and message.member.name or message.author.name).."#"..message.user.discriminator)
 				end
 				warnMember:kick(reason)
@@ -69,8 +69,8 @@ return {
 				conn:exec('UPDATE warnings SET is_active = 0 WHERE guild_id = "'..message.guild.id..'" AND user_id = "'..warnUser.id..'";')
 				utils.sendEmbed(message.channel, name.." has been banned for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00")
 				utils.sendEmbed(warnUser:getPrivateChannel(), "You have been banned from **"..message.guild.name.."** for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00")
-				if logChannel then
-					utils.sendEmbed(logChannel, name.." has been banned for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00",
+				if staffLogChannel then
+					utils.sendEmbed(staffLogChannel, name.." has been banned for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00",
 						"Responsible user: "..(message.member and message.member.name or message.author.name).."#"..message.user.discriminator)
 				end
 				warnMember:ban(reason)
@@ -81,8 +81,8 @@ return {
 		local warnFooter = commandHandler.strings.warnFooter(guildSettings, entry)
 		utils.sendEmbed(message.channel, name.." has been warned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", warnFooter)
 		utils.sendEmbed(warnUser:getPrivateChannel(), "You have been warned in **"..message.guild.name.."**. You now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", warnFooter)
-		if logChannel then
-			utils.sendEmbed(logChannel, name.." has been warned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00",
+		if staffLogChannel then
+			utils.sendEmbed(staffLogChannel, name.." has been warned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00",
 				"Responsible user: "..(message.member and message.member.name or message.author.name).."#"..message.user.discriminator.."\n"..warnFooter)
 		end
 		utils.setGame(message.client, conn)

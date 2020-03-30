@@ -37,14 +37,14 @@ return {
 			entry.end_timestamp = os.time()+guildSettings.warning_length
 			conn:exec("UPDATE warnings SET level = "..entry.level..", end_timestamp = "..entry.end_timestamp..' WHERE guild_id = "'..message.guild.id..'" AND user_id = "'..warnUser.id..'";')
 		end
-		local logChannel = guildSettings.log_channel and message.guild:getChannel(guildSettings.log_channel)
+		local staffLogChannel = guildSettings.staff_log_channel and message.guild:getChannel(guildSettings.staff_log_channel)
 		local reason = argString:match("%|%s+(.+)")
 		reason = reason and " (Reason: "..reason..")" or ""
 		local warnFooter = commandHandler.strings.warnFooter(guildSettings, entry)
 		utils.sendEmbed(message.channel, name.." has been unwarned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", warnFooter)
 		utils.sendEmbed(warnUser:getPrivateChannel(), "You have been unwarned in **"..message.guild.name.."**. You now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", warnFooter)
-		if logChannel then
-			utils.sendEmbed(logChannel, name.." has been unwarned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00",
+		if staffLogChannel then
+			utils.sendEmbed(staffLogChannel, name.." has been unwarned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00",
 				"Responsible user: "..(message.member and message.member.name or message.author.name).."#"..message.user.discriminator.."\n"..warnFooter)
 		end
 		utils.setGame(message.client, conn)
