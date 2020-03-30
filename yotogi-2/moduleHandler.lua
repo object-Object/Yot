@@ -5,19 +5,19 @@ local fs = require("fs")
 local utils = require("./miscUtils")
 
 local moduleHandler = {}
-local modules = {}
+moduleHandler.modules = {}
 
 moduleHandler.load = function()
 	for _,filename in ipairs(fs.readdirSync("modules")) do
 		if filename:match("%.lua$") then
 			local mod = require("./modules/"..filename)
-			modules[mod.name] = mod
+			moduleHandler.modules[mod.name] = mod
 		end
 	end
 end
 
 moduleHandler.doModules = function(event, guildSettings, ...)
-	for modName, mod in pairs(modules) do
+	for modName, mod in pairs(moduleHandler.modules) do
 		if mod.event==event and not guildSettings.disabled_modules[modName] then
 			mod:run(guildSettings, ...)
 		end
