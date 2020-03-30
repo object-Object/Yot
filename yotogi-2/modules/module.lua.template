@@ -9,10 +9,10 @@ return {
 			message:reply("General Kenobi!")
 		end
 	end,
-	onEnable = function(self, message, guildSettings) -- method called when this module is enabled, return true if enabling can proceed
+	onEnable = function(self, message, guildSettings, conn) -- method called when this module is enabled, return true if enabling can proceed
 		return true
 	end,
-	onDisable = function(self, message, guildSettings) -- method called when this module is disabled, return true if disabling can proceed
+	onDisable = function(self, message, guildSettings, conn) -- method called when this module is disabled, return true if disabling can proceed
 		return true
 	end
 }
