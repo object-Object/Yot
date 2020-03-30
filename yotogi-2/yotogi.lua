@@ -29,19 +29,20 @@ local function setupGuild(id)
 end
 
 clock:on("min", function()
-	local success, err = pcall(function()
-		for guild in client.guilds:iter() do
+	for guild in client.guilds:iter() do
+		local success, err = pcall(function()
 			local guildSettings = utils.getGuildSettings(guild.id, conn)
 			if not guildSettings then
 				setupGuild(guild.id)
 				guildSettings = utils.getGuildSettings(guild.id, conn)
 			end
 			moduleHandler.doModules("clock.min", guildSettings, guild, conn)
+		end)
+		if not success then
+			utils.logError(guild, "messageCreate", err)
+			print("Bot crashed! Guild: "..guild.name.." ("..guild.id..")\n"..err)
+			break
 		end
-	end)
-	if not success then
-		utils.logError(client, "messageCreate", err)
-		print("Bot crashed! "..err)
 	end
 end)
 
@@ -53,6 +54,10 @@ client:on("guildCreate", function(guild)
 	if not utils.getGuildSettings(guild.id, conn) then
 		setupGuild(guild.id)
 	end
+end)
+
+client:on("memberLeave", function(member)
+
 end)
 
 client:on("messageCreate", function(message)
@@ -76,8 +81,8 @@ client:on("messageCreate", function(message)
 		commandHandler.doCommands(message, guildSettings, conn)
 	end)
 	if not success then
-		utils.logError(client, "messageCreate", err)
-		print("Bot crashed! "..err)
+		utils.logError(message.guild, "messageCreate", err)
+		print("Bot crashed! Guild: "..message.guild.name.." ("..message.guild.id..")\n"..err)
 	end
 end)
 
