@@ -1,0 +1,16 @@
+return {
+	name = "",
+	description = "",
+	visible = true,
+	event = "",
+	disabledByDefault = false,
+	run = function(self, guildSettings, message)
+		
+	end,
+	onEnable = function(self, message, guildSettings, conn)
+		return true
+	end,
+	onDisable = function(self, message, guildSettings, conn)
+		return true
+	end
+}
