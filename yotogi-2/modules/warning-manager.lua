@@ -14,7 +14,7 @@ return {
 		if warnings then
 			local decreaseStmt = conn:prepare("UPDATE warnings SET level = ?, end_timestamp = ? WHERE guild_id = ? AND user_id = ?;")
 			local deleteStmt = conn:prepare("DELETE FROM warnings WHERE guild_id = ? AND user_id = ?;")
-			local fixActiveStmt = conn:prepare("UPDATE warnings SET active = 0 WHERE guild_id = ? AND user_id = ?;")
+			local fixActiveStmt = conn:prepare("UPDATE warnings SET is_active = 0 WHERE guild_id = ? AND user_id = ?;")
 			for row=1, nrow do
 				local warnMember = guild:getMember(warnings.user_id[row])
 				if not warnMember then
@@ -34,7 +34,7 @@ return {
 					local name = warnMember.name.."#"..warnUser.discriminator
 					utils.sendEmbed(warnUser:getPrivateChannel(), "You have been automatically unwarned in **"..guild.name.."**. You now have "..level.." warning"..utils.s(level)..".", "00ff00", warnFooter)
 					if publicLogChannel then
-						utils.sendEmbed(staffLogChannel, name.." has been automatically unwarned. They now have "..level.." warning"..utils.s(level)..".", "00ff00", warnFooter)
+						utils.sendEmbed(publicLogChannel, name.." has been automatically unwarned. They now have "..level.." warning"..utils.s(level)..".", "00ff00", warnFooter, nil, warnUser.mentionString)
 					end
 					if staffLogChannel then
 						utils.sendEmbed(staffLogChannel, name.." has been automatically unwarned. They now have "..level.." warning"..utils.s(level)..".", "00ff00", warnFooter)
