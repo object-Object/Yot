@@ -18,7 +18,7 @@ end
 
 local jsonColumns=utils.createLookupTable{
 	"disabled_commands",
-	"disabled_events",
+	"disabled_modules",
 	"persistent_roles",
 	"command_permissions"
 }
