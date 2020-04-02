@@ -102,7 +102,7 @@ client:on("messageCreate", function(message)
 			guildSettings = utils.getGuildSettings(message.guild.id, conn)
 		end
 
-		moduleHandler.doModules("client.messageCreate", guildSettings, message)
+		moduleHandler.doModules("client.messageCreate", guildSettings, message, conn)
 
 		commandHandler.doCommands(message, guildSettings, conn)
 	end)
