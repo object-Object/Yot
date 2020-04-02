@@ -107,6 +107,8 @@ local dbSettingsColumns = {
 		onEnable = function(self, message, argString, guildSettings)
 			if guildSettings[self.name] then
 				return false, "Already enabled."
+			elseif not message.guild:getMember(message.client.user.id):hasPermission("manageMessages") then
+				return false, "Yotogi does not have the `manageMessages` permission."
 			end
 			return 1, "Command messages will now be deleted when a command is used."
 		end,
