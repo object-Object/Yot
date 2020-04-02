@@ -17,7 +17,10 @@ CREATE TABLE IF NOT EXISTS guild_settings (
 	warning_ban_level REAL DEFAULT ]]..options.warningBanLevel..[[,
 	delete_command_messages BOOLEAN DEFAULT 0 NOT NULL CHECK (delete_command_messages IN (0,1)),
 	public_log_channel TEXT,
-	staff_log_channel TEXT
+	staff_log_channel TEXT,
+	suggestions_channel TEXT,
+	welcome_channel TEXT,
+	muted_role_id TEXT
 );
 CREATE TABLE IF NOT EXISTS warnings (
 	guild_id TEXT,
