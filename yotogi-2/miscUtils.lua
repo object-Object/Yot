@@ -78,9 +78,10 @@ utils.setGame = function(client, conn)
 	client:setGame({name=options.defaultPrefix.."help | "..activeWarnings.." active / "..inactiveWarnings.." inactive warnings", url="https://www.twitch.tv/ThisIsAFakeTwitchLink"})
 end
 
-utils.sendEmbed = function(channel,text,color,footer_text,footer_icon)
+utils.sendEmbed = function(channel, text, color, footer_text, footer_icon, messageContent)
 	local colorValue=color and discordia.Color.fromHex(color).value or nil
 	local msg=channel:send{
+		content=messageContent,
 		embed={
 			description=text,
 			color=colorValue,
@@ -117,6 +118,12 @@ utils.userFromString = function(str, client)
 	local id = str:match("^%<%@%!?(%d+)%>$") or str:match("^(%d+)$")
 	if not id then return end
 	return client:getUser(id)
+end
+
+utils.channelFromString = function(str, client)
+	local id = str:match("^%<%#(%d+)%>$") or str:match("^(%d+)$")
+	if not id then return end
+	return client:getChannel(id)
 end
 
 utils.s = function(num)
