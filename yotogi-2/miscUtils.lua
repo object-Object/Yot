@@ -126,6 +126,12 @@ utils.channelFromString = function(str, client)
 	return client:getChannel(id)
 end
 
+utils.roleFromString = function(str, guild)
+	local id = str:match("^%<%@%&(%d+)%>$") or str:match("^(%d+)$")
+	if not id then return end
+	return guild:getRole(id)
+end
+
 utils.s = function(num)
 	return num==1 and "" or "s"
 end
