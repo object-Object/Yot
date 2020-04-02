@@ -39,7 +39,7 @@ clock:on("min", function()
 			moduleHandler.doModules("clock.min", guildSettings, guild, conn)
 		end)
 		if not success then
-			utils.logError(guild, "messageCreate", err)
+			utils.logError(guild, err)
 			print("Bot crashed! Guild: "..guild.name.." ("..guild.id..")\n"..err)
 			break
 		end
@@ -66,7 +66,7 @@ client:on("memberJoin", function(member)
 		moduleHandler.doModules("client.memberJoin", guildSettings, member, conn)
 	end)
 	if not success then
-		utils.logError(member.guild, "messageCreate", err)
+		utils.logError(member.guild, err)
 		print("Bot crashed! Guild: "..member.guild.name.." ("..member.guild.id..")\n"..err)
 	end
 end)
@@ -81,7 +81,7 @@ client:on("memberLeave", function(member)
 		moduleHandler.doModules("client.memberLeave", guildSettings, member, conn)
 	end)
 	if not success then
-		utils.logError(member.guild, "messageCreate", err)
+		utils.logError(member.guild, err)
 		print("Bot crashed! Guild: "..member.guild.name.." ("..member.guild.id..")\n"..err)
 	end
 end)
@@ -107,7 +107,37 @@ client:on("messageCreate", function(message)
 		commandHandler.doCommands(message, guildSettings, conn)
 	end)
 	if not success then
-		utils.logError(message.guild, "messageCreate", err)
+		utils.logError(message.guild, err)
+		print("Bot crashed! Guild: "..message.guild.name.." ("..message.guild.id..")\n"..err)
+	end
+end)
+
+client:on("messageUpdate", function(message)
+	local success, err = pcall(function()
+		local guildSettings = utils.getGuildSettings(message.guild.id, conn)
+		if not guildSettings then
+			setupGuild(message.guild.id)
+			guildSettings = utils.getGuildSettings(message.guild.id, conn)
+		end
+		moduleHandler.doModules("client.messageUpdate", guildSettings, message, conn)
+	end)
+	if not success then
+		utils.logError(message.guild, err)
+		print("Bot crashed! Guild: "..message.guild.name.." ("..message.guild.id..")\n"..err)
+	end
+end)
+
+client:on("messageDelete", function(message)
+	local success, err = pcall(function()
+		local guildSettings = utils.getGuildSettings(message.guild.id, conn)
+		if not guildSettings then
+			setupGuild(message.guild.id)
+			guildSettings = utils.getGuildSettings(message.guild.id, conn)
+		end
+		moduleHandler.doModules("client.messageDelete", guildSettings, message, conn)
+	end)
+	if not success then
+		utils.logError(message.guild, err)
 		print("Bot crashed! Guild: "..message.guild.name.." ("..message.guild.id..")\n"..err)
 	end
 end)
