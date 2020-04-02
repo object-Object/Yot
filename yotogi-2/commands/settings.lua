@@ -77,6 +77,29 @@ local dbSettingsColumns = {
 			return nil, ""
 		end
 	},
+	muted_role = {
+		name = "muted_role",
+		description = "The role muted users are given.",
+		args = "<role mention (e.g. @Role) or role id>",
+		onEnable = function(self, message, argString, guildSettings)
+			if argString=="" then
+				return false, "Role not found in message."
+			else
+				local role = utils.roleFromString(argString, message.guild)
+				if role then
+					return role.id, "Muted users will now be given the role `"..role.name.."`. Note: this does **not** apply retroactively."
+				else
+					return false, "Role `"..argString.."` not found."
+				end
+			end
+		end,
+		onDisable = function(self, message, argString, guildSettings)
+			if not guildSettings[self.name] then
+				return false, "Already disabled."
+			end
+			return nil, "Commands related to muting users will not function until `muted_role` is set."
+		end
+	},
 	delete_command_messages = {
 		name = "delete_command_messages",
 		description = "Whether or not command messages should be deleted.",
