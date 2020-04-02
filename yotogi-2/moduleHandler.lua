@@ -17,8 +17,8 @@ moduleHandler.load = function()
 end
 
 moduleHandler.doModules = function(event, guildSettings, ...)
-	for modName, mod in pairs(moduleHandler.modules) do
-		if mod.event==event and not guildSettings.disabled_modules[modName] then
+	for _, mod in pairs(moduleHandler.modules) do
+		if mod.event==event and not guildSettings.disabled_modules[mod.name] then
 			mod:run(guildSettings, ...)
 		end
 	end
