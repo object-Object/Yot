@@ -94,7 +94,7 @@ utils.sendEmbed = function(channel, text, color, footer_text, footer_icon, messa
 	return msg
 end
 
-utils.logError = function(guild, section, err)
+utils.logError = function(guild, err)
 	return guild.client.owner:send{
 		embed = {
 			title = "Bot crashed!",
