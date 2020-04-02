@@ -3,21 +3,110 @@ local discordia = require("discordia")
 local utils = require("../miscUtils")
 local json = require("json")
 
+-- descriptions of all of the settings that can be enabled/disabled with the base settings command
+-- onEnable and onDisable return two values: the value that goes into the database, and text to be appended to the confirmation message sent in response to the command
+-- if value is false, response is the error message to be sent to the user
+-- args explains what to give as arguments when enabling the setting
 local dbSettingsColumns = {
-	{name = "public_log_channel", description = "The public log channel, for things like warnings being automatically decreased and mutes being removed."},
-	{name = "staff_log_channel", description = "The staff log channel, similar to the public log channel but with more information. Also where edited/deleted messages are logged to if enabled."},
-	{name = "delete_command_messages", description = "Whether or not command messages should be deleted."}
+	public_log_channel = {
+		description = "The public log channel, for things like warnings being automatically decreased and mutes being removed.",
+		args = "<channel mention (e.g. #general) or channel id>",
+		onEnable = function(self, message, argString)
+			if argString=="" then
+				return message.channel.id, "Public log messages will now be sent in this channel."
+			else
+				local channel = utils.channelFromString(argString, message.client)
+				if channel then
+					return channel.id, "Public log messages will now be sent in "..channel.mentionString.."."
+				else
+					return false, "Channel `"..argString.."` not found."
+				end
+			end
+		end,
+		onDisable = function(self, message, argString)
+			return nil, "Public log messages will no longer be sent."
+		end
+	},
+	staff_log_channel = {
+		description = "The staff log channel, similar to the public log channel but with more information. Also where edited/deleted messages are logged to if enabled.",
+		args = "<channel mention (e.g. #general) or channel id>",
+		onEnable = function(self, message, argString)
+			if argString=="" then
+				return message.channel.id, "Staff log messages will now be sent in this channel."
+			else
+				local channel = utils.channelFromString(argString, message.client)
+				if channel then
+					return channel.id, "Staff log messages will now be sent in "..channel.mentionString.."."
+				else
+					return false, "Channel `"..argString.."` not found."
+				end
+			end
+		end,
+		onDisable = function(self, message, argString)
+			return nil, "Staff log messages will no longer be sent."
+		end
+	},
+	delete_command_messages = {
+		description = "Whether or not command messages should be deleted.",
+		args = "None",
+		onEnable = function(self, message, argString)
+			return 1, "Command messages will now be deleted when a command is used."
+		end,
+		onDisable = function(self, message, argString)
+			return 0, "Command messages will no longer be deleted when a command is used."
+		end
+	}
 }
+
+local function showSettings(message, guildSettings)
+	local output = "```\n"
+	for columnString, column in pairs(dbSettingsColumns) do
+		output = output..columnString.." - "..(guildSettings[columnString] and tostring(guildSettings[columnString]) or "disabled").."\n"
+	end
+	output = output:gsub("\n$","").."```"
+	message.channel:send{
+		embed = {
+			title = "Settings",
+			description = output,
+			color = discordia.Color.fromHex("00ff00").value,
+			footer = {
+				text = "Do "..guildSettings.prefix.."settings [setting] for more info on a setting."
+			}
+		}
+	}
+end
 
 local settings = {
 	name = "settings",
-	description = "The main command for changing Yotogi's per-server settings. Lists togglable settings when used without arguments or subcommands.",
-	usage = "settings",
+	description = "The main command for changing Yotogi's per-server settings. Lists togglable settings or shows information about a setting when used without subcommands.",
+	usage = "settings [setting]",
 	visible = true,
 	permissions = {"administrator"},
 	run = function(self, message, argString, args, guildSettings, conn)
 		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
-		
+		if argString=="" then
+			showSettings(message, guildSettings)
+		else
+			local columnString = args[1]
+			local column = dbSettingsColumns[columnString]
+			if column then
+				message.channel:send{
+					embed = {
+						title = columnString,
+						description = column.description,
+						fields = {
+							{name = "Arguments for enabling", value = "`"..column.args.."`"}
+						},
+						color = discordia.Color.fromHex("00ff00").value,
+						footer = {
+							text = commandHandler.strings.usageFooter
+						}
+					}
+				}
+			else
+				showSettings(message, guildSettings)
+			end
+		end
 	end,
 	onEnable = function(self, message, guildSettings)
 		return true
@@ -25,6 +114,60 @@ local settings = {
 	onDisable = function(self, message, guildSettings)
 		utils.sendEmbed(message.channel, "Disabling `"..guildSettings.prefix..self.name.."` is not permitted.", "ff0000")
 		return false
+	end,
+	subcommands = {}
+}
+
+settings.subcommands.enable = {
+	name = "settings enable",
+	description = "Enable a setting. May have arguments, depending on the setting being enabled. Do `&prefix;settings [setting]` to see arguments for a setting.",
+	usage = "settings enable [arguments]",
+	run = function(self, message, argString, args, guildSettings, conn)
+		if argString=="" then
+			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
+			return
+		end
+		local column = dbSettingsColumns[args[1]]
+		if not column then
+			utils.sendEmbed(message.channel, "Setting `"..args[1].."` not found.", "ff0000")
+			return
+		end
+		local value, text = column:onEnable(message, argString:gsub("^%S+%s+",""))
+		if value==false then
+			utils.sendEmbed(message.channel, "`"..args[1].."` could not be enabled: "..text, "ff0000")
+			return
+		end
+		local stmt = conn:prepare("UPDATE guild_settings SET "..args[1].." = ? WHERE guild_id = ?;")
+		stmt:reset():bind(value, message.guild.id):step()
+		stmt:close()
+		utils.sendEmbed(message.channel, "`"..args[1].."` is now enabled. "..text, "00ff00")
+	end,
+	subcommands = {}
+}
+
+settings.subcommands.disable = {
+	name = "settings disable",
+	description = "Disable a setting.",
+	usage = "settings disable",
+	run = function(self, message, argString, args, guildSettings, conn)
+		if argString=="" then
+			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
+			return
+		end
+		local column = dbSettingsColumns[args[1]]
+		if not column then
+			utils.sendEmbed(message.channel, "Setting `"..args[1].."` not found.", "ff0000")
+			return
+		end
+		local value, text = column:onDisable(message, argString:gsub("^%S+%s+",""))
+		if value==false then
+			utils.sendEmbed(message.channel, "`"..args[1].."` could not be disabled: "..text, "ff0000")
+			return
+		end
+		local stmt = conn:prepare("UPDATE guild_settings SET "..args[1].." = ? WHERE guild_id = ?;")
+		stmt:reset():bind(value, message.guild.id):step()
+		stmt:close()
+		utils.sendEmbed(message.channel, "`"..args[1].."` is now disabled. "..text, "00ff00")
 	end,
 	subcommands = {}
 }
