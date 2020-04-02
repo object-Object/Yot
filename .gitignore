@@ -18,3 +18,4 @@ yotogi/core
 */*.db
 */options.lua
 yotogi-2/todo.txt
+yotogi-2/*/wiki*.lua
