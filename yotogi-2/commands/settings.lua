@@ -3,15 +3,21 @@ local discordia = require("discordia")
 local utils = require("../miscUtils")
 local json = require("json")
 
+local dbSettingsColumns = {
+	{name = "public_log_channel", description = "The public log channel, for things like warnings being automatically decreased and mutes being removed."},
+	{name = "staff_log_channel", description = "The staff log channel, similar to the public log channel but with more information. Also where edited/deleted messages are logged to if enabled."},
+	{name = "delete_command_messages", description = "Whether or not command messages should be deleted."}
+}
+
 local settings = {
 	name = "settings",
-	description = "Change settings for Yotogi in this server. Does nothing without subcommands.",
+	description = "The main command for changing Yotogi's per-server settings. Lists togglable settings when used without arguments or subcommands.",
 	usage = "settings",
 	visible = true,
 	permissions = {"administrator"},
 	run = function(self, message, argString, args, guildSettings, conn)
 		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
-		commandHandler.sendCommandHelp(message.channel, guildSettings, self.name, self, self.permissions)
+		
 	end,
 	onEnable = function(self, message, guildSettings)
 		return true
