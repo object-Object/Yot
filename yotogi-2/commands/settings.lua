@@ -9,9 +9,10 @@ local json = require("json")
 -- args explains what to give as arguments when enabling the setting
 local dbSettingsColumns = {
 	public_log_channel = {
+		name = "public_log_channel",
 		description = "The public log channel, for things like warnings being automatically decreased and mutes being removed.",
 		args = "<channel mention (e.g. #general) or channel id>",
-		onEnable = function(self, message, argString)
+		onEnable = function(self, message, argString, guildSettings)
 			if argString=="" then
 				return message.channel.id, "Public log messages will now be sent in this channel."
 			else
@@ -23,14 +24,18 @@ local dbSettingsColumns = {
 				end
 			end
 		end,
-		onDisable = function(self, message, argString)
+		onDisable = function(self, message, argString, guildSettings)
+			if not guildSettings[self.name] then
+				return false, "Already disabled."
+			end
 			return nil, "Public log messages will no longer be sent."
 		end
 	},
 	staff_log_channel = {
+		name = "staff_log_channel",
 		description = "The staff log channel, similar to the public log channel but with more information. Also where edited/deleted messages are logged to if enabled.",
 		args = "<channel mention (e.g. #general) or channel id>",
-		onEnable = function(self, message, argString)
+		onEnable = function(self, message, argString, guildSettings)
 			if argString=="" then
 				return message.channel.id, "Staff log messages will now be sent in this channel."
 			else
@@ -42,20 +47,53 @@ local dbSettingsColumns = {
 				end
 			end
 		end,
-		onDisable = function(self, message, argString)
+		onDisable = function(self, message, argString, guildSettings)
+			if not guildSettings[self.name] then
+				return false, "Already disabled."
+			end
 			return nil, "Staff log messages will no longer be sent."
 		end
 	},
+	suggestions_channel = {
+		name = "suggestions_channel",
+		description = "The suggestions channel, in which all messages will receive the reactions :thumbsup:, :person_shrugging:, and :thumbsdown: to allow people to vote on the suggestions.",
+		args = "<channel mention (e.g. #general) or channel id>",
+		onEnable = function(self, message, argString, guildSettings)
+			if argString=="" then
+				return message.channel.id, "Messages sent in this channel will now receive voting reactions."
+			else
+				local channel = utils.channelFromString(argString, message.client)
+				if channel then
+					return channel.id, "Messages sent in "..channel.mentionString.." will now receive voting reactions."
+				else
+					return false, "Channel `"..argString.."` not found."
+				end
+			end
+		end,
+		onDisable = function(self, message, argString, guildSettings)
+			if not guildSettings[self.name] then
+				return false, "Already disabled."
+			end
+			return nil, ""
+		end
+	},
 	delete_command_messages = {
+		name = "delete_command_messages",
 		description = "Whether or not command messages should be deleted.",
 		args = "None",
-		onEnable = function(self, message, argString)
+		onEnable = function(self, message, argString, guildSettings)
+			if guildSettings[self.name] then
+				return false, "Already enabled."
+			end
 			return 1, "Command messages will now be deleted when a command is used."
 		end,
-		onDisable = function(self, message, argString)
+		onDisable = function(self, message, argString, guildSettings)
+			if not guildSettings[self.name] then
+				return false, "Already disabled."
+			end
 			return 0, "Command messages will no longer be deleted when a command is used."
 		end
-	}
+	},
 }
 
 local function showSettings(message, guildSettings)
@@ -132,15 +170,15 @@ settings.subcommands.enable = {
 			utils.sendEmbed(message.channel, "Setting `"..args[1].."` not found.", "ff0000")
 			return
 		end
-		local value, text = column:onEnable(message, argString:gsub("^%S+%s+",""))
+		local value, text = column:onEnable(message, argString:gsub("^%S+%s+",""), guildSettings)
 		if value==false then
-			utils.sendEmbed(message.channel, "`"..args[1].."` could not be enabled: "..text, "ff0000")
+			utils.sendEmbed(message.channel, "`"..column.name.."` could not be enabled: "..text, "ff0000")
 			return
 		end
-		local stmt = conn:prepare("UPDATE guild_settings SET "..args[1].." = ? WHERE guild_id = ?;")
+		local stmt = conn:prepare("UPDATE guild_settings SET "..column.name.." = ? WHERE guild_id = ?;")
 		stmt:reset():bind(value, message.guild.id):step()
 		stmt:close()
-		utils.sendEmbed(message.channel, "`"..args[1].."` is now enabled. "..text, "00ff00")
+		utils.sendEmbed(message.channel, "`"..column.name.."` is now enabled. "..text, "00ff00")
 	end,
 	subcommands = {}
 }
@@ -159,15 +197,15 @@ settings.subcommands.disable = {
 			utils.sendEmbed(message.channel, "Setting `"..args[1].."` not found.", "ff0000")
 			return
 		end
-		local value, text = column:onDisable(message, argString:gsub("^%S+%s+",""))
+		local value, text = column:onDisable(message, argString:gsub("^%S+%s+",""), guildSettings)
 		if value==false then
-			utils.sendEmbed(message.channel, "`"..args[1].."` could not be disabled: "..text, "ff0000")
+			utils.sendEmbed(message.channel, "`"..column.name.."` could not be disabled: "..text, "ff0000")
 			return
 		end
-		local stmt = conn:prepare("UPDATE guild_settings SET "..args[1].." = ? WHERE guild_id = ?;")
+		local stmt = conn:prepare("UPDATE guild_settings SET "..column.name.." = ? WHERE guild_id = ?;")
 		stmt:reset():bind(value, message.guild.id):step()
 		stmt:close()
-		utils.sendEmbed(message.channel, "`"..args[1].."` is now disabled. "..text, "00ff00")
+		utils.sendEmbed(message.channel, "`"..column.name.."` is now disabled. "..text, "00ff00")
 	end,
 	subcommands = {}
 }
