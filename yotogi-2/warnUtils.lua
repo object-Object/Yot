@@ -25,7 +25,7 @@ warnUtils.warn = function(warnMember, warnUser, message, guildSettings, conn, re
 	local selfMember = message.guild:getMember(message.client.user.id)
 	if entry.level==guildSettings.warning_kick_level and warnMember then
 		if not selfMember:hasPermission("kickMembers") then
-			utils.sendEmbed(message.channel, name.." could not be kicked because Yotogi does not have the `banMembers` permission.", "ff0000")
+			utils.sendEmbed(message.channel, name.." could not be kicked because Yotogi does not have the `kickMembers` permission.", "ff0000")
 		elseif selfMember.highestRole.position<=warnMember.highestRole.position then
 			utils.sendEmbed(message.channel, name.." could not be kicked because Yotogi's highest role is not higher than their highest role.", "ff0000")
 		elseif warnUser.id==message.guild.ownerId then
