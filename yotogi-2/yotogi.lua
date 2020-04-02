@@ -114,6 +114,7 @@ end)
 
 client:on("messageUpdate", function(message)
 	local success, err = pcall(function()
+		if not message.guild then return end
 		local guildSettings = utils.getGuildSettings(message.guild.id, conn)
 		if not guildSettings then
 			setupGuild(message.guild.id)
@@ -129,6 +130,7 @@ end)
 
 client:on("messageDelete", function(message)
 	local success, err = pcall(function()
+		if not message.guild then return end
 		local guildSettings = utils.getGuildSettings(message.guild.id, conn)
 		if not guildSettings then
 			setupGuild(message.guild.id)
