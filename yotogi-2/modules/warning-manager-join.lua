@@ -17,12 +17,12 @@ return {
 			local warnFooter = commandHandler.strings.warnFooter(guildSettings, entry)
 			utils.sendEmbed(member:getPrivateChannel(), "Your warnings have been given back in **"..member.guild.name.."**. You have "..entry.level.." warning"..utils.s(entry.level)..".", "00ff00", warnFooter)
 			local publicLogChannel = guildSettings.public_log_channel and member.guild:getChannel(guildSettings.public_log_channel)
-			local staffLogChannel = guildSettings.staff_log_channel and member.guild:getChannel(guildSettings.public_log_channel)
+			local staffLogChannel = guildSettings.staff_log_channel and member.guild:getChannel(guildSettings.staff_log_channel)
 			if publicLogChannel then
-				utils.sendEmbed(publicLogChannel, name.."'s warnings have been given back. They have "..entry.level.." warning"..utils.s(entry.level)..".", "00ff00", warnFooter)
+				utils.sendEmbed(publicLogChannel, member.user.tag.."'s warnings have been given back. They have "..entry.level.." warning"..utils.s(entry.level)..".", "00ff00", warnFooter)
 			end
 			if staffLogChannel then
-				utils.sendEmbed(staffLogChannel, name.."'s warnings have been given back. They have "..entry.level.." warning"..utils.s(entry.level)..".", "00ff00", warnFooter)
+				utils.sendEmbed(staffLogChannel, member.user.tag.."'s warnings have been given back. They have "..entry.level.." warning"..utils.s(entry.level)..".", "00ff00", warnFooter)
 			end
 			utils.setGame(member.client, conn)
 		end
