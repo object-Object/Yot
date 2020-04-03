@@ -427,8 +427,6 @@ end
 warnDownload()
 persistDownload()
 
-botNotRunning=true
-
 client:on("ready", function()
     p("Logged in! Prefix: "..prefix)
     local aWarningNum=0
@@ -437,7 +435,6 @@ client:on("ready", function()
     aWarningNum=tostring(aWarningNum)
     iWarningNum=tostring(iWarningNum)
     client:setGame({name=aWarningNum.." active / "..iWarningNum.." inactive warnings", url="https://www.twitch.tv/ThisIsAFakeTwitchLink"})
-    if botNotRunning then botNotRunning=nil else logError("Bot crashed!","ready","Network error, reconnecting") end
 end)
 
 client:on('guildAvailable', function(guild)
