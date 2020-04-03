@@ -18,7 +18,7 @@ return {
 			for row=1, nrow do
 				local warnMember = guild:getMember(warnings.user_id[row])
 				if not warnMember then
-					fixActiveStmt:reset():bind(guild.id, warnUser.id):step()
+					fixActiveStmt:reset():bind(guild.id, warnings.user_id[row]):step()
 				else
 					local warnUser = guild.client:getUser(warnings.user_id[row])
 					local level = warnings.level[row]-1
@@ -49,12 +49,12 @@ return {
 	end,
 	onEnable = function(self, message, guildSettings, conn)
 		conn:exec("UPDATE guild_settings SET warning_length = "..options.warningLength.." WHERE guild_id = '"..message.guild.id.."';")
-		utils.sendEmbed(message.channel, "Warnings will now expire. The warning_length setting has been set to "..options.warningLength..".", "00ff00")
+		utils.sendEmbed(message.channel, "Warnings will now expire. The `warning_length` setting has been set to "..options.warningLength..".", "00ff00")
 		return true
 	end,
 	onDisable = function(self, message, guildSettings, conn)
 		conn:exec("UPDATE guild_settings SET warning_length = 0 WHERE guild_id = '"..message.guild.id.."';")
-		utils.sendEmbed(message.channel, "Warnings will no longer expire. The warning_length setting has been set to 0.", "00ff00")
+		utils.sendEmbed(message.channel, "Warnings will no longer expire. The `warning_length` setting has been set to 0.", "00ff00")
 		return true
 	end
 }
