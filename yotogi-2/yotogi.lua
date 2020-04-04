@@ -28,21 +28,24 @@ local function setupGuild(id)
 	conn:exec("INSERT INTO guild_settings (guild_id, disabled_modules) VALUES ('"..id.."', '"..disabledModulesStr.."')")
 end
 
+local function doModulesPcall(event, guild, conn, ...)
+	local success, err = pcall(function(...)
+		local guildSettings = utils.getGuildSettings(guild.id, conn)
+		if not guildSettings then
+			setupGuild(guild.id)
+			guildSettings = utils.getGuildSettings(guild.id, conn)
+		end
+		moduleHandler.doModules(event, guildSettings, ...)
+	end, ...)
+	if not success then
+		utils.logError(guild, err)
+		print("Bot crashed! Guild: "..member.guild.name.." ("..member.guild.id..")\n"..err)
+	end
+end
+
 clock:on("min", function()
 	for guild in client.guilds:iter() do
-		local success, err = pcall(function()
-			local guildSettings = utils.getGuildSettings(guild.id, conn)
-			if not guildSettings then
-				setupGuild(guild.id)
-				guildSettings = utils.getGuildSettings(guild.id, conn)
-			end
-			moduleHandler.doModules("clock.min", guildSettings, guild, conn)
-		end)
-		if not success then
-			utils.logError(guild, err)
-			print("Bot crashed! Guild: "..guild.name.." ("..guild.id..")\n"..err)
-			break
-		end
+		doModulesPcall("clock.min", guild, conn, guild, conn)
 	end
 end)
 
@@ -57,33 +60,15 @@ client:on("guildCreate", function(guild)
 end)
 
 client:on("memberJoin", function(member)
-	local success, err = pcall(function()
-		local guildSettings = utils.getGuildSettings(member.guild.id, conn)
-		if not guildSettings then
-			setupGuild(member.guild.id)
-			guildSettings = utils.getGuildSettings(member.guild.id, conn)
-		end
-		moduleHandler.doModules("client.memberJoin", guildSettings, member, conn)
-	end)
-	if not success then
-		utils.logError(member.guild, err)
-		print("Bot crashed! Guild: "..member.guild.name.." ("..member.guild.id..")\n"..err)
-	end
+	doModulesPcall("client.memberJoin", member.guild, conn, member, conn)
 end)
 
 client:on("memberLeave", function(member)
-	local success, err = pcall(function()
-		local guildSettings = utils.getGuildSettings(member.guild.id, conn)
-		if not guildSettings then
-			setupGuild(member.guild.id)
-			guildSettings = utils.getGuildSettings(member.guild.id, conn)
-		end
-		moduleHandler.doModules("client.memberLeave", guildSettings, member, conn)
-	end)
-	if not success then
-		utils.logError(member.guild, err)
-		print("Bot crashed! Guild: "..member.guild.name.." ("..member.guild.id..")\n"..err)
-	end
+	doModulesPcall("client.memberLeave", member.guild, conn, member, conn)
+end)
+
+client:on("userBan", function(user, guild)
+	doModulesPcall("client.userBan", guild, conn, user, guild, conn)
 end)
 
 client:on("messageCreate", function(message)
@@ -113,35 +98,13 @@ client:on("messageCreate", function(message)
 end)
 
 client:on("messageUpdate", function(message)
-	local success, err = pcall(function()
-		if not message.guild then return end
-		local guildSettings = utils.getGuildSettings(message.guild.id, conn)
-		if not guildSettings then
-			setupGuild(message.guild.id)
-			guildSettings = utils.getGuildSettings(message.guild.id, conn)
-		end
-		moduleHandler.doModules("client.messageUpdate", guildSettings, message, conn)
-	end)
-	if not success then
-		utils.logError(message.guild, err)
-		print("Bot crashed! Guild: "..message.guild.name.." ("..message.guild.id..")\n"..err)
-	end
+	if not message.guild then return end
+	doModulesPcall("client.messageUpdate", message.guild, conn, message, conn)
 end)
 
 client:on("messageDelete", function(message)
-	local success, err = pcall(function()
-		if not message.guild then return end
-		local guildSettings = utils.getGuildSettings(message.guild.id, conn)
-		if not guildSettings then
-			setupGuild(message.guild.id)
-			guildSettings = utils.getGuildSettings(message.guild.id, conn)
-		end
-		moduleHandler.doModules("client.messageDelete", guildSettings, message, conn)
-	end)
-	if not success then
-		utils.logError(message.guild, err)
-		print("Bot crashed! Guild: "..message.guild.name.." ("..message.guild.id..")\n"..err)
-	end
+	if not message.guild then return end
+	doModulesPcall("client.messageDelete", message.guild, conn, message, conn)
 end)
 
 clock:start()
