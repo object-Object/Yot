@@ -49,7 +49,7 @@ return {
 				goto continue
 			end
 			local text = name.." has been automatically unmuted."
-			utils.sendEmbedSafe(publicLogChannel, text, "00ff00", nil, nil, muteUser.mentionString)
+			utils.sendEmbedSafe(publicLogChannel, text, "00ff00")
 			utils.sendEmbedSafe(staffLogChannel, text, "00ff00")
 
 			-- I know "goto is evil", but it drastically improves code clarity here because Lua doesn't have a continue statement
