@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS warnings (
 CREATE TABLE IF NOT EXISTS mutes (
 	guild_id TEXT,
 	user_id TEXT,
-	duration REAL,
+	length REAL,
 	end_timestamp REAL,
 	is_active BOOLEAN DEFAULT 1 NOT NULL CHECK (is_active IN (0,1)),
 	PRIMARY KEY (guild_id, user_id),
