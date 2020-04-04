@@ -1,4 +1,5 @@
 local commandHandler = require("../commandHandler")
+local moduleHandler = require("../moduleHandler")
 local discordia = require("discordia")
 local utils = require("../miscUtils")
 local json = require("json")
@@ -139,6 +140,27 @@ local function showSettings(message, guildSettings)
 	}
 end
 
+local function showModules(message, guildSettings)
+	local output = "```\n"
+	for _, modString in ipairs(moduleHandler.sortedModuleNames) do
+		local mod = moduleHandler.modules[modString]
+		if mod.visible then
+			output = output..modString.." - "..(guildSettings.disabled_modules[modString] and "DISABLED" or "enabled").."\n"
+		end
+	end
+	output = output:gsub("\n$","").."```"
+	message.channel:send{
+		embed = {
+			title = "Module list",
+			description = output,
+			color = discordia.Color.fromHex("00ff00").value,
+			footer = {
+				text = "Modules are case sensitive."
+			}
+		}
+	}
+end
+
 local settings = {
 	name = "settings",
 	description = "The main command for changing Yotogi's per-server settings. Lists togglable settings or shows information about a setting when used without subcommands.",
@@ -158,7 +180,8 @@ local settings = {
 						title = columnString,
 						description = column.description,
 						fields = {
-							{name = "Arguments for enabling", value = "`"..column.args.."`"}
+							{name = "Arguments for enabling", value = "`"..column.args.."`"},
+							{name = "Value", value = "`"..(guildSettings[columnString] and tostring(guildSettings[columnString]) or "disabled").."`"}
 						},
 						color = discordia.Color.fromHex("00ff00").value,
 						footer = {
@@ -278,7 +301,7 @@ settings.subcommands.commands.subcommands.enable = {
 			utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already enabled.", "ff0000")
 			return
 		end
-		if not commandHandler.enable(commandString, message.guild.id, guildSettings, conn) then return end
+		if not commandHandler.enable(commandString, message, guildSettings, conn) then return end
 		utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is now enabled.", "00ff00")
 	end,
 	subcommands = {}
@@ -302,7 +325,7 @@ settings.subcommands.commands.subcommands.disable = {
 			utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already disabled.", "ff0000")
 			return
 		end
-		if not commandHandler.disable(commandString, message.guild.id, guildSettings, conn) then return end
+		if not commandHandler.disable(commandString, message, guildSettings, conn) then return end
 		utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is now disabled.", "00ff00")
 	end,
 	subcommands = {}
@@ -383,6 +406,82 @@ settings.subcommands.commands.subcommands.reset = {
 		local disabled_commands = json.encode(guildSettings.disabled_commands)
 		conn:exec("UPDATE guild_settings SET command_permissions = '"..command_permissions.."', disabled_commands = '"..disabled_commands.."' WHERE guild_id = '"..message.guild.id.."';")
 		utils.sendEmbed(message.channel, "Successfully reset `"..guildSettings.prefix..commandString.."`.", "00ff00")
+	end,
+	subcommands = {}
+}
+
+settings.subcommands.modules = {
+	name = "settings modules",
+	description = "List all modules and whether they are enabled or disabled, or show information about a module.",
+	usage = "settings modules [module]",
+	run = function(self, message, argString, args, guildSettings, conn)
+		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
+		if argString=="" then
+			showModules(message, guildSettings)
+		else
+			local mod = moduleHandler.modules[argString]
+			if (mod and mod.visible) then
+				message.channel:send{
+					embed = {
+						title = mod.name,
+						description = mod.description,
+						fields = {
+							{name = "Event", value = "`"..mod.event.."`"},
+							{name = "Enabled", value = (guildSettings.disabled_modules[mod.name] and "no" or "yes")}
+						},
+						color = discordia.Color.fromHex("00ff00").value
+					}
+				}
+			else
+				showModules(message, guildSettings)
+			end
+		end
+	end,
+	subcommands = {}
+}
+
+settings.subcommands.modules.subcommands.enable = {
+	name = "settings modules enable",
+	description = "Enable a disabled module.",
+	usage = "settings modules enable <module>",
+	run = function(self, message, argString, args, guildSettings, conn)
+		if argString=="" then
+			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
+			return
+		end
+		local mod = moduleHandler.modules[argString]
+		if not (mod and mod.visible) then
+			utils.sendEmbed(message.channel, "Module `"..argString.."` not found.", "ff0000")
+			return
+		elseif not guildSettings.disabled_modules[mod.name] then
+			utils.sendEmbed(message.channel, "`"..mod.name.."` is already enabled.", "ff0000")
+			return
+		end
+		if not moduleHandler.enable(mod.name, message, guildSettings, conn) then return end
+		utils.sendEmbed(message.channel, "`"..mod.name.."` is now enabled.", "00ff00")
+	end,
+	subcommands = {}
+}
+
+settings.subcommands.modules.subcommands.disable = {
+	name = "settings modules disable",
+	description = "Disable an enabled module.",
+	usage = "settings modules disable <module>",
+	run = function(self, message, argString, args, guildSettings, conn)
+		if argString=="" then
+			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
+			return
+		end
+		local mod = moduleHandler.modules[argString]
+		if not (mod and mod.visible) then
+			utils.sendEmbed(message.channel, "Module `"..argString.."` not found.", "ff0000")
+			return
+		elseif guildSettings.disabled_modules[mod.name] then
+			utils.sendEmbed(message.channel, "`"..mod.name.."` is already disabled.", "ff0000")
+			return
+		end
+		if not moduleHandler.disable(mod.name, message, guildSettings, conn) then return end
+		utils.sendEmbed(message.channel, "`"..mod.name.."` is now disabled.", "00ff00")
 	end,
 	subcommands = {}
 }
