@@ -1,5 +1,6 @@
 local fs = require("fs")
 local utils = require("./miscUtils")
+local json = require("json")
 local discordia = require("discordia")
 
 local commandHandler = {}
@@ -92,7 +93,7 @@ commandHandler.sendPermissionError = function(channel, commandString, missingPer
 end
 
 commandHandler.enable = function(commandString, message, guildSettings, conn)
-	if not commandHandler.commands[commandString]:onDisable(message, guildSettings, conn) then
+	if not commandHandler.commands[commandString]:onEnable(message, guildSettings, conn) then
 		return false
 	end
 	guildSettings.disabled_commands[commandString] = nil
