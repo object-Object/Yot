@@ -34,7 +34,7 @@ return {
 					local name = warnMember.name.."#"..warnUser.discriminator
 					utils.sendEmbed(warnUser:getPrivateChannel(), "You have been automatically unwarned in **"..guild.name.."**. You now have "..level.." warning"..utils.s(level)..".", "00ff00", warnFooter)
 					if publicLogChannel then
-						utils.sendEmbed(publicLogChannel, name.." has been automatically unwarned. They now have "..level.." warning"..utils.s(level)..".", "00ff00", warnFooter, nil, warnUser.mentionString)
+						utils.sendEmbed(publicLogChannel, name.." has been automatically unwarned. They now have "..level.." warning"..utils.s(level)..".", "00ff00", warnFooter)
 					end
 					if staffLogChannel then
 						utils.sendEmbed(staffLogChannel, name.." has been automatically unwarned. They now have "..level.." warning"..utils.s(level)..".", "00ff00", warnFooter)
