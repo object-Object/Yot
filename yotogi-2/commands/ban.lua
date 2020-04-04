@@ -36,7 +36,7 @@ return {
 			if staffLogChannel then
 				utils.sendEmbed(staffLogChannel, name.." has been banned."..reason, "00ff00", "Responsible user: "..staffMember.name.."#"..staffMember.discriminator)
 			end
-			banMember:ban(reason)
+			message.guild:banUser(banUser.id)
 		end
 	end,
 	onEnable = function(self, message, guildSettings)

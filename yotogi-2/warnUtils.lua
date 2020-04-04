@@ -40,10 +40,10 @@ warnUtils.warn = function(warnMember, warnUser, message, guildSettings, conn, re
 			utils.setGame(message.client, conn)
 			return
 		end
-	elseif entry.level==guildSettings.warning_ban_level and warnMember then
+	elseif entry.level==guildSettings.warning_ban_level then
 		if not selfMember:hasPermission("banMembers") then
 			utils.sendEmbed(message.channel, name.." could not be banned because Yotogi does not have the `banMembers` permission.", "ff0000")
-		elseif selfMember.highestRole.position<=warnMember.highestRole.position then
+		elseif warnMember and selfMember.highestRole.position<=warnMember.highestRole.position then
 			utils.sendEmbed(message.channel, name.." could not be banned because Yotogi's highest role is not higher than their highest role.", "ff0000")
 		elseif warnUser.id==message.guild.ownerId then
 			utils.sendEmbed(message.channel, name.." could not be banned because they are the server owner.", "ff0000")
@@ -53,7 +53,7 @@ warnUtils.warn = function(warnMember, warnUser, message, guildSettings, conn, re
 			if staffLogChannel then
 				utils.sendEmbed(staffLogChannel, name.." has been banned for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", "Responsible user: "..staffMember.name.."#"..staffMember.discriminator)
 			end
-			warnMember:ban(reason)
+			message.guild:banUser(warnUser.id)
 			utils.setGame(message.client, conn)
 			return
 		end
