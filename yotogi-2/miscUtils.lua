@@ -94,6 +94,11 @@ utils.sendEmbed = function(channel, text, color, footer_text, footer_icon, messa
 	return msg
 end
 
+utils.sendEmbedSafe = function(channel, text, color, footer_text, footer_icon, messageContent)
+	if not channel then return false end
+	return utils.sendEmbed(channel, text, color, footer_text, footer_icon, messageContent)
+end
+
 utils.logError = function(guild, err)
 	return guild.client.owner:send{
 		embed = {
@@ -106,6 +111,16 @@ utils.logError = function(guild, err)
 			}
 		}
 	}
+end
+
+utils.name = function(user, guild)
+	if guild then
+		local member = guild:getMember(user.id)
+		if member then
+			return member.name.."#"..user.discriminator
+		end
+	end
+	return user.tag
 end
 
 utils.memberFromString = function(str, guild)
