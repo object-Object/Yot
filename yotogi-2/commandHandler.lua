@@ -22,10 +22,10 @@ commandHandler.strings = { -- bits of text used in multiple places that should b
 			.."Warnings until ban: "..(entry.level<guildSettings.warning_ban_level and guildSettings.warning_ban_level-entry.level or "N/A").."\n"
 			.."Active: "..(entry.is_active and "yes" or "no")
 	end,
-	muteFooter = function(guildSettings, entry)
-		return "Time until unmute: "..(entry.is_active and utils.secondsToTime(entry.end_timestamp-os.time()) or "N/A").."\n"
-			.."Duration: "..utils.secondsToTime(entry.duration).."\n"
-			.."Active: "..(entry.is_active and "yes" or "no")
+	muteFooter = function(guildSettings, length, end_timestamp, is_active)
+		return "Time until unmute: "..(is_active and utils.secondsToTime(end_timestamp-os.time()) or "N/A").."\n"
+			.."Duration: "..utils.secondsToTime(length).."\n"
+			.."Active: "..(is_active and "yes" or "no")
 	end
 }
 
