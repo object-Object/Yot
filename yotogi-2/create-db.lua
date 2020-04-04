@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS guild_settings (
 	staff_log_channel TEXT,
 	suggestions_channel TEXT,
 	welcome_channel TEXT,
-	muted_role TEXT
+	muted_role TEXT,
+	advertising_allowed_role TEXT
 );
 CREATE TABLE IF NOT EXISTS warnings (
 	guild_id TEXT,
