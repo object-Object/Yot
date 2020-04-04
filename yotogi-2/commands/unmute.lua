@@ -47,9 +47,7 @@ return {
 			return
 		end
 		utils.sendEmbed(message.channel, name.." has been unmuted."..reason, "00ff00")
-		if staffLogChannel then
-			utils.sendEmbed(staffLogChannel, name.." has been unmuted."..reason, "00ff00", "Responsible user: "..utils.name(message.author, guild))
-		end
+		utils.sendEmbedSafe(staffLogChannel, name.." has been unmuted."..reason, "00ff00", "Responsible user: "..utils.name(message.author, guild))
 	end,
 	onEnable = function(self, message, guildSettings)
 		return true
