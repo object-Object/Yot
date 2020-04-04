@@ -64,6 +64,22 @@ muteUtils.mute = function(muteMember, muteUser, mutedRole, guild, conn, length)
 end
 
 -- returns: success, err
+-- true, nil if mute succeeds
+-- false, err otherwise
+muteUtils.remute = function(muteMember, muteUser, mutedRole, guild, conn, length)
+	local stmt = conn:prepare("UPDATE mutes SET is_active = 1, end_timestamp = ? WHERE guild_id = ? AND user_id = ?;")
+	stmt:reset():bind(os.time()+length, guild.id, muteUser.id):step()
+	stmt:close()
+	if muteMember then
+		local success, err = muteMember:addRole(mutedRole.id)
+		if not success then
+			return false, err
+		end
+	end
+	return true
+end
+
+-- returns: success, err
 -- true, nil if unmute succeeds
 -- false, err otherwise
 muteUtils.unmute = function(muteMember, muteUser, mutedRole, guild, conn)
