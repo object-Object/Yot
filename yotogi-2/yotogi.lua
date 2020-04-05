@@ -39,7 +39,7 @@ local function doModulesPcall(event, guild, conn, ...)
 	end, ...)
 	if not success then
 		utils.logError(guild, err)
-		print("Bot crashed! Guild: "..member.guild.name.." ("..member.guild.id..")\n"..err)
+		print("Bot crashed! Guild: "..guild.name.." ("..guild.id..")\n"..err)
 	end
 end
 

@@ -20,7 +20,8 @@ local jsonColumns=utils.createLookupTable{
 	"disabled_commands",
 	"disabled_modules",
 	"persistent_roles",
-	"command_permissions"
+	"command_permissions",
+	"roles"
 }
 local booleanColumns=utils.createLookupTable{
 	"delete_command_messages",

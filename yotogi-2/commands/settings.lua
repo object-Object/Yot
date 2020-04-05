@@ -88,7 +88,11 @@ local dbSettingsColumns = {
 			else
 				local role = utils.roleFromString(argString, message.guild)
 				if role then
-					return role.id, "Muted users will now be given the role `"..role.name.."`. Note: this does **not** apply retroactively."
+					local selfMember = message.guild:getMember(message.client.user.id)
+					if selfMember.highestRole.position<=role.position then
+						return false, "Yotogi's highest role is not above the chosen role."
+					end
+					return role.id, "Muted users will now be given the role "..role.mentionString..". Note: this does **not** apply retroactively."
 				else
 					return false, "Role `"..argString.."` not found."
 				end
@@ -99,6 +103,29 @@ local dbSettingsColumns = {
 				return false, "Already disabled."
 			end
 			return nil, "Commands related to muting users will not function until `muted_role` is set."
+		end
+	},
+	advertising_allowed_role = {
+		name = "advertising_allowed_role",
+		description = "The role that the anti-advertising modules will ignore.",
+		args = "<role mention (e.g. @Role) or role id>",
+		onEnable = function(self, message, argString, guildSettings)
+			if argString=="" then
+				return false, "Role not found in message."
+			else
+				local role = utils.roleFromString(argString, message.guild)
+				if role then
+					return role.id, "Users with the role "..role.mentionString.." will now be ignored by the anti-advertising modules."
+				else
+					return false, "Role `"..argString.."` not found."
+				end
+			end
+		end,
+		onDisable = function(self, message, argString, guildSettings)
+			if not guildSettings[self.name] then
+				return false, "Already disabled."
+			end
+			return nil, "All users will now be affected by the anti-advertising modules."
 		end
 	},
 	delete_command_messages = {
@@ -482,6 +509,85 @@ settings.subcommands.modules.subcommands.disable = {
 		end
 		if not moduleHandler.disable(mod.name, message, guildSettings, conn) then return end
 		utils.sendEmbed(message.channel, "`"..mod.name.."` is now disabled.", "00ff00")
+	end,
+	subcommands = {}
+}
+
+settings.subcommands.persistentroles = {
+	name = "settings persistentroles",
+	description = "List all persistent roles. Persistent roles are roles that will be given back to users if they leave while having them. This is different from the muted role, which is handled separately and should not be added as a persistent role.",
+	usage = "settings persistentroles",
+	run = function(self, message, argString, args, guildSettings, conn)
+		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
+		local output = "``` \n"
+		for roleId, _ in pairs(guildSettings.persistent_roles) do
+			local role = guild:getRole(roleId)
+			if role then
+				output = output..role.name.." ("..roleId..")\n"
+			end
+		end
+		output = output:gsub("\n$","").."```"
+		message.channel:send{
+			embed = {
+				title = "Persistent roles",
+				description = output,
+				color = discordia.Color.fromHex("00ff00").value
+			}
+		}
+	end,
+	subcommands = {}
+}
+
+settings.subcommands.persistentroles.subcommands.add = {
+	name = "settings persistentroles add",
+	description = "Add a persistent role by id or role mention.",
+	usage = "settings persistentroles add <role mention (e.g. @Role) or role id>",
+	run = function(self, message, argString, args, guildSettings, conn)
+		if argString=="" then
+			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
+			return
+		end
+		local role = utils.roleFromString(argString, message.guild)
+		local selfMember = message.guild:getMember(message.client.user.id)
+		if not role then
+			utils.sendEmbed(message.channel, "Role `"..argString.."` not found.", "ff0000")
+			return
+		elseif guildSettings.persistent_roles[role.id] then
+			utils.sendEmbed(message.channel, role.mentionString.." is already persistent.", "ff0000")
+			return
+		elseif selfMember.highestRole.position<=role.position then
+			utils.sendEmbed(message.channel, role.mentionString.." could not be made persistent because Yotogi's highest role is not above it.", "ff0000")
+			return
+		end
+		guildSettings.persistent_roles[role.id] = true
+		local persistent_roles = json.encode(guildSettings.persistent_roles)
+		conn:exec("UPDATE guild_settings SET persistent_roles = '"..persistent_roles.."' WHERE guild_id = '"..message.guild.id.."';")
+		utils.sendEmbed(message.channel, role.mentionString.." is now persistent.", "00ff00")
+	end,
+	subcommands = {}
+}
+
+settings.subcommands.persistentroles.subcommands.remove = {
+	name = "settings persistentroles remove",
+	description = "Remove a persistent role by id or role mention.",
+	usage = "settings persistentroles remove <role mention (e.g. @Role) or role id>",
+	run = function(self, message, argString, args, guildSettings, conn)
+		if argString=="" then
+			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
+			return
+		end
+		local role = utils.roleFromString(argString, message.guild)
+		if not role then
+			utils.sendEmbed(message.channel, "Role `"..argString.."` not found.", "ff0000")
+			return
+		elseif not guildSettings.persistent_roles[role.id] then
+			utils.sendEmbed(message.channel, role.mentionString.." is not persistent.", "ff0000")
+			return
+		end
+		guildSettings.persistent_roles[role.id] = nil
+		local persistent_roles = json.encode(guildSettings.persistent_roles)
+		conn:exec("UPDATE guild_settings SET persistent_roles = '"..persistent_roles.."' WHERE guild_id = '"..message.guild.id.."';")
+		utils.sendEmbed(message.channel, role.mentionString.." is no longer persistent.", "00ff00")
 	end,
 	subcommands = {}
 }
