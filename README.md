@@ -1,5 +1,5 @@
 # Yotogi
-Yotogi is a general-purpose bot with an emphasis on moderation. It is written, hosted, and maintained by @\[object Object]#0001.
+Yotogi is a general-purpose Discord bot written in Lua with an emphasis on moderation. It is written, hosted, and maintained by @\[object Object]#0001.
 
 ## Dependencies
 * [Luvit](https://luvit.io/)
