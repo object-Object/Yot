@@ -3,6 +3,7 @@ local utils = require("../miscUtils")
 local commandHandler = require("../commandHandler")
 local options = require("../options")
 local http = require("coro-http")
+local timer = require("timer")
 
 local timeout = false
 
