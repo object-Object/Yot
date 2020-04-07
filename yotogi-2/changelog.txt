@@ -1,3 +1,9 @@
+**v2.0.2** - 2020-04-07
+* Automated messages now have a yellow embed colour to make it more obvious that a human didn't directly cause them
+
+**v2.0.1** - 2020-04-05
+* Fixed the anti-ad modules not working at all
+
 **v2.0.0** - 2020-04-04
 ** Complete rewrite of the entire bot!
 + Added multi-server support

@@ -39,7 +39,7 @@ return {
 				goto continue
 			end
 
-			local mutedDM = utils.sendEmbed(muteUser:getPrivateChannel(), "You have been automatically unmuted in **"..guild.name.."**.", "00ff00")
+			local mutedDM = utils.sendEmbed(muteUser:getPrivateChannel(), "You have been automatically unmuted in **"..guild.name.."**.", "ffff00")
 			local success, err = muteUtils.unmute(muteMember, muteUser, mutedRole, guild, conn)
 			if not success then
 				if mutedDM then mutedDM:delete() end
@@ -49,8 +49,8 @@ return {
 				goto continue
 			end
 			local text = name.." has been automatically unmuted."
-			utils.sendEmbedSafe(publicLogChannel, text, "00ff00")
-			utils.sendEmbedSafe(staffLogChannel, text, "00ff00")
+			utils.sendEmbedSafe(publicLogChannel, text, "ffff00")
+			utils.sendEmbedSafe(staffLogChannel, text, "ffff00")
 
 			-- I know "goto is evil", but it drastically improves code clarity here because Lua doesn't have a continue statement
 			::continue::

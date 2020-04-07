@@ -40,7 +40,7 @@ return {
 		if doKick then
 			local kickValid, kickErr = warnUtils.checkValidKick(member, message.guild)
 			if kickValid then
-				local kickedDM = utils.sendEmbed(message.author:getPrivateChannel(), "You have been kicked from **"..message.guild.name.."** for automatically reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00")
+				local kickedDM = utils.sendEmbed(message.author:getPrivateChannel(), "You have been kicked from **"..message.guild.name.."** for automatically reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "ffff00")
 				local success, err = member:kick()
 				if not success then
 					-- kick failed, so continue with normal warn messages
@@ -49,8 +49,8 @@ return {
 				else
 					-- kick succeeded, exit early
 					local text = name.." has been kicked for automatically reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason
-					utils.sendEmbed(message.channel, text, "00ff00")
-					utils.sendEmbedSafe(staffLogChannel, text, "00ff00", "Responsible user: "..utils.name(message.client.user, message.guild))
+					utils.sendEmbed(message.channel, text, "ffff00")
+					utils.sendEmbedSafe(staffLogChannel, text, "ffff00", "Responsible user: "..utils.name(message.client.user, message.guild))
 					utils.setGame(message.client, conn)
 					return
 				end
@@ -61,7 +61,7 @@ return {
 		elseif doBan then
 			local banValid, banErr = warnUtils.checkValidBan(member, message.guild)
 			if banValid then
-				local bannedDM = utils.sendEmbed(message.author:getPrivateChannel(), "You have been banned from **"..message.guild.name.."** for automatically reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00")
+				local bannedDM = utils.sendEmbed(message.author:getPrivateChannel(), "You have been banned from **"..message.guild.name.."** for automatically reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason, "ffff00")
 				local success, err = message.guild:banUser(message.author.id)
 				if not success then
 					-- ban failed, so continue with normal warn messages
@@ -70,8 +70,8 @@ return {
 				else
 					-- ban succeeded, exit early
 					local text = name.." has been banned for automatically reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason
-					utils.sendEmbed(message.channel, text, "00ff00")
-					utils.sendEmbedSafe(staffLogChannel, text, "00ff00", "Responsible user: "..utils.name(message.client.user, message.guild))
+					utils.sendEmbed(message.channel, text, "ffff00")
+					utils.sendEmbedSafe(staffLogChannel, text, "ffff00", "Responsible user: "..utils.name(message.client.user, message.guild))
 					utils.setGame(message.client, conn)
 					return
 				end
@@ -83,10 +83,10 @@ return {
 
 		local warnFooter = commandHandler.strings.warnFooter(guildSettings, entry)
 
-		utils.sendEmbed(message.author:getPrivateChannel(), "You have been automatically warned in **"..message.guild.name.."**. You now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", warnFooter)
+		utils.sendEmbed(message.author:getPrivateChannel(), "You have been automatically warned in **"..message.guild.name.."**. You now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "ffff00", warnFooter)
 		local text = name.." has been automatically warned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason
-		utils.sendEmbed(message.channel, text, "00ff00", warnFooter)
-		utils.sendEmbedSafe(staffLogChannel, text, "00ff00", "Responsible user: "..utils.name(message.client.user, message.guild).."\n"..warnFooter)
+		utils.sendEmbed(message.channel, text, "ffff00", warnFooter)
+		utils.sendEmbedSafe(staffLogChannel, text, "ffff00", "Responsible user: "..utils.name(message.client.user, message.guild).."\n"..warnFooter)
 		utils.setGame(message.client, conn)
 	end,
 	onEnable = function(self, message, guildSettings, conn)
