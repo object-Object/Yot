@@ -6,7 +6,7 @@ return {
 	description = "Restart the bot.",
 	usage = "restart",
 	visible = false,
-	permissions = {"bot.botOwner"},
+	permissions = {"yotogi.botOwner"},
 	run = function(self, message, argString, args, guildSettings, conn)
 		utils.sendEmbed(message.channel, "Restarting.", "00ff00")
 		os.exit()
