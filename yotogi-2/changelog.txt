@@ -1,3 +1,6 @@
+**v2.0.3** - 2020-04-08
+* The footer of `&prefix;warnings` now only mentions `&prefix;warnings refresh` if the user is checking their own warning level
+
 **v2.0.2** - 2020-04-07
 * Automated messages now have a yellow embed colour to make it more obvious that a human didn't directly cause them
 

@@ -30,7 +30,7 @@ return {
 		end
 		local name = warnMember and warnMember.name.."#"..warnUser.discriminator or warnUser.tag
 		utils.sendEmbed(message.channel, name.." has "..entry.level.." warning"..utils.s(entry.level)..".", "00ff00",
-			"Does something seem wrong? Try "..guildSettings.prefix.."warnings refresh\n"..commandHandler.strings.warnFooter(guildSettings, entry))
+			(warnUser==message.author and "Does something seem wrong? Try "..guildSettings.prefix.."warnings refresh\n" or "")..commandHandler.strings.warnFooter(guildSettings, entry))
 	end,
 	onEnable = function(self, message, guildSettings)
 		return true
