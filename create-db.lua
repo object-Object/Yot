@@ -48,5 +48,9 @@ CREATE TABLE IF NOT EXISTS persistent_roles (
 	PRIMARY KEY (guild_id, user_id),
 	FOREIGN KEY (guild_id) REFERENCES guild_settings(guild_id)
 );
+CREATE TABLE IF NOT EXISTS webhooks (
+	channel_id TEXT PRIMARY KEY,
+	url TEXT
+);
 ]])
 print("Done.")
