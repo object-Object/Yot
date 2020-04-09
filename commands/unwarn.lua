@@ -39,7 +39,6 @@ return {
 		local text = name.." has been unwarned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason
 		utils.sendEmbed(message.channel, text, "00ff00", warnFooter)
 		utils.sendEmbedSafe(staffLogChannel, text, "00ff00", "Responsible user: "..utils.name(message.author, message.guild).."\n"..warnFooter)
-		utils.setGame(message.client, conn)
 	end,
 	onEnable = function(self, message, guildSettings)
 		return true

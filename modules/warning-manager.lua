@@ -44,7 +44,6 @@ return {
 			decreaseStmt:close()
 			deleteStmt:close()
 			fixActiveStmt:close()
-			utils.setGame(guild.client, conn)
 		end
 	end,
 	onEnable = function(self, message, guildSettings, conn)

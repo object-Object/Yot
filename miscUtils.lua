@@ -73,12 +73,6 @@ utils.getGuildSettings = function(id, conn)
 	return utils.formatRow(settings)
 end
 
-utils.setGame = function(client, conn)
-	local _,activeWarnings = conn:exec("SELECT * FROM warnings WHERE is_active=1;","k")
-	local _,inactiveWarnings = conn:exec("SELECT * FROM warnings WHERE is_active=0;","k")
-	client:setGame({name=options.defaultPrefix.."help | "..activeWarnings.." active / "..inactiveWarnings.." inactive warnings", url="https://www.twitch.tv/ThisIsAFakeTwitchLink"})
-end
-
 utils.sendEmbed = function(channel, text, color, footer_text, footer_icon, messageContent)
 	local colorValue=color and discordia.Color.fromHex(color).value or nil
 	local msg=channel:send{

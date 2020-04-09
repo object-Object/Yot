@@ -51,7 +51,6 @@ return {
 					local text = name.." has been kicked for automatically reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason
 					utils.sendEmbed(message.channel, text, "ffff00")
 					utils.sendEmbedSafe(staffLogChannel, text, "ffff00", "Responsible user: "..utils.name(message.client.user, message.guild))
-					utils.setGame(message.client, conn)
 					return
 				end
 			else
@@ -72,7 +71,6 @@ return {
 					local text = name.." has been banned for automatically reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason
 					utils.sendEmbed(message.channel, text, "ffff00")
 					utils.sendEmbedSafe(staffLogChannel, text, "ffff00", "Responsible user: "..utils.name(message.client.user, message.guild))
-					utils.setGame(message.client, conn)
 					return
 				end
 			else
@@ -87,7 +85,6 @@ return {
 		local text = name.." has been automatically warned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason
 		utils.sendEmbed(message.channel, text, "ffff00", warnFooter)
 		utils.sendEmbedSafe(staffLogChannel, text, "ffff00", "Responsible user: "..utils.name(message.client.user, message.guild).."\n"..warnFooter)
-		utils.setGame(message.client, conn)
 	end,
 	onEnable = function(self, message, guildSettings, conn)
 		return true

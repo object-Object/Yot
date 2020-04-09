@@ -21,7 +21,6 @@ return {
 			local text = member.user.tag.."'s warnings have been given back. They have "..entry.level.." warning"..utils.s(entry.level).."."
 			utils.sendEmbedSafe(publicLogChannel, text, "00ff00", warnFooter)
 			utils.sendEmbedSafe(staffLogChannel, text, "00ff00", warnFooter)
-			utils.setGame(member.client, conn)
 		end
 	end,
 	onEnable = function(self, message, guildSettings, conn)

@@ -4,6 +4,7 @@ local timer = require("timer")
 local json = require("json")
 local utils = require("./miscUtils")
 local sql = require("sqlite3")
+local fs = require("fs")
 local options = require("options")
 
 local conn = sql.open("yotogi.db")
@@ -16,6 +17,16 @@ local commandHandler = require("./commandHandler")
 commandHandler.load()
 local moduleHandler = require("./moduleHandler")
 moduleHandler.load()
+
+local statusVersion
+local function setGame()
+	local changelog = fs.readFileSync("changelog.txt")
+	local version = changelog and changelog:match("%*%*([^%*]+)%*%*") or "error"
+	if version~=statusVersion then
+		statusVersion = version
+		client:setGame({name=options.defaultPrefix.."help | "..version, url="https://www.twitch.tv/ThisIsAFakeTwitchLink"})
+	end
+end
 
 local function setupGuild(id)
 	local disabledModules = {}
@@ -47,10 +58,11 @@ clock:on("min", function()
 	for guild in client.guilds:iter() do
 		doModulesPcall("clock.min", guild, conn, guild, conn)
 	end
+	setGame()
 end)
 
 client:on("ready", function()
-	utils.setGame(client, conn)
+	setGame()
 end)
 
 client:on("guildCreate", function(guild)

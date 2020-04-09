@@ -10,7 +10,6 @@ return {
 		local entry, _ = conn:exec('SELECT * FROM warnings WHERE guild_id = "'..member.guild.id..'" AND user_id = "'..member.id..'";')
 		if entry then
 			conn:exec('UPDATE warnings SET is_active = 0 WHERE guild_id = "'..member.guild.id..'" AND user_id = "'..member.id..'";')
-			utils.setGame(member.client, conn)
 		end
 	end,
 	onEnable = function(self, message, guildSettings, conn)
