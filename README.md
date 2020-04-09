@@ -12,15 +12,3 @@ I'd prefer if you would just invite my bot to your server using [the invite link
 * Install the dependencies.
 * Run `./luvit create-db.lua`.
 * Included is a shell script to start the bot using [PM2](https://pm2.keymetrics.io/), or just run `./luvit yotogi.lua`.
-
-## Installation (old)
-* Pick a version of Yotogi to use.
-* Run init.sh in the bot folder.
-* Install deps.
-* Included in each folder is a shell script to start the bot using [PM2](https://pm2.keymetrics.io/).
-
-## Old Versions
-These are being kept for posterity only. None are currently in use.
-* Yotogi: The original. Was in use on RubyChan's Nightcore server.
-* Yotogi-Marmar: Was in use on MarMarChan's server. Has a couple extra commands.
-* Yotogi-Remnants: Was in use on a private server. Has a lot of things changed.
