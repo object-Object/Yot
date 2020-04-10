@@ -1,3 +1,7 @@
+**v2.0.4** - 2020-04-09
+* Rename `&prefix;ping` to `&prefix;latency`
+* Bring back the old `&prefix;ping` command
+
 **v2.0.3** - 2020-04-08
 * The footer of `&prefix;warnings` now only mentions `&prefix;warnings refresh` if the user is checking their own warning level
 
