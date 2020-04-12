@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS persistent_roles (
 );
 CREATE TABLE IF NOT EXISTS webhooks (
 	channel_id TEXT PRIMARY KEY,
-	url TEXT
+	webhook_id TEXT
 );
 ]])
 print("Done.")
