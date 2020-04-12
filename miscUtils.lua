@@ -120,26 +120,27 @@ end
 
 utils.memberFromString = function(str, guild)
 	local id = str:match("^%<%@%!?(%d+)%>$") or str:match("^(%d+)$")
-	if not id then return end
-	return guild:getMember(id)
+	return id and guild:getMember(id)
 end
 
 utils.userFromString = function(str, client)
 	local id = str:match("^%<%@%!?(%d+)%>$") or str:match("^(%d+)$")
-	if not id then return end
-	return client:getUser(id)
+	return id and client:getUser(id)
 end
 
 utils.channelFromString = function(str, client)
 	local id = str:match("^%<%#(%d+)%>$") or str:match("^(%d+)$")
-	if not id then return end
-	return client:getChannel(id)
+	return id and client:getChannel(id)
 end
 
 utils.roleFromString = function(str, guild)
 	local id = str:match("^%<%@%&(%d+)%>$") or str:match("^(%d+)$")
-	if not id then return end
-	return guild:getRole(id)
+	return id and guild:getRole(id)
+end
+
+utils.messageFromString = function(str, channel)
+	local id = str:gsub("https://discordapp%.com/channels/%d+/%d+/",""):match("^(%d+)$")
+	return id and channel:getMessage(id)
 end
 
 utils.s = function(num)
