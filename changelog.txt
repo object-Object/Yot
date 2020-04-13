@@ -1,3 +1,8 @@
+**v2.1.0** - DATE
++ Added `&prefix;move` for moving messages between channels
+* Slightly updated the look of `&prefix;about`
+* Replaced the warning stats in the bot status with the version number
+
 **v2.0.4** - 2020-04-09
 * Rename `&prefix;ping` to `&prefix;latency`
 * Bring back the old `&prefix;ping` command
