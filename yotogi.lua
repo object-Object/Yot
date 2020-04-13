@@ -76,7 +76,8 @@ client:on("messageCreate", function(message)
 		if message.author.bot then return end
 		if message.channel.type == discordia.enums.channelType.private then 
 			utils.sendEmbed(message.channel, "Your message has been forwarded to "..client.owner.name..".", "00ff00")
-			utils.sendEmbed(client.owner:getPrivateChannel(), "**DM from "..message.author.name.."#"..message.author.discriminator..":**", "00ff00")
+			utils.sendEmbed(client.owner:getPrivateChannel(), "**DM from "..message.author.name.."#"..message.author.discriminator..":**", "00ff00",
+				"User ID: "..message.author.id)
 			client.owner:send(message)
 			return
 		end
