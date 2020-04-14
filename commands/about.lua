@@ -19,10 +19,10 @@ return {
 				fields = {
 					{name = "Servers", value = #message.client.guilds},
 					{name = "GitHub", value = "https://github.com/object-Object/Yotogi"},
-					{name = "Invite link", value = "https://discordapp.com/api/oauth2/authorize?client_id=316932415840845865&permissions=805431366&scope=bot"}
+					{name = "Invite link", value = "https://objectobject.ca/yotogi"}
 				},
 				footer = {
-					text = "Version "..version
+					text = "Version: "..version
 				}
 			}
 		}
