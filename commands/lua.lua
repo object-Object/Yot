@@ -1,26 +1,31 @@
 local commandHandler = require("../commandHandler")
-local pp = require('pretty-print')
+local pp = require("pretty-print")
+local http = require("coro-http")
+local json = require("json")
+local utils = require("../miscUtils")
+local discordia = require("discordia")
+local timer = require("timer")
 
 local function printLine(...)
 	local ret = {}
-	for i = 1, select('#', ...) do
+	for i = 1, select("#", ...) do
 		local arg = tostring(select(i, ...))
 		table.insert(ret, arg)
 	end
-	return table.concat(ret, '\t')
+	return table.concat(ret, "\t")
 end
 
 local function prettyLine(...)
 	local ret = {}
-	for i = 1, select('#', ...) do
+	for i = 1, select("#", ...) do
 		local arg = pp.strip(pp.dump(select(i, ...)))
 		table.insert(ret, arg)
 	end
-	return table.concat(ret, '\t')
+	return table.concat(ret, "\t")
 end
 
 local function code(str)
-	return string.format('```\n%s```', str)
+	return string.format("```\n%s```", str)
 end
 
 return {
@@ -35,7 +40,7 @@ return {
 			return
 		end
 
-		argString = argString:gsub('```\n?', '')
+		argString = argString:gsub("```\n?", "")
 
 		local lines = {}
 		local iolines = {}
@@ -46,9 +51,11 @@ return {
 		sandbox.guildSettings = guildSettings
 		sandbox.commandHandler = commandHandler
 		sandbox.code = code
-		sandbox.timer = require("timer")
-		sandbox.discordia = require("discordia")
-		sandbox.utils = require("../miscUtils")
+		sandbox.timer = timer
+		sandbox.discordia = discordia
+		sandbox.utils = utils
+		sandbox.json = json
+		sandbox.http = http
 		
 		sandbox.io.write = function(...)
 			table.insert(iolines, printLine(...))
@@ -62,17 +69,32 @@ return {
 			table.insert(lines, prettyLine(...))
 		end
 
-		local fn, syntaxError = load(argString, 'DiscordBot', 't', sandbox)
+		local fn, syntaxError = load(argString, "DiscordBot", "t", sandbox)
 		if not fn then return message:reply(code(syntaxError)) end
 
 		local success, runtimeError = pcall(fn)
 		if not success then return message:reply(code(runtimeError)) end
 
-		lines = table.concat(lines, '\n')
+		lines = table.concat(lines, "\n")
 		iolines = table.concat(iolines)
 
-		if lines~="" then message:reply(lines) end
-		if iolines~="" then message:reply(iolines) end
+		if #lines>2000 then
+			message:reply{
+				content = "Output from `print()` and/or `p()` exceeded 2000 characters. Output is attached.",
+				file = {"print.txt", lines}
+			}
+		elseif lines~="" then
+			message:reply(lines)
+		end
+
+		if #iolines>2000 then
+			message:reply{
+				content = "Output from `io.write()` exceeded 2000 characters. Output is attached.",
+				file = {"iowrite.txt", iolines}
+			}
+		elseif iolines~="" then
+			message:reply(iolines)
+		end
 	end,
 	onEnable = function(self, message, guildSettings)
 		return true
