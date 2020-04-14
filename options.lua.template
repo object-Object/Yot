@@ -1,6 +1,7 @@
 local settings={
 	token="token", -- Discord bot token
 	youtubeAPIKey="key", -- your API key for the YouTube API, used for checking video posts for advertising
+	dmLogChannel="", -- id of the channel to which DMs sent to the bot should be forwarded; leave blank to disable DM forwarding
 	clientOptions={ -- client options for Discordia
 		cacheAllMembers=true
 	},

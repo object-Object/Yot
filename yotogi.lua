@@ -86,11 +86,13 @@ end)
 client:on("messageCreate", function(message)
 	local success, err = pcall(function()
 		if message.author.bot then return end
-		if message.channel.type == discordia.enums.channelType.private then 
-			utils.sendEmbed(message.channel, "Your message has been forwarded to "..client.owner.name..".", "00ff00")
-			utils.sendEmbed(client.owner:getPrivateChannel(), "**DM from "..message.author.name.."#"..message.author.discriminator..":**", "00ff00",
+		if message.channel.type == discordia.enums.channelType.private then
+			local dmLogChannel = client:getChannel(options.dmLogChannel)
+			if not dmLogChannel then return end
+			utils.sendEmbed(message.channel, "Your message has been forwarded to the bot developer.", "00ff00")
+			utils.sendEmbed(dmLogChannel, "**DM from "..message.author.name.."#"..message.author.discriminator..":**", "00ff00",
 				"User ID: "..message.author.id)
-			client.owner:send(message)
+			dmLogChannel:send(message)
 			return
 		end
 		if not message.guild then return end
