@@ -11,15 +11,16 @@ local function sendChangelog(channel, prefix, latestOnly)
 	end
 	if #changelog>2000 then
 		local splitChangelog={""}
-		local messageNum,counter=1,1
+		local messageNum, counter=1, 0
 		for l in changelog:gmatch("[^\n]+") do
-			if counter>=2000 then
-				counter=1+#l+1
+			local line = l.."\n"
+			if counter+#line>=2000 then
+				counter=#line
 				messageNum=messageNum+1
-				splitChangelog[messageNum]=l.."\n"
+				splitChangelog[messageNum]=line
 			else
-				splitChangelog[messageNum]=splitChangelog[messageNum]..l.."\n"
-				counter=counter+#l+1
+				splitChangelog[messageNum]=splitChangelog[messageNum]..line
+				counter=counter+#line
 			end
 		end
 		for k,currentPortion in ipairs(splitChangelog) do
