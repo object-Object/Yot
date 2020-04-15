@@ -3,6 +3,8 @@
 + Added `&prefix;move` for moving messages between channels
 * Slightly updated the look of `&prefix;about`
 * Replaced the warning stats in the bot status with the version number
+* Renamed `%prefix;ping` to `%prefix;mention` and `%prefix;latency` to `%prefix;ping`
+* `%prefix;mention` now supports mentioning using id
 
 **v2.0.4** - 2020-04-09
 * Renamed `&prefix;ping` to `&prefix;latency`
