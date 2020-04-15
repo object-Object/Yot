@@ -28,6 +28,13 @@ local booleanColumns=utils.createLookupTable{
 	"is_active"
 }
 
+local timeModifiers = {
+	m = 60,
+	h = 3600,
+	d = 86400,
+	w = 604800
+}
+
 utils.secondsToTime = function(seconds)
 	local function s(num)
 		if num=="01" then return "" end return "s"
@@ -116,6 +123,19 @@ utils.name = function(user, guild)
 		end
 	end
 	return user.tag
+end
+
+utils.secondsFromString = function(str)
+	local seconds = 0
+	for num, mod in str:gmatch("(%d+)(%a)") do
+		if not (num and mod and timeModifiers[mod]) then
+			num, mod = 0, 0
+		else
+			num, mod = tonumber(num), timeModifiers[mod]
+		end
+		seconds = seconds + num*mod
+	end
+	return seconds
 end
 
 utils.memberFromString = function(str, guild)
