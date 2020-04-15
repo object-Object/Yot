@@ -1,10 +1,12 @@
-**v2.1.0** - DATE
+**v2.1.0** - 2020-04-15
 ** This update adds most of the features that were left out of v2.0.0 for a quicker release
 + Added `&prefix;move` for moving messages between channels
++ Added the ability to configure the following settings: `warning_kick_level`, `warning_ban_level`, `default_mute_length`, and `warning_length`
 * Slightly updated the look of `&prefix;about`
 * Replaced the warning stats in the bot status with the version number
 * Renamed `%prefix;ping` to `%prefix;mention` and `%prefix;latency` to `%prefix;ping`
 * `%prefix;mention` now supports mentioning using id
+* Rename the bot to Yot
 
 **v2.0.4** - 2020-04-09
 * Renamed `&prefix;ping` to `&prefix;latency`
