@@ -9,11 +9,11 @@ local warnUtils = {}
 warnUtils.checkValidKick = function(kickMember, guild)
 	local selfMember = guild:getMember(guild.client.user.id)
 	if not selfMember:hasPermission("kickMembers") then
-		return false, "Yotogi does not have the `kickMembers` permission."
+		return false, "Yot does not have the `kickMembers` permission."
 	elseif not kickMember then
 		return false, "they are not in this server."
 	elseif selfMember.highestRole.position<=kickMember.highestRole.position then
-		return false, "Yotogi's highest role is not higher than their highest role."
+		return false, "Yot's highest role is not higher than their highest role."
 	elseif kickMember.id==guild.ownerId then
 		return false, "they are the server owner."
 	end
@@ -26,9 +26,9 @@ end
 warnUtils.checkValidBan = function(banMember, guild)
 	local selfMember = guild:getMember(guild.client.user.id)
 	if not selfMember:hasPermission("banMembers") then
-		return false, "Yotogi does not have the `banMembers` permission."
+		return false, "Yot does not have the `banMembers` permission."
 	elseif banMember and selfMember.highestRole.position<=banMember.highestRole.position then
-		return false, "Yotogi's highest role is not higher than their highest role."
+		return false, "Yot's highest role is not higher than their highest role."
 	elseif banMember and banMember.id==guild.ownerId then
 		return false, "they are the server owner."
 	end

@@ -13,13 +13,13 @@ return {
 		local version=changelog and changelog:match("%*%*([^%*]+)%*%*") or "error"
 		message.channel:send{
 			embed = {
-				title = "About Yotogi",
-				description = "• Yotogi is a general-purpose bot with an emphasis on moderation.\n• It is written, hosted, and maintained by [object Object]#0001.\n• Found a bug? Send a direct message to Yotogi! Include some information about the bug, like what you were doing when it happened, what you expected to happen, and what actually happened.",
+				title = "About Yot",
+				description = "• Yot is a general-purpose bot with an emphasis on moderation.\n• It is written, hosted, and maintained by [object Object]#0001.\n• Found a bug? Send a direct message to Yot! Include some information about the bug, like what you were doing when it happened, what you expected to happen, and what actually happened.",
 				color = discordia.Color.fromHex("00ff00").value,
 				fields = {
 					{name = "Servers", value = #message.client.guilds},
-					{name = "GitHub", value = "https://github.com/object-Object/Yotogi"},
-					{name = "Invite link", value = "https://objectobject.ca/yotogi"}
+					{name = "GitHub", value = "https://github.com/object-Object/Yot"},
+					{name = "Invite link", value = "https://objectobject.ca/yot"}
 				},
 				footer = {
 					text = "Version: "..version

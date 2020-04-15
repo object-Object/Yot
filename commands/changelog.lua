@@ -49,7 +49,7 @@ end
 
 return {
 	name = "changelog",
-	description = "Show Yotogi's changelog.",
+	description = "Show Yot's changelog.",
 	usage = "changelog",
 	visible = true,
 	permissions = {},
@@ -67,7 +67,7 @@ return {
 
 		latest = {
 			name = "changelog latest",
-			description = "Show Yotogi's most recent changelog.",
+			description = "Show Yot's most recent changelog.",
 			usage = "changelog latest",
 			run = function(self, message, argString, args, guildSettings, conn)
 				sendChangelog(message.channel, guildSettings.prefix, true)

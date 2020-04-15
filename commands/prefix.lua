@@ -4,7 +4,7 @@ local options = require("../options")
 
 return {
 	name = "prefix",
-	description = "Show or change the command prefix for Yotogi in this server.",
+	description = "Show or change the command prefix for Yot in this server.",
 	usage = "prefix [new prefix (may be in an inline code block)]",
 	visible = true,
 	permissions = {"administrator"},
@@ -30,7 +30,7 @@ return {
 
 		reset = {
 			name = "prefix reset",
-			description = "Reset the command prefix for Yotogi in this server.",
+			description = "Reset the command prefix for Yot in this server.",
 			usage = "prefix reset",
 			run = function(self, message, argString, args, guildSettings, conn)
 				local stmt = conn:prepare("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?;")

@@ -34,7 +34,7 @@ return {
 		local success, err = muteUtils.remute(muteMember, muteUser, mutedRole, muteMember.guild, conn, entry.length)
 		if not success then
 			if mutedDM then mutedDM:delete() end
-			local text = name.."'s mute could not be given back: `"..err.."`. Please report this error to the bot developer by sending Yotogi a direct message."
+			local text = name.."'s mute could not be given back: `"..err.."`. Please report this error to the bot developer by sending Yot a direct message."
 			utils.sendEmbedSafe(publicLogChannel, text, "ff0000")
 			utils.sendEmbedSafe(staffLogChannel, text, "ff0000")
 			return

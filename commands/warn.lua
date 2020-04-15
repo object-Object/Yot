@@ -41,7 +41,7 @@ return {
 				if not success then
 					-- kick failed, so continue with normal warn messages
 					if kickedDM then kickedDM:delete() end
-					utils.sendEmbed(message.channel, name.." could not be kicked for reaching "..entry.level.." warning"..utils.s(entry.level)..": `"..err.."`. Please report this error to the bot developer by sending Yotogi a direct message.", "ff0000")
+					utils.sendEmbed(message.channel, name.." could not be kicked for reaching "..entry.level.." warning"..utils.s(entry.level)..": `"..err.."`. Please report this error to the bot developer by sending Yot a direct message.", "ff0000")
 				else
 					-- kick succeeded, exit early
 					local text = name.." has been kicked for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason
@@ -61,7 +61,7 @@ return {
 				if not success then
 					-- ban failed, so continue with normal warn messages
 					if bannedDM then bannedDM:delete() end
-					utils.sendEmbed(message.channel, name.." could not be banned for reaching "..entry.level.." warning"..utils.s(entry.level)..": `"..err.."`. Please report this error to the bot developer by sending Yotogi a direct message.", "ff0000")
+					utils.sendEmbed(message.channel, name.." could not be banned for reaching "..entry.level.." warning"..utils.s(entry.level)..": `"..err.."`. Please report this error to the bot developer by sending Yot a direct message.", "ff0000")
 				else
 					-- ban succeeded, exit early
 					local text = name.." has been banned for reaching "..entry.level.." warning"..utils.s(entry.level).."."..reason

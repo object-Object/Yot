@@ -90,7 +90,7 @@ local dbSettingsColumns = {
 				if role then
 					local selfMember = message.guild:getMember(message.client.user.id)
 					if selfMember.highestRole.position<=role.position then
-						return false, "Yotogi's highest role is not above the chosen role."
+						return false, "Yot's highest role is not above the chosen role."
 					end
 					return role.id, "Muted users will now be given the role "..role.mentionString..". Note: this does **not** apply retroactively."
 				else
@@ -136,7 +136,7 @@ local dbSettingsColumns = {
 			if guildSettings[self.name] then
 				return false, "Already enabled."
 			elseif not message.guild:getMember(message.client.user.id):hasPermission("manageMessages") then
-				return false, "Yotogi does not have the `manageMessages` permission."
+				return false, "Yot does not have the `manageMessages` permission."
 			end
 			return 1, "Command messages will now be deleted when a command is used."
 		end,
@@ -248,7 +248,7 @@ end
 
 local settings = {
 	name = "settings",
-	description = "The main command for changing Yotogi's per-server settings. Lists togglable settings or shows information about a setting when used without subcommands.",
+	description = "The main command for changing Yot's per-server settings. Lists togglable settings or shows information about a setting when used without subcommands.",
 	usage = "settings [setting]",
 	visible = true,
 	permissions = {"administrator"},
@@ -645,7 +645,7 @@ settings.subcommands.persistentroles.subcommands.add = {
 			utils.sendEmbed(message.channel, role.mentionString.." is already persistent.", "ff0000")
 			return
 		elseif selfMember.highestRole.position<=role.position then
-			utils.sendEmbed(message.channel, role.mentionString.." could not be made persistent because Yotogi's highest role is not above it.", "ff0000")
+			utils.sendEmbed(message.channel, role.mentionString.." could not be made persistent because Yot's highest role is not above it.", "ff0000")
 			return
 		end
 		guildSettings.persistent_roles[role.id] = true

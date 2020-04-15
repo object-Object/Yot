@@ -17,9 +17,9 @@ muteUtils.checkValidMute = function(muteMember, muteUser, guild, guildSettings)
 	elseif muteUser.bot then
 		return false, "they are a bot."
 	elseif not selfMember:hasPermission("manageRoles") then
-		return false, "Yotogi does not have the `manageRoles` permission."
+		return false, "Yot does not have the `manageRoles` permission."
 	elseif selfMember.highestRole.position<=mutedRole.position then
-		return false, "Yotogi's highest role is not higher than the role set as the `muted_role` setting."
+		return false, "Yot's highest role is not higher than the role set as the `muted_role` setting."
 	elseif muteMember and muteMember:hasPermission("administrator") then
 		return false, "they have the `administrator` permission."
 	end

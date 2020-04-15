@@ -3,7 +3,7 @@ local stopwatch = discordia.Stopwatch()
 
 return {
 	name = "ping",
-	description = "Show Yotogi's ping (API latency).",
+	description = "Show Yot's ping (API latency).",
 	usage = "ping",
 	visible = true,
 	permissions = {},

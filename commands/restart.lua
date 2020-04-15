@@ -3,10 +3,10 @@ local utils = require("../miscUtils")
 
 return {
 	name = "restart",
-	description = "Restart the bot.",
+	description = "Restart Yot.",
 	usage = "restart",
 	visible = false,
-	permissions = {"yotogi.botOwner"},
+	permissions = {"yot.botOwner"},
 	run = function(self, message, argString, args, guildSettings, conn)
 		utils.sendEmbed(message.channel, "Restarting.", "00ff00")
 		os.exit()

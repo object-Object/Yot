@@ -47,7 +47,7 @@ return {
 		local success, err = muteUtils.mute(muteMember, muteUser, mutedRole, message.guild, conn, length)
 		if not success then
 			if mutedDM then mutedDM:delete() end
-			utils.sendEmbed(message.channel, name.." could not be muted: `"..err.."`. Please report this error to the bot developer by sending Yotogi a direct message.", "ff0000")
+			utils.sendEmbed(message.channel, name.." could not be muted: `"..err.."`. Please report this error to the bot developer by sending Yot a direct message.", "ff0000")
 			return
 		end
 		utils.sendEmbed(message.channel, name.." has been muted."..reason, "00ff00", muteFooter)

@@ -52,10 +52,10 @@ return {
 		-- checks to make sure move is possible
 		local selfMember = message.guild:getMember(message.client.user.id)
 		if not selfMember:hasPermission(targetChannel, "manageWebhooks") then
-			utils.sendEmbed(message.channel, "The messages could not be moved because Yotogi does not have the `manageWebhooks` permission.", "ff0000")
+			utils.sendEmbed(message.channel, "The messages could not be moved because Yot does not have the `manageWebhooks` permission.", "ff0000")
 			return
 		elseif not selfMember:hasPermission(targetChannel, "manageMessages") then
-			utils.sendEmbed(message.channel, "The messages could not be moved because Yotogi does not have the `manageMessages` permission.", "ff0000")
+			utils.sendEmbed(message.channel, "The messages could not be moved because Yot does not have the `manageMessages` permission.", "ff0000")
 			return
 		end
 
@@ -64,7 +64,7 @@ return {
 		local webhook = entry and message.client:getWebhook(entry.webhook_id[1])
 		if not webhook then
 			-- if webhook is nil, then either entry didn't exist or the webhook has been deleted
-			webhook = targetChannel:createWebhook("Yotogi System Webhook")
+			webhook = targetChannel:createWebhook("Yot System Webhook")
 			if entry then
 				conn:exec("UPDATE webhooks SET webhook_id = '"..webhook.id.."' WHERE channel_id = '"..targetChannel.id.."';")
 			else

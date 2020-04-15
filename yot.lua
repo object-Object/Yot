@@ -7,7 +7,7 @@ local sql = require("sqlite3")
 local fs = require("fs")
 local options = require("options")
 
-local conn = sql.open("yotogi.db")
+local conn = sql.open("yot.db")
 
 local client = discordia.Client(options.clientOptions)
 local clock = discordia.Clock()

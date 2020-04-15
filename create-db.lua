@@ -1,5 +1,5 @@
 local sql = require("sqlite3")
-local conn = sql.open("yotogi.db")
+local conn = sql.open("yot.db")
 local options = require("options")
 
 print("Creating database...")

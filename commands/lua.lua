@@ -33,7 +33,7 @@ return {
 	description = "Execute arbitrary Lua code.",
 	usage = "lua <code (may be in a full code block)>",
 	visible = false,
-	permissions = {"yotogi.botOwner"},
+	permissions = {"yot.botOwner"},
 	run = function(self, message, argString, args, guildSettings)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)

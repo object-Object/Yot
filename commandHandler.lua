@@ -124,8 +124,8 @@ commandHandler.doCommands = function(message, guildSettings, conn)
 		local permissions = guildSettings.command_permissions[commandString] or command.permissions
 		local missingPermissions = {}
 		for _,permission in pairs(permissions) do
-			if permission:match("^yotogi%.") then
-				if not commandHandler.customPermissions[permission:match("^yotogi%.(.+)")](message.member) then
+			if permission:match("^yot%.") then
+				if not commandHandler.customPermissions[permission:match("^yot%.(.+)")](message.member) then
 					table.insert(missingPermissions, permission)
 				end
 			else

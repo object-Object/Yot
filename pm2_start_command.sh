@@ -1,1 +1,1 @@
-pm2 start yotogi.lua --interpreter ./luvit && pm2 save
+pm2 start yot.lua --interpreter ./luvit && pm2 save
