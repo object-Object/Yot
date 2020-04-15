@@ -19,7 +19,7 @@ return {
 				fields = {
 					{name = "Servers", value = #message.client.guilds},
 					{name = "GitHub", value = "https://github.com/object-Object/Yot"},
-					{name = "Invite link", value = "https://objectobject.ca/yot"}
+					{name = "Invite link", value = "https://objectobject.ca/Yot"}
 				},
 				footer = {
 					text = "Version: "..version
