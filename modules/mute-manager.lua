@@ -7,10 +7,11 @@ local muteUtils = require("../muteUtils")
 return {
 	name = "mute-manager",
 	description = "Runs once per minute to remove any active mutes that have expired.",
-	visible = true,
+	visible = false,
 	event = "clock.min",
 	disabledByDefault = false,
 	run = function(self, guildSettings, guild, conn)
+		if guildSettings.default_mute_length==-1 then return end
 		local mutes, nrow = conn:exec("SELECT * FROM mutes WHERE is_active = 1 AND end_timestamp <= "..os.time().." AND guild_id = '"..guild.id.."';")
 		if not mutes then return end
 		for row=1, nrow do
@@ -57,13 +58,9 @@ return {
 		end
 	end,
 	onEnable = function(self, message, guildSettings, conn)
-		conn:exec("UPDATE guild_settings SET default_mute_length = "..options.defaultMuteLength.." WHERE guild_id = '"..message.guild.id.."';")
-		utils.sendEmbed(message.channel, "Mutes will now expire. The `default_mute_length` setting has been set to "..options.defaultMuteLength..".", "00ff00")
 		return true
 	end,
 	onDisable = function(self, message, guildSettings, conn)
-		conn:exec("UPDATE guild_settings SET default_mute_length = 0 WHERE guild_id = '"..message.guild.id.."';")
-		utils.sendEmbed(message.channel, "Mutes will no longer expire. The `default_mute_length` setting has been set to 0.", "00ff00")
 		return true
 	end
 }

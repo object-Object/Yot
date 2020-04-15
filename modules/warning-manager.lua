@@ -6,10 +6,11 @@ local options = require("../options")
 return {
 	name = "warning-manager",
 	description = "Runs once per minute to remove any active warnings that have expired.",
-	visible = true,
+	visible = false,
 	event = "clock.min",
 	disabledByDefault = false,
 	run = function(self, guildSettings, guild, conn)
+		if guildSettings.warning_length==-1 then return end
 		local warnings, nrow = conn:exec("SELECT * FROM warnings WHERE is_active = 1 AND end_timestamp <= "..os.time().." AND guild_id = '"..guild.id.."';")
 		if warnings then
 			local decreaseStmt = conn:prepare("UPDATE warnings SET level = ?, end_timestamp = ? WHERE guild_id = ? AND user_id = ?;")
@@ -47,13 +48,9 @@ return {
 		end
 	end,
 	onEnable = function(self, message, guildSettings, conn)
-		conn:exec("UPDATE guild_settings SET warning_length = "..options.warningLength.." WHERE guild_id = '"..message.guild.id.."';")
-		utils.sendEmbed(message.channel, "Warnings will now expire. The `warning_length` setting has been set to "..options.warningLength..".", "00ff00")
 		return true
 	end,
 	onDisable = function(self, message, guildSettings, conn)
-		conn:exec("UPDATE guild_settings SET warning_length = 0 WHERE guild_id = '"..message.guild.id.."';")
-		utils.sendEmbed(message.channel, "Warnings will no longer expire. The `warning_length` setting has been set to 0.", "00ff00")
 		return true
 	end
 }
