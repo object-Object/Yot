@@ -61,10 +61,7 @@ return {
 
 		-- get webhook url, create if doesn't exist
 		local entry, _ = conn:exec("SELECT webhook_id FROM webhooks WHERE channel_id = '"..targetChannel.id.."';")
-		local webhook
-		if entry then
-			webhook = message.client:getWebhook(entry.webhook_id[1])
-		end
+		local webhook = entry and message.client:getWebhook(entry.webhook_id[1])
 		if not webhook then
 			-- if webhook is nil, then either entry didn't exist or the webhook has been deleted
 			webhook = targetChannel:createWebhook("Yotogi System Webhook")
@@ -78,59 +75,33 @@ return {
 		local numMessages = #messagesToMove
 		local s = utils.s(numMessages)
 		utils.sendEmbed(targetChannel, "Moved "..numMessages.." message"..s.." to this channel from "..message.channel.mentionString..":", "00ff00")
+		local API = message.client._api
+		local method = "POST"
+		local endpoint = "/webhooks/"..webhook.id.."/"..webhook.token
 		for _, moveMessage in ipairs(messagesToMove) do
 			local member = message.guild:getMember(moveMessage.author.id)
 			local name = member and member.name or moveMessage.author.name
 			name = name:gsub("([Cc])([Ll][Yy][Dd][Ee])","%1 %2") -- Discord doesn't allow webhook names to contain Clyde so we add a space between C and L, case insensitive
-			local _, attachment = moveMessage.attachment and http.request("GET", moveMessage.attachment.url)
-			if moveMessage.content~="" or moveMessage.embed then
-				message.client._api:executeWebhook(webhook.id, webhook.token, {
-					content = moveMessage.content,
-					username = name,
-					avatar_url = moveMessage.author.avatarURL,
-					embeds = moveMessage.embed and {moveMessage.embed},
-					allowed_mentions = {parse={}} -- disable all mentions to avoid double pinging people
-				})
-			end
-			if moveMessage.attachment then -- sending the attachment in a separate message because multipart/form-data is difficult
-				local res, file = http.request("GET", moveMessage.attachment.url)
-				if not (res.code>=200 and res.code<300) then
-					res, file = http.request("GET", moveMessage.attachment.proxy_url)
-				end
-				if res.code>=200 and res.code<300 then
-					local contentType = "text/plain"
-					for _, header in pairs(res) do -- get the content type of the file
-						if type(header)=="table" and header[1]=="Content-Type" then
-							contentType = header[2]
-							break
-						end
+			local payload = {
+				content = moveMessage.content,
+				username = name,
+				avatar_url = moveMessage.author.avatarURL,
+				embeds = moveMessage.embeds,
+				allowed_mentions = {parse={}}
+			}
+			local files = {}
+			if moveMessage.attachments then
+				for _, attachment in ipairs(moveMessage.attachments) do
+					local res, file = http.request("GET", attachment.url)
+					if not (res.code>=200 and res.code<300) then
+						res, file = http.request("GET", attachment.proxy_url)
 					end
-					local headers = {
-						{"content-type", "multipart/form-data; boundary=FormBoundaryYZk7MTru0gAWx4W"}
-					}
-					-- need to manually encode the multipart/form-data payload for files
-					local payload =
-[[--FormBoundaryYZk7MTru0gAWx4W
-Content-Disposition: form-data; name="username"
-
-]]..name..[[
-
---FormBoundaryYZk7MTru0gAWx4W
-Content-Disposition: form-data; name="avatar_url"
-
-]]..moveMessage.author.avatarURL..[[
-
---FormBoundaryYZk7MTru0gAWx4W
-Content-Disposition: file; name="file"; filename="]]..moveMessage.attachment.filename..[["
-Content-Type: ]]..contentType..[[
-Content-Transfer-Encoding: binary
-
-]]..file..[[
-
---FormBoundaryYZk7MTru0gAWx4W--]]
-					http.request("POST", "https://discordapp.com/api/webhooks/"..webhook.id.."/"..webhook.token, headers, payload)
+					if res.code>=200 and res.code<300 then
+						table.insert(files, {attachment.filename, file})
+					end
 				end
 			end
+			API:request(method, endpoint, payload, nil, files)
 			moveMessage:delete()
 		end
 		utils.sendEmbed(message.channel, "Moved "..numMessages.." message"..s.." to "..targetChannel.mentionString..".", "00ff00")
