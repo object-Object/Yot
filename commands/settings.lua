@@ -147,6 +147,64 @@ local dbSettingsColumns = {
 			return 0, "Command messages will no longer be deleted when a command is used."
 		end
 	},
+	warning_kick_level = {
+		name = "warning_kick_level",
+		description = "Users will be kicked from the server when they reach this amount of warnings.",
+		args = "<number of warnings>",
+		onEnable = function(self, message, argString, guildSettings)
+			local numWarnings = argString:match("^(%-?%d+)$")
+			numWarnings = numWarnings and tonumber(numWarnings)
+			if not numWarnings then
+				return false, "Number of warnings not found in message."
+			elseif numWarnings<=0 then
+				return false, "Number of warnings must be above 0."
+			else
+				return numWarnings, "Users will now be kicked from the server when they reach "..numWarnings.." warnings."
+			end
+		end,
+		onDisable = function(self, message, argString, guildSettings)
+			if guildSettings[self.name]==-1 then
+				return false, "Already disabled."
+			end
+			return -1, "Users will no longer be kicked from the server for reaching a certain amount of warnings."
+		end
+	},
+	warning_ban_level = {
+		name = "warning_ban_level",
+		description = "Users will be banned from the server when they reach this amount of warnings.",
+		args = "<number of warnings>",
+		onEnable = function(self, message, argString, guildSettings)
+			local numWarnings = argString:match("^(%-?%d+)$")
+			numWarnings = numWarnings and tonumber(numWarnings)
+			if not numWarnings then
+				return false, "Number of warnings not found in message."
+			elseif numWarnings<=0 then
+				return false, "Number of warnings must be above 0."
+			else
+				return numWarnings, "Users will now be banned from the server when they reach "..numWarnings.." warnings."
+			end
+		end,
+		onDisable = function(self, message, argString, guildSettings)
+			if guildSettings[self.name]==-1 then
+				return false, "Already disabled."
+			end
+			return -1, "Users will no longer be banned from the server for reaching a certain amount of warnings."
+		end
+	},
+	default_mute_length = {
+		name = "default_mute_length",
+		description = "The default amount of time before a mute is removed.",
+		args = "<number of warnings>",
+		onEnable = function(self, message, argString, guildSettings)
+			
+		end,
+		onDisable = function(self, message, argString, guildSettings)
+			if guildSettings[self.name]==-1 then
+				return false, "Already disabled."
+			end
+			return -1, "Mutes will no longer be automatically removed."
+		end
+	},
 }
 
 local function showSettings(message, guildSettings)
@@ -233,7 +291,7 @@ local settings = {
 
 settings.subcommands.enable = {
 	name = "settings enable",
-	description = "Enable a setting. May have arguments, depending on the setting being enabled. Do `&prefix;settings [setting]` to see arguments for a setting.",
+	description = "Enable a setting. This is a semi-alias for `&prefix;settings update`. May have arguments, depending on the setting being enabled. Do `&prefix;settings [setting]` to see arguments for a setting.",
 	usage = "settings enable <setting> [arguments]",
 	run = function(self, message, argString, args, guildSettings, conn)
 		if argString=="" then
@@ -254,6 +312,37 @@ settings.subcommands.enable = {
 		stmt:reset():bind(value, message.guild.id):step()
 		stmt:close()
 		utils.sendEmbed(message.channel, "`"..column.name.."` is now enabled. "..text, "00ff00")
+	end,
+	subcommands = {}
+}
+
+settings.subcommands.update = {
+	name = "settings update",
+	description = "Update the value of a setting. This is a semi-alias for `&prefix;settings enable`. May have arguments, depending on the setting being updated. Do `&prefix;settings [setting]` to see arguments for a setting.",
+	usage = "settings update <setting> [arguments]",
+	run = function(self, message, argString, args, guildSettings, conn)
+		if argString=="" then
+			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
+			return
+		end
+		local column = dbSettingsColumns[args[1]]
+		if not column then
+			utils.sendEmbed(message.channel, "Setting `"..args[1].."` not found.", "ff0000")
+			return
+		end
+		if column.args=="None" then
+			utils.sendEmbed(message.channel, "`"..column.name.."` can only be enabled or disabled, not updated.", "ff0000")
+			return
+		end
+		local value, text = column:onEnable(message, argString:gsub("^%S+%s+",""), guildSettings)
+		if value==false then
+			utils.sendEmbed(message.channel, "Value of `"..column.name.."` could not be updated: "..text, "ff0000")
+			return
+		end
+		local stmt = conn:prepare("UPDATE guild_settings SET "..column.name.." = ? WHERE guild_id = ?;")
+		stmt:reset():bind(value, message.guild.id):step()
+		stmt:close()
+		utils.sendEmbed(message.channel, "Value of `"..column.name.."` successfully updated. "..text, "00ff00")
 	end,
 	subcommands = {}
 }
