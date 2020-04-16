@@ -1,3 +1,6 @@
+**v2.2.2** - 2020-04-16
+* Fixed an issue where `&prefix;ban` didn't work if a number of days was not specified
+
 **v2.2.1** - 2020-04-16
 * Fixed the colour of the `ban-messages` embed (was black, should be yellow)
 

@@ -19,7 +19,8 @@ return {
 			return
 		end
 		local name = banMember and banMember.name.."#"..banUser.discriminator or banUser.tag
-		local days = tonumber(args[2]:match("^(%d+)$")) or 0
+		local days = args[2] and args[2]:match("^(%d+)$") or 0
+		days = tonumber(days)
 		local daysRemoved = days>0 and " "..days.." day"..utils.s(days).." of their messages "..(days==1 and "was" or "were").." purged." or ""
 		local plainReason = argString:match("%|%s+(.+)")
 		local reason = plainReason and " (Reason: "..plainReason..")" or ""
