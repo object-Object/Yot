@@ -8,7 +8,7 @@ return {
 	disabledByDefault = true,
 	run = function(self, guildSettings, user, guild, conn)
 		local publicLogChannel = guildSettings.public_log_channel and guild:getChannel(guildSettings.public_log_channel)
-		utils.sendEmbedSafe(publicLogChannel, user.tag.." has been banned from this server.", "ffffff")
+		utils.sendEmbedSafe(publicLogChannel, user.tag.." has been banned from this server.", "ffff00")
 	end,
 	onEnable = function(self, message, guildSettings, conn)
 		return true
