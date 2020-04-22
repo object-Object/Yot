@@ -2,6 +2,7 @@ local utils = require("../miscUtils")
 local commandHandler = require("../commandHandler")
 local http = require("coro-http")
 local json = require("json")
+local timer = require("timer")
 
 -- create a new webhook in channel and insert it into the database
 local function addWebhook(channel, conn)
@@ -10,8 +11,8 @@ end
 
 return {
 	name = "move",
-	description = "Move a specified message, or specified number of recent messages (1 to 100), to another channel. If a specific message is being moved, it must be in the channel in which you are running the command. Optionally, if you're moving multiple messages, you can specify a message to start at. This message will *not* be moved, and defaults to the command message.",
-	usage = "move <message id, link to message, or specified number of messages (1 to 100)> <channel mention (e.g. #general) or id> [link to or id of message to start at, if a number of messages is specified - this message will not be moved - defaults to the command message]",
+	description = "Move a specified message, or specified number of recent messages (1 to 100), to another channel. If a specific message is being moved, it must be in the channel in which you are running the command. Optionally, if you're moving multiple messages, you can specify a message to start at. This message defaults to the message before the command message.",
+	usage = "move <message id, link to message, or specified number of messages (1 to 100)> <channel mention (e.g. #general) or id> [link to or id of message to start at, if a number of messages is specified - defaults to the message before the command message]",
 	visible = true,
 	permissions = {"manageMessages"},
 	run = function(self, message, argString, args, guildSettings, conn)
@@ -29,7 +30,6 @@ return {
 				return
 			end
 		end
-		startMessage = startMessage or message
 
 		-- get message(s) to move
 		local selectedMessage = utils.messageFromString(args[1], message.channel)
@@ -47,7 +47,17 @@ return {
 			end
 			-- need to only get messages before the command message so we don't move it
 			-- toArray sorts it by timestamp so the messages are moved in order
-			messagesToMove = message.channel:getMessagesBefore(startMessage.id, num):toArray("timestamp")
+			if startMessage then
+				num=num-1
+				if num>0 then
+					messagesToMove = message.channel:getMessagesBefore(startMessage.id, num):toArray("timestamp")
+				else
+					messagesToMove = {}
+				end
+				table.insert(messagesToMove, startMessage)
+			else
+				messagesToMove = message.channel:getMessagesBefore(message.id, num):toArray("timestamp")
+			end
 		end
 
 		-- get target channel
@@ -86,6 +96,7 @@ return {
 		local numMessages = #messagesToMove
 		local s = utils.s(numMessages)
 		utils.sendEmbed(targetChannel, "Moved "..numMessages.." message"..s.." to this channel from "..message.channel.mentionString..":", "00ff00")
+		local movingMessage = utils.sendEmbed(message.channel, "Moving "..numMessages.." message"..s.." to "..targetChannel.mentionString.."...", "00ff00", "Estimated total time to move the messages: "..utils.secondsToTime(numMessages))
 		local API = message.client._api
 		local method = "POST"
 		local endpoint = "/webhooks/"..webhook.id.."/"..webhook.token
@@ -114,7 +125,9 @@ return {
 			end
 			API:request(method, endpoint, payload, nil, files)
 			moveMessage:delete()
+			timer.sleep(1000)
 		end
+		movingMessage:delete()
 		utils.sendEmbed(message.channel, "Moved "..numMessages.." message"..s.." to "..targetChannel.mentionString..".", "00ff00")
 	end,
 	onEnable = function(self, message, guildSettings)
