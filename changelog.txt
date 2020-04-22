@@ -1,3 +1,6 @@
+**v2.2.3** - 2020-04-22
+* `&prefix;move` now has an optional argument to specify the message to start at, if multiple messages are being moved
+
 **v2.2.2** - 2020-04-16
 * Fixed an issue where `&prefix;ban` didn't work if a number of days was not specified
 
