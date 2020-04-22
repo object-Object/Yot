@@ -10,8 +10,8 @@ end
 
 return {
 	name = "move",
-	description = "Move a specified message, or specified number of recent messages (1 to 100), to another channel. If a specific message is being moved, it must be in the channel in which you are running the command.",
-	usage = "move <message id, link to message, or specified number of messages (1 to 100)> <channel mention (e.g. #general) or id>",
+	description = "Move a specified message, or specified number of recent messages (1 to 100), to another channel. If a specific message is being moved, it must be in the channel in which you are running the command. Optionally, if you're moving multiple messages, you can specify a message to start at. This message will *not* be moved, and defaults to the command message.",
+	usage = "move <message id, link to message, or specified number of messages (1 to 100)> <channel mention (e.g. #general) or id> [link to or id of message to start at, if a number of messages is specified - this message will not be moved - defaults to the command message]",
 	visible = true,
 	permissions = {"manageMessages"},
 	run = function(self, message, argString, args, guildSettings, conn)
@@ -19,6 +19,17 @@ return {
 			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
 			return
 		end
+
+		-- get startMessage
+		local startMessage
+		if args[3] then
+			startMessage = utils.messageFromString(args[3], message.channel)
+			if not startMessage then
+				utils.sendEmbed(message.channel, "`"..args[1].."` is not a valid message id or link to a message. Messages being moved must be in the channel in which the command is run.", "ff0000")
+				return
+			end
+		end
+		startMessage = startMessage or message
 
 		-- get message(s) to move
 		local selectedMessage = utils.messageFromString(args[1], message.channel)
@@ -36,7 +47,7 @@ return {
 			end
 			-- need to only get messages before the command message so we don't move it
 			-- toArray sorts it by timestamp so the messages are moved in order
-			messagesToMove = message.channel:getMessagesBefore(message.id, num):toArray("timestamp")
+			messagesToMove = message.channel:getMessagesBefore(startMessage.id, num):toArray("timestamp")
 		end
 
 		-- get target channel
