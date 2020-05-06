@@ -72,6 +72,29 @@ commandHandler.stripPrefix = function(str, guildSettings, client)
 	return str:gsub("^"..utils.escapePatterns(guildSettings.prefix),""):gsub("^%<%@%!?"..client.user.id.."%>%s+","")
 end
 
+-- input can be string.split-ed table (for efficiency, if you've already split it) or string
+-- string should contain command name
+commandHandler.subcommandFromString = function(command, input)
+	local inputType = type(input)
+	assert(inputType=="table" or inputType=="string", "Expected table or string for argument #1, got "..inputType)
+	local splitStr = inputType=="table" and input or input:split("%s+")
+	table.remove(splitStr, 1) -- remove the base command name from splitStr
+	local output = command
+	if #splitStr>0 then
+		local currentCommand = command
+		local subcommand
+		repeat
+			subcommand = currentCommand.subcommands[splitStr[1]]
+			if subcommand then
+				currentCommand = subcommand
+				table.remove(splitStr, 1)
+			end
+		until not subcommand or #splitStr==0
+		output = subcommand or currentCommand
+	end
+	return output, table.concat(splitStr, " "), splitStr
+end
+
 commandHandler.sendUsage = function(channel, guildSettings, command)
 	return utils.sendEmbed(channel, "Usage: `"..guildSettings.prefix..command.usage.."`", "ff0000", commandHandler.strings.usageFooter)
 end
@@ -158,31 +181,19 @@ commandHandler.doCommands = function(message, guildSettings, conn)
 			end
 		end
 		if #missingPermissions==0 then
-			local argString = content:gsub("^"..commandString.."%s*","")
-			local args = argString:split("%s")
+			local argString, args
+			if command.subcommands~={} then
+				command, argString, args = commandHandler.subcommandFromString(command, content)
+			else
+				argString = content:gsub("^"..commandString.."%s*","")
+				args = argString:split("%s")
+			end
 			command:run(message, argString, args, guildSettings, conn)
 		else
 			commandHandler.sendPermissionError(message.channel, commandString, missingPermissions)
 		end
 		if guildSettings.delete_command_messages then message:delete() end
 	end
-end
-
-commandHandler.doSubcommands = function(message, argString, args, guildSettings, conn, commandString)
-	local splitCommandString = string.split(commandString, " ")
-	local command = commandHandler.commands[splitCommandString[1]]
-	for i=2, #splitCommandString do -- go through commandString to get the command object of the deepest subcommand
-		command = command.subcommands[splitCommandString[i]]
-	end
-
-	local subcommand = command.subcommands[args[1]]
-	if subcommand then
-		argString=argString:gsub("^%S+%s*","")
-		table.remove(args,1)
-		subcommand:run(message, argString, args, guildSettings, conn)
-		return true
-	end
-	return false
 end
 
 return commandHandler

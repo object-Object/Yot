@@ -55,7 +55,6 @@ return {
 	visible = true,
 	permissions = {},
 	run = function(self, message, argString, args, guildSettings, conn)
-		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
 		sendChangelog(message.channel, guildSettings.prefix, false)
 	end,
 	onEnable = function(self, message, guildSettings)

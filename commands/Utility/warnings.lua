@@ -8,7 +8,6 @@ return {
 	visible = true,
 	permissions = {},
 	run = function(self, message, argString, args, guildSettings, conn)
-		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
 		local warnMember = message.member
 		local warnUser = message.author
 		if argString~="" then

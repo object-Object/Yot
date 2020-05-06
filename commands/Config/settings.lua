@@ -256,7 +256,6 @@ local settings = {
 	visible = true,
 	permissions = {"administrator"},
 	run = function(self, message, argString, args, guildSettings, conn)
-		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
 		if argString=="" then
 			showSettings(message, guildSettings)
 		else
@@ -463,7 +462,6 @@ settings.subcommands.commands.subcommands.permissions = {
 	description = "Set the permissions required to use a command. Enter just the command to make the command usable by everyone. To view the permissions currently required for a command, use the `&prefix;help` command.",
 	usage = "settings commands permissions <command> [permission1 permission2 permission3 ...]",
 	run = function(self, message, argString, args, guildSettings, conn)
-		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
@@ -542,7 +540,6 @@ settings.subcommands.modules = {
 	description = "List all modules and whether they are enabled or disabled, or show information about a module.",
 	usage = "settings modules [module]",
 	run = function(self, message, argString, args, guildSettings, conn)
-		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
 		if argString=="" then
 			showModules(message, guildSettings)
 		else
@@ -618,7 +615,6 @@ settings.subcommands.persistentroles = {
 	description = "List all persistent roles. Persistent roles are roles that will be given back to users if they leave while having them. This is different from the muted role, which is handled separately and should not be added as a persistent role.",
 	usage = "settings persistentroles",
 	run = function(self, message, argString, args, guildSettings, conn)
-		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
 		local output = "``` \n"
 		for roleId, _ in pairs(guildSettings.persistent_roles) do
 			local role = guild:getRole(roleId)
