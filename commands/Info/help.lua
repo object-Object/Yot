@@ -58,26 +58,8 @@ return {
 			local baseCommandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
 			local command = commandHandler.commands[baseCommandString]
 			if command and command.visible then
-				local permissions = guildSettings.command_permissions[baseCommandString] or command.permissions
-				if #args>1 then
-					local currentCommand = command
-					local subcommand
-					for i=2, #args do
-						subcommand = currentCommand.subcommands[args[i]]
-						if subcommand then
-							currentCommand = subcommand
-						else
-							break
-						end
-					end
-					if subcommand then
-						commandHandler.sendCommandHelp(message.channel, guildSettings, subcommand)
-					else
-						commandHandler.sendCommandHelp(message.channel, guildSettings, currentCommand)
-					end
-				else
-					commandHandler.sendCommandHelp(message.channel, guildSettings, command)
-				end
+				command = commandHandler.subcommandFromString(command, args)
+				commandHandler.sendCommandHelp(message.channel, guildSettings, command)
 			else
 				-- command not found
 				showMainHelp(message, guildSettings, false)
