@@ -1,7 +1,8 @@
-local warnUtils = require("../warnUtils")
-local utils = require("../miscUtils")
-local commandHandler = require("../commandHandler")
-local options = require("../options")
+local warnUtils = require("warnUtils")
+local utils = require("miscUtils")
+local commandHandler = require("commandHandler")
+local discordia = require("discordia")
+local options = discordia.storage.options
 local http = require("coro-http")
 local timer = require("timer")
 

@@ -1,7 +1,8 @@
-local utils = require("../miscUtils")
-local commandHandler = require("../commandHandler")
-local moduleHandler = require("../moduleHandler")
-local options = require("../options")
+local utils = require("miscUtils")
+local commandHandler = require("commandHandler")
+local moduleHandler = require("moduleHandler")
+local discordia = require("discordia")
+local options = discordia.storage.options
 
 return {
 	name = "warning-manager",

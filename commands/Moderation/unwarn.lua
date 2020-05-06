@@ -1,6 +1,6 @@
-local commandHandler = require("../commandHandler")
-local utils = require("../miscUtils")
-local warnUtils = require("../warnUtils")
+local commandHandler = require("commandHandler")
+local utils = require("miscUtils")
+local warnUtils = require("warnUtils")
 
 return {
 	name = "unwarn",

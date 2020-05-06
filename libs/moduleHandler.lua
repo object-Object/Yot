@@ -3,7 +3,7 @@
 
 local fs = require("fs")
 local json = require("json")
-local utils = require("./miscUtils")
+local utils = require("miscUtils")
 
 local moduleHandler = {}
 moduleHandler.modules = {}
@@ -12,7 +12,7 @@ moduleHandler.sortedModuleNames = {}
 moduleHandler.load = function()
 	for _,filename in ipairs(fs.readdirSync("modules")) do
 		if filename:match("%.lua$") then
-			local mod = require("./modules/"..filename)
+			local mod = require("../modules/"..filename)
 			moduleHandler.modules[mod.name] = mod
 			table.insert(moduleHandler.sortedModuleNames, mod.name)
 		end

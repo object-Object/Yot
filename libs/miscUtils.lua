@@ -1,6 +1,6 @@
 local discordia = require("discordia")
 local json = require("json")
-local options = require("../options")
+local options = discordia.storage.options
 
 local utils = {}
 

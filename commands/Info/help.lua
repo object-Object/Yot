@@ -1,6 +1,6 @@
 local discordia = require("discordia")
-local commandHandler = require("../commandHandler")
-local utils = require("../miscUtils")
+local commandHandler = require("commandHandler")
+local utils = require("miscUtils")
 
 local function appendSubcommands(str, indent, command)
 	for subcommandString, subcommand in pairs(command.subcommands) do
@@ -11,21 +11,30 @@ local function appendSubcommands(str, indent, command)
 end
 
 local function showMainHelp(message, guildSettings, showSubcommands)
-	local output = "```\n"
-	for _, commandString in ipairs(commandHandler.sortedCommandNames) do
-		local command = commandHandler.commands[commandString]
-		if command.visible and not guildSettings.disabled_commands[commandString] then
-			output = output..guildSettings.prefix..commandString.."\n"
-			if showSubcommands then
-				output = appendSubcommands(output, "  ", command)
+	local fields = {}
+	for _, categoryString in ipairs(commandHandler.sortedCategoryNames) do
+		local category = commandHandler.sortedCommandNames[categoryString]
+		if not categoryString:match("^%.") then
+			local output = "```\n"
+			for _, commandString in ipairs(category) do
+				local command = commandHandler.commands[commandString]
+				if command.visible and not guildSettings.disabled_commands[commandString] then
+					output = output..guildSettings.prefix..commandString.."\n"
+					if showSubcommands then
+						output = appendSubcommands(output, "  ", command)
+					end
+				end
+			end
+			if output~="```\n" then
+				output = output:gsub("\n$","").."```"
+				table.insert(fields, {name = categoryString, value = output})
 			end
 		end
 	end
-	output = output:gsub("\n$","").."```"
 	message.channel:send{
 		embed = {
-			title = "Commands",
-			description = output,
+			title = "Help Menu"..(showSubcommands and " + Subcommands" or ""),
+			fields = fields,
 			color = discordia.Color.fromHex("00ff00").value,
 			footer = {
 				text = "Do "..guildSettings.prefix.."help [command] for more info on a command."

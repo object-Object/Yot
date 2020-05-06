@@ -1,13 +1,15 @@
 local fs = require("fs")
-local utils = require("./miscUtils")
+local utils = require("miscUtils")
 local json = require("json")
 local discordia = require("discordia")
 
 local commandHandler = {}
 
-commandHandler.commands = {}
-commandHandler.sortedCommandNames = {}
-commandHandler.sortedPermissionNames = {}
+commandHandler.commands = {}				-- keys: commandString, values: command table
+commandHandler.categories = {}				-- table for each category, holding commands in same format as commandHandler.commands
+commandHandler.sortedCategoryNames = {}		-- values: category names, sorted alphabetically
+commandHandler.sortedCommandNames = {}		-- table for each category, values: command names, sorted alphabetically
+commandHandler.sortedPermissionNames = {}	-- values: permission enums, sorted alphabetically
 
 commandHandler.customPermissions = {
 	botOwner = function(member)
@@ -31,11 +33,21 @@ commandHandler.strings = { -- bits of text used in multiple places that should b
 }
 
 commandHandler.load = function()
-	for _,filename in ipairs(fs.readdirSync("commands")) do
-		if filename:match("%.lua$") then
-			local command = require("./commands/"..filename)
-			commandHandler.commands[command.name] = command
-			table.insert(commandHandler.sortedCommandNames, command.name)
+	for category, filetype in fs.scandirSync("commands") do
+		assert(filetype=="directory", "Non-directory file '"..category.."' in commands directory")
+		if not commandHandler.categories[category] then
+			commandHandler.categories[category] = {}
+			commandHandler.sortedCommandNames[category] = {}
+			table.insert(commandHandler.sortedCategoryNames, category)
+		end
+		for _, commandFilename in ipairs(fs.readdirSync("commands/"..category)) do
+			if commandFilename:match("%.lua$") then
+				local command = require("../commands/"..category.."/"..commandFilename)
+				command.category = category
+				commandHandler.commands[command.name] = command
+				commandHandler.categories[category][command.name] = command
+				table.insert(commandHandler.sortedCommandNames[category], command.name)
+			end
 		end
 	end
 	table.sort(commandHandler.sortedCommandNames)
@@ -74,6 +86,7 @@ commandHandler.sendCommandHelp = function(channel, guildSettings, baseCommandStr
 				title = guildSettings.prefix..command.name,
 				description = command.description:gsub("%&prefix%;", guildSettings.prefix),
 				fields = {
+					{name = "Category", value = command.category},
 					{name = "Required permissions", value = permissionsString},
 					{name = "Subcommands", value = subcommandsString},
 					{name = "Usage", value = "`"..guildSettings.prefix..command.usage.."`"}

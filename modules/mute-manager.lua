@@ -1,8 +1,9 @@
-local utils = require("../miscUtils")
-local commandHandler = require("../commandHandler")
-local moduleHandler = require("../moduleHandler")
-local options = require("../options")
-local muteUtils = require("../muteUtils")
+local utils = require("miscUtils")
+local commandHandler = require("commandHandler")
+local moduleHandler = require("moduleHandler")
+local discordia = require("discordia")
+local options = discordia.storage.options
+local muteUtils = require("muteUtils")
 
 return {
 	name = "mute-manager",

@@ -1,5 +1,5 @@
-local utils = require("../miscUtils")
-local commandHandler = require("../commandHandler")
+local utils = require("miscUtils")
+local commandHandler = require("commandHandler")
 
 return {
 	name = "warning-manager-join",

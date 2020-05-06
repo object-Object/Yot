@@ -2,10 +2,11 @@ local discordia = require("discordia")
 local http = require("coro-http")
 local timer = require("timer")
 local json = require("json")
-local utils = require("./miscUtils")
+local utils = require("miscUtils")
 local sql = require("sqlite3")
 local fs = require("fs")
 local options = require("options")
+discordia.storage.options = options
 
 local conn = sql.open("yot.db")
 
@@ -13,9 +14,9 @@ local client = discordia.Client(options.clientOptions)
 local clock = discordia.Clock()
 discordia.extensions()
 
-local commandHandler = require("./commandHandler")
+local commandHandler = require("commandHandler")
 commandHandler.load()
-local moduleHandler = require("./moduleHandler")
+local moduleHandler = require("moduleHandler")
 moduleHandler.load()
 
 local statusVersion

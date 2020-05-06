@@ -1,6 +1,6 @@
-local utils = require("../miscUtils")
-local muteUtils = require("../muteUtils")
-local commandHandler = require("../commandHandler")
+local utils = require("miscUtils")
+local muteUtils = require("muteUtils")
+local commandHandler = require("commandHandler")
 
 return {
 	name = "unmute",

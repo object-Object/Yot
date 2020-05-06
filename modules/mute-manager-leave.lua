@@ -1,4 +1,4 @@
-local utils = require("../miscUtils")
+local utils = require("miscUtils")
 
 return {
 	name = "mute-manager-leave",

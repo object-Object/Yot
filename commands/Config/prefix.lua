@@ -1,6 +1,7 @@
-local utils = require("../miscUtils")
-local commandHandler = require("../commandHandler")
-local options = require("../options")
+local utils = require("miscUtils")
+local commandHandler = require("commandHandler")
+local discordia = require("discordia")
+local options = discordia.storage.options
 
 return {
 	name = "prefix",

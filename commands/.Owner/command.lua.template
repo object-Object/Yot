@@ -1,4 +1,4 @@
-local commandHandler = require("../commandHandler")
+local commandHandler = require("commandHandler")
 
 return {
 	name = "command", -- name of the command and what users type to use it

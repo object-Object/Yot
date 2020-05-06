@@ -1,8 +1,8 @@
-local commandHandler = require("../commandHandler")
+local commandHandler = require("commandHandler")
 local pp = require("pretty-print")
 local http = require("coro-http")
 local json = require("json")
-local utils = require("../miscUtils")
+local utils = require("miscUtils")
 local discordia = require("discordia")
 local timer = require("timer")
 

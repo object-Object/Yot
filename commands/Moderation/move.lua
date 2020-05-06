@@ -1,5 +1,5 @@
-local utils = require("../miscUtils")
-local commandHandler = require("../commandHandler")
+local utils = require("miscUtils")
+local commandHandler = require("commandHandler")
 local http = require("coro-http")
 local json = require("json")
 local timer = require("timer")

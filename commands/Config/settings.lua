@@ -1,7 +1,7 @@
-local commandHandler = require("../commandHandler")
-local moduleHandler = require("../moduleHandler")
+local commandHandler = require("commandHandler")
+local moduleHandler = require("moduleHandler")
 local discordia = require("discordia")
-local utils = require("../miscUtils")
+local utils = require("miscUtils")
 local json = require("json")
 
 -- descriptions of all of the settings that can be enabled/disabled with the base settings command
