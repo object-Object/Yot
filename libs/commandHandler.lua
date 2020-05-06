@@ -72,34 +72,31 @@ commandHandler.stripPrefix = function(str, guildSettings, client)
 	return str:gsub("^"..utils.escapePatterns(guildSettings.prefix),""):gsub("^%<%@%!?"..client.user.id.."%>%s+","")
 end
 
-commandHandler.sendUsage = function(channel, prefix, commandString)
-	local splitCommandString = string.split(commandString, " ")
-	local command = commandHandler.commands[splitCommandString[1]]
-	for i=2, #splitCommandString do -- go through commandString to get the command object of the deepest subcommand
-		command = command.subcommands[splitCommandString[i]]
-	end
-	return utils.sendEmbed(channel, "Usage: `"..prefix..command.usage.."`", "ff0000", commandHandler.strings.usageFooter)
+commandHandler.sendUsage = function(channel, guildSettings, command)
+	return utils.sendEmbed(channel, "Usage: `"..guildSettings.prefix..command.usage.."`", "ff0000", commandHandler.strings.usageFooter)
 end
 
-commandHandler.sendCommandHelp = function(channel, guildSettings, baseCommandString, command, permissions)
-	if guildSettings.disabled_commands[baseCommandString] then
+commandHandler.sendCommandHelp = function(channel, guildSettings, command)
+	local baseCommand = command.baseCommand
+	if guildSettings.disabled_commands[baseCommand.name] then
 		channel:send{
 			embed = {
 				title = guildSettings.prefix..command.name,
-				description = "`"..guildSettings.prefix..baseCommandString.."` is disabled in this server.",
+				description = "`"..guildSettings.prefix..baseCommand.name.."` is disabled in this server.",
 				color = discordia.Color.fromHex("ff0000").value
 			}
 		}
 	else
 		local subcommandsKeys = table.keys(command.subcommands)
-		local permissionsString = #permissions>0 and "`"..table.concat(permissions, ", ").."`" or "None"
+		table.sort(subcommandsKeys)
+		local permissionsString = #baseCommand.permissions>0 and "`"..table.concat(baseCommand.permissions, ", ").."`" or "None"
 		local subcommandsString = #subcommandsKeys>0 and "`"..table.concat(subcommandsKeys, "`, `").."`" or "None"
 		channel:send{
 			embed = {
 				title = guildSettings.prefix..command.name,
 				description = command.description:gsub("%&prefix%;", guildSettings.prefix),
 				fields = {
-					{name = "Category", value = command.category},
+					{name = "Category", value = baseCommand.category},
 					{name = "Required permissions", value = permissionsString},
 					{name = "Subcommands", value = subcommandsString},
 					{name = "Usage", value = "`"..guildSettings.prefix..command.usage.."`"}

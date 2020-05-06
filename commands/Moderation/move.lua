@@ -17,7 +17,7 @@ return {
 	permissions = {"manageMessages"},
 	run = function(self, message, argString, args, guildSettings, conn)
 		if #args<2 then
-			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
+			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
 		end
 

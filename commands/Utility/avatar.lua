@@ -8,7 +8,7 @@ return {
 	permissions = {},
 	run = function(self, message, argString, args, guildSettings, conn)
 		if not message.mentionedUsers.first then
-			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
+			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
 		end
 		local output=""
