@@ -3,6 +3,15 @@ local utils = require("miscUtils")
 local json = require("json")
 local discordia = require("discordia")
 
+local function applySubcommandReferences(command, baseCommand)
+	for _, subcommand in pairs(command.subcommands) do
+		subcommand.parentCommand = command
+		subcommand.baseCommand = baseCommand
+		subcommand.isSubcommand = true
+		applySubcommandReferences(subcommand, baseCommand)
+	end
+end
+
 local commandHandler = {}
 
 commandHandler.commands = {}				-- keys: commandString, values: command table
@@ -43,6 +52,10 @@ commandHandler.load = function()
 		for _, commandFilename in ipairs(fs.readdirSync("commands/"..category)) do
 			if commandFilename:match("%.lua$") then
 				local command = require("../commands/"..category.."/"..commandFilename)
+				applySubcommandReferences(command, command)
+				command.parentCommand = command
+				command.baseCommand = command
+				command.isSubcommand = false
 				command.category = category
 				commandHandler.commands[command.name] = command
 				commandHandler.tree[category][command.name] = command
