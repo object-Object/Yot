@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS guild_settings (
 	disabled_modules TEXT DEFAULT "{}",
 	command_permissions TEXT DEFAULT "{}",
 	prefix TEXT DEFAULT "]]..options.defaultPrefix..[[",
+	language TEXT DEFAULT "]]..options.defaultLanguage..[["
 	warning_length REAL DEFAULT ]]..options.warningLength..[[,
 	default_mute_length REAL DEFAULT ]]..options.muteLength..[[,
 	warning_kick_level REAL DEFAULT ]]..options.warningKickLevel..[[,
