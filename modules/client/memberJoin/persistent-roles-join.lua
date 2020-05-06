@@ -4,7 +4,6 @@ return {
 	name = "persistent-roles-join",
 	description = "Give back persistent roles when users join who had the roles when they left.",
 	visible = false,
-	event = "client.memberJoin",
 	disabledByDefault = false,
 	run = function(self, guildSettings, member, conn)
 		local entry = conn:exec("SELECT * FROM persistent_roles WHERE guild_id = '"..member.guild.id.."' AND user_id = '"..member.id.."';")

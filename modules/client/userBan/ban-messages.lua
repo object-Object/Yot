@@ -4,7 +4,6 @@ return {
 	name = "ban-messages",
 	description = "Send messages in the public log channel when a user is banned.",
 	visible = true,
-	event = "client.userBan",
 	disabledByDefault = true,
 	run = function(self, guildSettings, user, guild, conn)
 		local publicLogChannel = guildSettings.public_log_channel and guild:getChannel(guildSettings.public_log_channel)

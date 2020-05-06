@@ -6,7 +6,7 @@ local discordia = require("discordia")
 local commandHandler = {}
 
 commandHandler.commands = {}				-- keys: commandString, values: command table
-commandHandler.categories = {}				-- table for each category, holding commands in same format as commandHandler.commands
+commandHandler.tree = {}					-- table for each category, holding commands in same format as commandHandler.commands
 commandHandler.sortedCategoryNames = {}		-- values: category names, sorted alphabetically
 commandHandler.sortedCommandNames = {}		-- table for each category, values: command names, sorted alphabetically
 commandHandler.sortedPermissionNames = {}	-- values: permission enums, sorted alphabetically
@@ -34,9 +34,9 @@ commandHandler.strings = { -- bits of text used in multiple places that should b
 
 commandHandler.load = function()
 	for category, filetype in fs.scandirSync("commands") do
-		assert(filetype=="directory", "Non-directory file '"..category.."' in commands directory")
-		if not commandHandler.categories[category] then
-			commandHandler.categories[category] = {}
+		assert(filetype=="directory", "Non-directory file '"..category.."' in commands/ directory")
+		if not commandHandler.tree[category] then
+			commandHandler.tree[category] = {}
 			commandHandler.sortedCommandNames[category] = {}
 			table.insert(commandHandler.sortedCategoryNames, category)
 		end
@@ -45,7 +45,7 @@ commandHandler.load = function()
 				local command = require("../commands/"..category.."/"..commandFilename)
 				command.category = category
 				commandHandler.commands[command.name] = command
-				commandHandler.categories[category][command.name] = command
+				commandHandler.tree[category][command.name] = command
 				table.insert(commandHandler.sortedCommandNames[category], command.name)
 			end
 		end

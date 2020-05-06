@@ -9,7 +9,6 @@ return {
 	name = "mute-manager",
 	description = "Runs once per minute to remove any active mutes that have expired.",
 	visible = false,
-	event = "clock.min",
 	disabledByDefault = false,
 	run = function(self, guildSettings, guild, conn)
 		if guildSettings.default_mute_length==-1 then return end

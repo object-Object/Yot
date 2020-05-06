@@ -2,7 +2,6 @@ return {
 	name = "module", -- name of the module, used in the settings modules commands
 	description = "This is an example module.", -- description of the module, used in the settings modules command
 	visible = true, -- whether or not this module shows up in modules and is togglable by users
-	event = "client.messageCreate", -- event in which the module is run
 	disabledByDefault = false, -- whether or not the module starts disabled in a new guild
 	run = function(self, guildSettings, message) -- method called when the module's event happens
 		if message.content:match("Hello There") then

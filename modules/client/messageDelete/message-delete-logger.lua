@@ -5,7 +5,6 @@ return {
 	name = "message-delete-logger",
 	description = "Logs deleted messages in the staff log channel.",
 	visible = true,
-	event = "client.messageDelete",
 	disabledByDefault = true,
 	run = function(self, guildSettings, message, conn)
 		if not guildSettings.staff_log_channel then return end

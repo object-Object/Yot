@@ -9,7 +9,6 @@ return {
 	name = "discord-anti-ad",
 	description = "Deletes messages containing Discord invite links and warns the users who posted them. A role ignored by this module may be set using the `advertising_allowed_role` setting. Discord invite links leading to the current server will be ignored, as will invalid invites.",
 	visible = true,
-	event = "client.messageCreate",
 	disabledByDefault = true,
 	run = function(self, guildSettings, message, conn)
 		local member = message.guild:getMember(message.author.id)

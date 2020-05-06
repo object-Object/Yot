@@ -8,7 +8,6 @@ return {
 	name = "warning-manager",
 	description = "Runs once per minute to remove any active warnings that have expired.",
 	visible = false,
-	event = "clock.min",
 	disabledByDefault = false,
 	run = function(self, guildSettings, guild, conn)
 		if guildSettings.warning_length==-1 then return end

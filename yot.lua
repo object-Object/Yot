@@ -57,7 +57,7 @@ end
 
 clock:on("min", function()
 	for guild in client.guilds:iter() do
-		doModulesPcall("clock.min", guild, conn, guild, conn)
+		doModulesPcall(moduleHandler.tree.clock.min, guild, conn, guild, conn)
 	end
 	setGame()
 end)
@@ -73,15 +73,15 @@ client:on("guildCreate", function(guild)
 end)
 
 client:on("memberJoin", function(member)
-	doModulesPcall("client.memberJoin", member.guild, conn, member, conn)
+	doModulesPcall(moduleHandler.tree.client.memberJoin, member.guild, conn, member, conn)
 end)
 
 client:on("memberLeave", function(member)
-	doModulesPcall("client.memberLeave", member.guild, conn, member, conn)
+	doModulesPcall(moduleHandler.tree.client.memberLeave, member.guild, conn, member, conn)
 end)
 
 client:on("userBan", function(user, guild)
-	doModulesPcall("client.userBan", guild, conn, user, guild, conn)
+	doModulesPcall(moduleHandler.tree.client.userBan, guild, conn, user, guild, conn)
 end)
 
 client:on("messageCreate", function(message)
@@ -103,7 +103,7 @@ client:on("messageCreate", function(message)
 			guildSettings = utils.getGuildSettings(message.guild.id, conn)
 		end
 
-		moduleHandler.doModules("client.messageCreate", guildSettings, message, conn)
+		moduleHandler.doModules(moduleHandler.tree.client.messageCreate, guildSettings, message, conn)
 
 		commandHandler.doCommands(message, guildSettings, conn)
 	end)
@@ -115,12 +115,12 @@ end)
 
 client:on("messageUpdate", function(message)
 	if not message.guild then return end
-	doModulesPcall("client.messageUpdate", message.guild, conn, message, conn)
+	doModulesPcall(moduleHandler.tree.client.messageUpdate, message.guild, conn, message, conn)
 end)
 
 client:on("messageDelete", function(message)
 	if not message.guild then return end
-	doModulesPcall("client.messageDelete", message.guild, conn, message, conn)
+	doModulesPcall(moduleHandler.tree.client.messageDelete, message.guild, conn, message, conn)
 end)
 
 clock:start()

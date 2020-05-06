@@ -206,10 +206,13 @@ local dbSettingsColumns = {
 		end
 	},
 }
+local sortedColumnNames = table.keys(dbSettingsColumns)
+table.sort(sortedColumnNames)
 
 local function showSettings(message, guildSettings)
 	local output = "```\n"
-	for columnString, column in pairs(dbSettingsColumns) do
+	for _, columnString in pairs(sortedColumnNames) do
+		column = dbSettingsColumns[columnString]
 		output = output..columnString.." - "..(guildSettings[columnString] and tostring(guildSettings[columnString]) or "disabled").."\n"
 	end
 	output = output:gsub("\n$","").."```"
@@ -379,19 +382,27 @@ settings.subcommands.commands = {
 	description = "List all commands, whether they are enabled or disabled, and whether their permissions have been modified or not.",
 	usage = "settings commands",
 	run = function(self, message, argString, args, guildSettings, conn)
-		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
-		local output = "```\n"
-		for _, commandString in ipairs(commandHandler.sortedCommandNames) do
-			local command = commandHandler.commands[commandString]
-			if command.visible then
-				output = output..guildSettings.prefix..commandString.." - "..(guildSettings.disabled_commands[commandString] and "DISABLED" or "enabled").." - "..(guildSettings.command_permissions[commandString] and "MODIFIED perms" or "default perms").."\n"
+		local fields = {}
+		for _, categoryString in ipairs(commandHandler.sortedCategoryNames) do
+			local category = commandHandler.sortedCommandNames[categoryString]
+			if not categoryString:match("^%.") then
+				local output = "```\n"
+				for _, commandString in ipairs(category) do
+					local command = commandHandler.commands[commandString]
+					if command.visible then
+						output = output..guildSettings.prefix..commandString.." - "..(guildSettings.disabled_commands[commandString] and "DISABLED" or "enabled").." - "..(guildSettings.command_permissions[commandString] and "MODIFIED perms" or "default perms").."\n"
+					end
+				end
+				if output~="```\n" then
+					output = output:gsub("\n$","").."```"
+					table.insert(fields, {name = categoryString, value = output})
+				end
 			end
 		end
-		output = output:gsub("\n$","").."```"
 		message.channel:send{
 			embed = {
 				title = "Command list",
-				description = output,
+				fields = fields,
 				color = discordia.Color.fromHex("00ff00").value
 			}
 		}

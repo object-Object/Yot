@@ -4,7 +4,6 @@ return {
 	name = "persistent-roles-leave",
 	description = "Cache persistent roles when users leave.",
 	visible = false,
-	event = "client.memberLeave",
 	disabledByDefault = false,
 	run = function(self, guildSettings, member, conn)
 		local persistent_roles = {}

@@ -5,7 +5,6 @@ return {
 	name = "message-edit-logger",
 	description = "Logs edited messages in the staff log channel.",
 	visible = true,
-	event = "client.messageUpdate",
 	disabledByDefault = true,
 	run = function(self, guildSettings, message, conn)
 		if not guildSettings.staff_log_channel then return end

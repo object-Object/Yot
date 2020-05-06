@@ -1,4 +1,4 @@
--- In the context of this bot, a module is pretty much anything the bot does that isn't a module.
+-- In the context of this bot, a module is pretty much anything the bot does that isn't a command.
 -- For example: checking messages for advertising, decreasing warning levels.
 
 local fs = require("fs")
@@ -6,32 +6,50 @@ local json = require("json")
 local utils = require("miscUtils")
 
 local moduleHandler = {}
-moduleHandler.modules = {}				-- table holding all modules with name as key and module table as value
-moduleHandler.tree = {}					-- table holding all modules, in a class.event.module hierarchy
-moduleHandler.sortedModuleNames = {}	-- table holding all modules as value, sorted alphabetically
+moduleHandler.modules = {}
+moduleHandler.modulePaths = {}
+moduleHandler.sortedModuleNames = {}
 
+<<<<<<< HEAD:libs/moduleHandler.lua
 moduleHandler.load = function()
-	for class, classFiletype in fs.scandirSync("modules") do
-		assert(classFiletype=="directory", "Non-directory file '"..class.."' in modules/ directory")
-		if not moduleHandler.tree[class] then
-			moduleHandler.tree[class] = {}
-		end
-		for event, eventFiletype in fs.scandirSync("modules/"..class) do
-			assert(eventFiletype=="directory", "Non-directory file '"..event.."' in modules/"..class.."/ directory")
-			if not moduleHandler.tree[class][event] then
-				moduleHandler.tree[class][event] = {}
-			end
-			for _,filename in ipairs(fs.readdirSync("modules/"..class.."/"..event)) do
-				if filename:match("%.lua$") then
-					local mod = require("../modules/"..class.."/"..event.."/"..filename)
-					mod.event = class.."."..event
-					moduleHandler.modules[mod.name] = mod
-					moduleHandler.tree[class][event][mod.name] = mod
-					table.insert(moduleHandler.sortedModuleNames, mod.name)
-				end
-			end
+	for _,filename in ipairs(fs.readdirSync("modules")) do
+		if filename:match("%.lua$") then
+			local mod = require("../modules/"..filename)
+			moduleHandler.modules[mod.name] = mod
+=======
+local function scanModules(dir)
+	for filename, filetype in fs.scandirSync(dir) do
+		if filetype=="directory" then
+			scanModules(dir.."/"..filename)
+		elseif filename:match("%.lua$") then
+			local mod = require("./"..dir.."/"..filename)
+			local event = moduleHandler.eventFromPath(dir)
+			event[mod.name] = mod
+			moduleHandler.modulePaths[mod.name] = dir:gsub("^modules%/?","")
+>>>>>>> change/module-folders:moduleHandler.lua
+			table.insert(moduleHandler.sortedModuleNames, mod.name)
 		end
 	end
+	return t
+end
+
+moduleHandler.eventFromPath = function(path)
+	local pathSplit = path:gsub("^modules%/?",""):split("/")
+	local event = moduleHandler.modules
+	for _, eventName in ipairs(pathSplit) do
+		if not event[eventName] then
+			event[eventName] = {}
+		end
+		event = event[eventName]
+		assert(type(event)=="table", "Module "..eventName.." has the same name as an event in path "..path)
+	end
+	return event
+end
+
+moduleHandler.getModule = function()
+
+moduleHandler.load = function()
+	scanModules("modules")
 	table.sort(moduleHandler.sortedModuleNames)
 end
 

@@ -2,7 +2,6 @@ return {
 	name = "",
 	description = "",
 	visible = true,
-	event = "",
 	disabledByDefault = false,
 	run = function(self, guildSettings, )
 		

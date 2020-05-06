@@ -12,7 +12,6 @@ return {
 	name = "youtube-anti-ad",
 	description = "Deletes messages containing YouTube video links in which the video uploader's name matches the user's, and warns the users who posted them. A role ignored by this module may be set using the `advertising_allowed_role` setting.",
 	visible = true,
-	event = "client.messageCreate",
 	disabledByDefault = true,
 	run = function(self, guildSettings, message, conn)
 		local member = message.guild:getMember(message.author.id)

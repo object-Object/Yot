@@ -5,7 +5,6 @@ return {
 	name = "warning-manager-join",
 	description = "Set is_active to 1 and reset end_timestamp when users with warnings rejoin.",
 	visible = false,
-	event = "client.memberJoin",
 	disabledByDefault = false,
 	run = function(self, guildSettings, member, conn)
 		local entry, _ = conn:exec('SELECT * FROM warnings WHERE guild_id = "'..member.guild.id..'" AND user_id = "'..member.id..'";')
