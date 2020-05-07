@@ -54,7 +54,7 @@ return {
 	usage = "changelog",
 	visible = true,
 	permissions = {},
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		sendChangelog(message.channel, guildSettings.prefix, false)
 	end,
 	onEnable = function(self, message, guildSettings)
@@ -69,7 +69,7 @@ return {
 			name = "changelog latest",
 			description = "Show Yot's most recent changelog.",
 			usage = "changelog latest",
-			run = function(self, message, argString, args, guildSettings, conn)
+			run = function(self, message, argString, args, guildSettings, lang, conn)
 				sendChangelog(message.channel, guildSettings.prefix, true)
 			end,
 			subcommands = {}

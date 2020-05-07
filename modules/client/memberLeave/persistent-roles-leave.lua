@@ -5,7 +5,7 @@ return {
 	description = "Cache persistent roles when users leave.",
 	visible = false,
 	disabledByDefault = false,
-	run = function(self, guildSettings, member, conn)
+	run = function(self, guildSettings, lang, member, conn)
 		local persistent_roles = {}
 		for role in member.roles:iter() do
 			if guildSettings.persistent_roles[role.id] then

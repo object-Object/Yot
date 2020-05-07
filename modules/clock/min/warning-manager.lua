@@ -9,7 +9,7 @@ return {
 	description = "Runs once per minute to remove any active warnings that have expired.",
 	visible = false,
 	disabledByDefault = false,
-	run = function(self, guildSettings, guild, conn)
+	run = function(self, guildSettings, lang, guild, conn)
 		if guildSettings.warning_length==-1 then return end
 		local warnings, nrow = conn:exec("SELECT * FROM warnings WHERE is_active = 1 AND end_timestamp <= "..os.time().." AND guild_id = '"..guild.id.."';")
 		if warnings then

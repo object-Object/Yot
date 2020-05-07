@@ -7,7 +7,7 @@ return {
 	usage = "unban <ping or id> [| reason]",
 	visible = true,
 	permissions = {"banMembers"},
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return

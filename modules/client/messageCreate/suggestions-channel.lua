@@ -1,11 +1,11 @@
-local suggestionsEmotes = {"👍","🤷","👎"}
+local suggestionsEmotes = {"","",""}
 
 return {
 	name = "suggestions-channel",
 	description = "Add voting reactions to messages sent in the server's suggestions channel, if set.",
 	visible = false,
 	disabledByDefault = false,
-	run = function(self, guildSettings, message, conn)
+	run = function(self, guildSettings, lang, message, conn)
 		if not (guildSettings.suggestions_channel and message.channel.id==guildSettings.suggestions_channel) then return end
 		for _, emote in ipairs(suggestionsEmotes) do
 			if message then

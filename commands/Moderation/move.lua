@@ -15,7 +15,7 @@ return {
 	usage = "move <message id, link to message, or specified number of messages (1 to 100)> <channel mention (e.g. #general) or id> [link to or id of message to start at, if a number of messages is specified - defaults to the message before the command message]",
 	visible = true,
 	permissions = {"manageMessages"},
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if #args<2 then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return

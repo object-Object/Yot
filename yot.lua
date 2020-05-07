@@ -1,3 +1,5 @@
+_G.f = string.format -- shorthand for string.format used in almost every file for lang purposes
+
 local discordia = require("discordia")
 local http = require("coro-http")
 local timer = require("timer")
@@ -9,6 +11,20 @@ local options = require("options")
 discordia.storage.options = options
 
 local conn = sql.open("yot.db")
+
+discordia.storage.langs = {}
+for _, filename in ipairs(fs.readdirSync("lang")) do
+	if filename:match("%.json$") then
+		local lang = json.decode(fs.readFileSync("lang/"..filename))
+		lang.pl = function(entry, num)
+			assert(entry.default~=nil, "entry has no default value")
+			num = tostring(num)
+			return entry[num] or entry.default
+		end
+		discordia.storage.langs[filename:gsub("%.json","")] = lang
+	end
+end
+local defaultLang = discordia.storage.langs[options.defaultLanguage]
 
 local client = discordia.Client(options.clientOptions)
 local clock = discordia.Clock()
@@ -50,8 +66,8 @@ local function doModulesPcall(event, guild, conn, ...)
 		moduleHandler.doModules(event, guildSettings, ...)
 	end, ...)
 	if not success then
-		utils.logError(guild, err)
-		print("Bot crashed! Guild: "..guild.name.." ("..guild.id..")\n"..err)
+		utils.logError(guild, defaultLang, err)
+		print(defaultLang.error.bot_crashed.." "..f(defaultLang.g.guild_str, guild.name, guild.id).."\n"..err)
 	end
 end
 
@@ -90,9 +106,8 @@ client:on("messageCreate", function(message)
 		if message.channel.type == discordia.enums.channelType.private then
 			local dmLogChannel = client:getChannel(options.dmLogChannel)
 			if not dmLogChannel then return end
-			utils.sendEmbed(message.channel, "Your message has been forwarded to the bot developer.", "00ff00")
-			utils.sendEmbed(dmLogChannel, "**DM from "..message.author.name.."#"..message.author.discriminator..":**", "00ff00",
-				"User ID: "..message.author.id)
+			utils.sendEmbed(message.channel, defaultLang.dm.message_forwarded, "00ff00")
+			utils.sendEmbed(dmLogChannel, "**"..f(defaultLang.dm.from, message.author.tag).."**", "00ff00", f(defaultLang.g.user_id, message.author.id))
 			dmLogChannel:send(message)
 			return
 		end
@@ -103,13 +118,15 @@ client:on("messageCreate", function(message)
 			guildSettings = utils.getGuildSettings(message.guild.id, conn)
 		end
 
-		moduleHandler.doModules(moduleHandler.tree.client.messageCreate, guildSettings, message, conn)
+		local lang = discordia.storage.langs[guildSettings.language]
 
-		commandHandler.doCommands(message, guildSettings, conn)
+		moduleHandler.doModules(moduleHandler.tree.client.messageCreate, guildSettings, lang, message, conn)
+
+		commandHandler.doCommands(message, guildSettings, lang, conn)
 	end)
 	if not success then
-		utils.logError(message.guild, err)
-		print("Bot crashed! Guild: "..message.guild.name.." ("..message.guild.id..")\n"..err)
+		utils.logError(message.guild, defaultLang, err)
+		print(defaultLang.error.bot_crashed.." "..f(defaultLang.g.guild_str, message.guild.name, message.guild.id).."\n"..err)
 	end
 end)
 

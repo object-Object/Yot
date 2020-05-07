@@ -4,6 +4,7 @@
 local fs = require("fs")
 local json = require("json")
 local utils = require("miscUtils")
+local discordia = require("discordia")
 
 local moduleHandler = {}
 moduleHandler.modules = {}				-- table holding all modules with name as key and module table as value
@@ -24,6 +25,12 @@ moduleHandler.load = function()
 			for _,filename in ipairs(fs.readdirSync("modules/"..class.."/"..event)) do
 				if filename:match("%.lua$") then
 					local mod = require("../modules/"..class.."/"..event.."/"..filename)
+					--[[
+					for code, lang in pairs(discordia.storage.langs) do
+						local modLang = lang.modules[mod.name]
+						assert(modLang~=nil, "Module "..class.."/"..event.."/"..mod.name.." has no "..code.." lang entries")
+						assert(modLang.description~=nil, "Module "..class.."/"..event.."/"..mod.name.." has no "..code.." lang description entry")
+					end --]]
 					mod.event = class.."."..event
 					moduleHandler.modules[mod.name] = mod
 					moduleHandler.tree[class][event][mod.name] = mod

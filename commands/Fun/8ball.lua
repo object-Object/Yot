@@ -13,7 +13,7 @@ return {
 	usage = "8ball <question>",
 	visible = true,
 	permissions = {},
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return

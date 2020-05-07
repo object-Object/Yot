@@ -1,7 +1,7 @@
 **v2.3.0** - DATE HERE
 * Commands are now sorted by category in the help menu
 * The settings list is now sorted alphabetically
-* Changed how modules and commands are stored in the bot files - be on the lookout for weird bugs related to this!
+* Significant amounts of behind-the-scenes restructuring - be on the lookout for weird bugs!
 
 **v2.2.4** - 2020-04-22
 * Fixed behaviour of starting message for `&prefix;move`

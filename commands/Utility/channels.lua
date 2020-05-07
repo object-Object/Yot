@@ -6,7 +6,7 @@ return {
 	usage = "channels",
 	visible = true,
 	permissions = {},
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		local textChannelCount=#message.guild.textChannels
 		local voiceChannelCount=#message.guild.voiceChannels
 		local categoryCount=#message.guild.categories

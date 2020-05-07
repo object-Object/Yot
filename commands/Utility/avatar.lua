@@ -6,7 +6,7 @@ return {
 	usage = "avatar <ping> [ping 2] [ping 3 ...]",
 	visible = true,
 	permissions = {},
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if not message.mentionedUsers.first then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return

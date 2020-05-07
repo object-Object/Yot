@@ -10,7 +10,7 @@ return {
 	description = "Runs once per minute to remove any active mutes that have expired.",
 	visible = false,
 	disabledByDefault = false,
-	run = function(self, guildSettings, guild, conn)
+	run = function(self, guildSettings, lang, guild, conn)
 		if guildSettings.default_mute_length==-1 then return end
 		local mutes, nrow = conn:exec("SELECT * FROM mutes WHERE is_active = 1 AND end_timestamp <= "..os.time().." AND guild_id = '"..guild.id.."';")
 		if not mutes then return end

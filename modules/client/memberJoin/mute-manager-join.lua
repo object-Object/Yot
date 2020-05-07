@@ -7,7 +7,7 @@ return {
 	description = "Set is_active to 1 and reset end_timestamp when users with mutes rejoin.",
 	visible = false,
 	disabledByDefault = false,
-	run = function(self, guildSettings, muteMember, conn)
+	run = function(self, guildSettings, lang, muteMember, conn)
 		local entry, _ = conn:exec('SELECT * FROM mutes WHERE guild_id = "'..muteMember.guild.id..'" AND user_id = "'..muteMember.id..'";')
 		if not entry then return end
 		entry = utils.formatRow(entry)

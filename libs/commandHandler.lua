@@ -26,18 +26,19 @@ commandHandler.customPermissions = {
 	end
 }
 
-commandHandler.strings = { -- bits of text used in multiple places that should be consistent
-	usageFooter = "Angled brackets represent required arguments. Square brackets represent optional arguments. Do not include the brackets in the command. All values are case sensitive.",
-	warnFooter = function(guildSettings, entry)
-		return "Time until a warning is removed: "..(entry.is_active and utils.secondsToTime(entry.end_timestamp-os.time()) or "N/A").."\n"
-			.."Warnings until kick: "..(entry.level<guildSettings.warning_kick_level and guildSettings.warning_kick_level-entry.level or "N/A").."\n"
-			.."Warnings until ban: "..(entry.level<guildSettings.warning_ban_level and guildSettings.warning_ban_level-entry.level or "N/A").."\n"
-			.."Active: "..(entry.is_active and "yes" or "no")
+commandHandler.strings = { -- generate proper text to be used in lang strings
+	warnFooter = function(guildSettings, lang, entry)
+		return f(lang.footer.warn_info,
+			entry.is_active and utils.secondsToTime(entry.end_timestamp-os.time(), lang) or lang.g.not_applicable,
+			entry.level<guildSettings.warning_kick_level and guildSettings.warning_kick_level-entry.level or lang.g.not_applicable,
+			entry.level<guildSettings.warning_ban_level and guildSettings.warning_ban_level-entry.level or lang.g.not_applicable,
+			entry.is_active and lang.g.yes or lang.g.no)
 	end,
-	muteFooter = function(guildSettings, length, end_timestamp, is_active)
-		return "Time until unmute: "..(is_active and utils.secondsToTime(end_timestamp-os.time()) or "N/A").."\n"
-			.."Duration: "..utils.secondsToTime(length).."\n"
-			.."Active: "..(is_active and "yes" or "no")
+	muteFooter = function(guildSettings, lang, length, end_timestamp, is_active)
+		return f(lang.footer.mute_info, 
+			is_active and utils.secondsToTime(end_timestamp-os.time(), lang) or lang.g.not_applicable,
+			utils.secondsToTime(length, lang),
+			is_active and lang.g.yes or lang.g.no)
 	end
 }
 
@@ -49,9 +50,19 @@ commandHandler.load = function()
 			commandHandler.sortedCommandNames[category] = {}
 			table.insert(commandHandler.sortedCategoryNames, category)
 		end
+		for code, lang in pairs(discordia.storage.langs) do
+			assert(lang.categories[category]~=nil, "Category "..category.." has no "..code.." lang entry")
+		end
 		for _, commandFilename in ipairs(fs.readdirSync("commands/"..category)) do
 			if commandFilename:match("%.lua$") then
 				local command = require("../commands/"..category.."/"..commandFilename)
+				--[[
+				for code, lang in pairs(discordia.storage.langs) do
+					local commandLang = lang.commands[command.name]
+					assert(commandLang~=nil, "Command "..category.."/"..command.name.." has no "..code.." lang entries")
+					assert(commandLang.description~=nil, "Command "..category.."/"..command.name.." has no "..code.." lang description entry")
+					assert(commandLang.usage~=nil, "Command "..category.."/"..command.name.." has no "..code.." lang usage entry")
+				end --]]
 				applySubcommandReferences(command, command)
 				command.parentCommand = command
 				command.baseCommand = command
@@ -95,47 +106,46 @@ commandHandler.subcommandFromString = function(command, input)
 	return output, table.concat(splitStr, " "), splitStr
 end
 
-commandHandler.sendUsage = function(channel, guildSettings, command)
-	return utils.sendEmbed(channel, "Usage: `"..guildSettings.prefix..command.usage.."`", "ff0000", commandHandler.strings.usageFooter)
+commandHandler.sendUsage = function(channel, guildSettings, lang, command)
+	return utils.sendEmbed(channel, f(lang.g.usage_str, guildSettings.prefix..command.name.." "..lang.commands[command.name].usage), "ff0000", lang.footer.cmd_usage)
 end
 
-commandHandler.sendCommandHelp = function(channel, guildSettings, command)
+commandHandler.sendCommandHelp = function(channel, guildSettings, lang, command)
 	local baseCommand = command.baseCommand
 	if guildSettings.disabled_commands[baseCommand.name] then
 		channel:send{
 			embed = {
 				title = guildSettings.prefix..command.name,
-				description = "`"..guildSettings.prefix..baseCommand.name.."` is disabled in this server.",
+				description = f(lang.error.command_disabled, guildSettings.prefix..baseCommand.name),
 				color = discordia.Color.fromHex("ff0000").value
 			}
 		}
 	else
 		local subcommandsKeys = table.keys(command.subcommands)
 		table.sort(subcommandsKeys)
-		local permissionsString = #baseCommand.permissions>0 and "`"..table.concat(baseCommand.permissions, ", ").."`" or "None"
-		local subcommandsString = #subcommandsKeys>0 and "`"..table.concat(subcommandsKeys, "`, `").."`" or "None"
+		local permissionsString = #baseCommand.permissions>0 and "`"..table.concat(baseCommand.permissions, ", ").."`" or lang.g.none
+		local subcommandsString = #subcommandsKeys>0 and "`"..table.concat(subcommandsKeys, "`, `").."`" or lang.g.none
 		channel:send{
 			embed = {
 				title = guildSettings.prefix..command.name,
-				description = command.description:gsub("%&prefix%;", guildSettings.prefix),
+				description = lang.commands[command.name].description:gsub("%&prefix%;", guildSettings.prefix),
 				fields = {
-					{name = "Category", value = baseCommand.category},
-					{name = "Required permissions", value = permissionsString},
-					{name = "Subcommands", value = subcommandsString},
-					{name = "Usage", value = "`"..guildSettings.prefix..command.usage.."`"}
+					{name = lang.g.category, value = lang.categories[baseCommand.category]},
+					{name = lang.g.required_permissions, value = permissionsString},
+					{name = lang.g.subcommands, value = subcommandsString},
+					{name = lang.g.usage, value = "`"..guildSettings.prefix..command.name.." "..lang.commands[command.name].usage.."`"}
 				},
 				color = discordia.Color.fromHex("00ff00").value,
 				footer = {
-					text = commandHandler.strings.usageFooter
+					text = lang.footer.cmd_usage
 				}
 			}
 		}
 	end
 end
 
-commandHandler.sendPermissionError = function(channel, commandString, missingPermissions)
-	return utils.sendEmbed(channel, "You need the following permission"..utils.s(#missingPermissions).." to use this command: `"
-		..table.concat(missingPermissions,", ").."`", "ff0000")
+commandHandler.sendPermissionError = function(channel, commandString, missingPermissions, lang)
+	return utils.sendEmbed(channel, f(lang.error.missing_permissions, utils.s(#missingPermissions), table.concat(missingPermissions,", ")), "ff0000")
 end
 
 commandHandler.enable = function(commandString, message, guildSettings, conn)
@@ -162,7 +172,7 @@ commandHandler.disable = function(commandString, message, guildSettings, conn)
 	return true
 end
 
-commandHandler.doCommands = function(message, guildSettings, conn)
+commandHandler.doCommands = function(message, guildSettings, lang, conn)
 	local content = commandHandler.stripPrefix(message.content, guildSettings, message.client)
 	local commandString = content:match("^(%S+)")
 	local command = commandHandler.commands[commandString]
@@ -188,9 +198,9 @@ commandHandler.doCommands = function(message, guildSettings, conn)
 				argString = content:gsub("^"..commandString.."%s*","")
 				args = argString:split("%s")
 			end
-			command:run(message, argString, args, guildSettings, conn)
+			command:run(message, argString, args, guildSettings, lang, conn)
 		else
-			commandHandler.sendPermissionError(message.channel, commandString, missingPermissions)
+			commandHandler.sendPermissionError(message.channel, commandString, missingPermissions, lang)
 		end
 		if guildSettings.delete_command_messages then message:delete() end
 	end

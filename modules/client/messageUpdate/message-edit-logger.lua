@@ -6,7 +6,7 @@ return {
 	description = "Logs edited messages in the staff log channel.",
 	visible = true,
 	disabledByDefault = true,
-	run = function(self, guildSettings, message, conn)
+	run = function(self, guildSettings, lang, message, conn)
 		if not guildSettings.staff_log_channel then return end
 		local staffLogChannel = message.guild:getChannel(guildSettings.staff_log_channel)
 		if not staffLogChannel then return end

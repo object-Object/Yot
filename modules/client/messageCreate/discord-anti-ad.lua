@@ -10,7 +10,7 @@ return {
 	description = "Deletes messages containing Discord invite links and warns the users who posted them. A role ignored by this module may be set using the `advertising_allowed_role` setting. Discord invite links leading to the current server will be ignored, as will invalid invites.",
 	visible = true,
 	disabledByDefault = true,
-	run = function(self, guildSettings, message, conn)
+	run = function(self, guildSettings, lang, message, conn)
 		local member = message.guild:getMember(message.author.id)
 		local name = utils.name(message.author, message.guild)
 		if guildSettings.advertising_allowed_role and member:hasRole(guildSettings.advertising_allowed_role) then

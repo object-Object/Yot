@@ -6,7 +6,7 @@ return {
 	usage = "roll [number of rolls]d<number of sides on dice>[+modifier or -modifier]",
 	visible = true,
 	permissions = {},
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		local rolls,sides,modifier="","",""
 		if argString~="" then
 			rolls,sides=argString:match("(%d*)d(%d+)")

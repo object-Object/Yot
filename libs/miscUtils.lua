@@ -28,36 +28,33 @@ local booleanColumns=utils.createLookupTable{
 	"is_active"
 }
 
-local timeModifiers = {
-	m = 60,
-	h = 3600,
-	d = 86400,
-	w = 604800
-}
+utils.divmod = function(a, b)
+	return math.floor(a/b), a%b
+end
 
-utils.secondsToTime = function(seconds)
-	local function s(num)
-		if num=="01" then return "" end return "s"
-	end
-	local function t(num)
-		if num:match("%d")=="0" then num=num:sub(2,2) end
-		return num
-	end
-	local seconds = tonumber(seconds)
+utils.secondsToTime = function(seconds, lang)
+	seconds = tonumber(seconds)
 	if seconds<=0 then
-		return "N/A"
+		return lang.g.not_applicable
 	else
-		days=string.format("%02.f", math.floor(seconds/86400))
-		hours=string.format("%02.f", math.floor(seconds/3600 - days*24))
-		mins=string.format("%02.f", math.floor(seconds/60 - days*1440 - hours*60))
-		secs=string.format("%02.f", math.floor(seconds - days*86400 - hours*3600 - mins*60))
-		local returnString=""
-		if t(days)~="0" then returnString=returnString..t(days).." day"..s(days)..", " end
-		if t(hours)~="0" then returnString=returnString..t(hours).." hour"..s(hours)..", " end
-		if t(mins)~="0" then returnString=returnString..t(mins).." minute"..s(mins)..", " end
-		if t(secs)~="0" then returnString=returnString..t(secs).." second"..s(secs) end
-		returnString=returnString:gsub("%, $","")
-		return returnString
+		local day, min, hour, sec
+		min, sec = utils.divmod(seconds, 60)
+		hour, min = utils.divmod(min, 60)
+		day, hour = utils.divmod(hour, 24)
+		local output = {}
+		if day>0 then
+			table.insert(output, f("%d %s", day, lang.pl(lang.time.day, day)))
+		end
+		if hour>0 then
+			table.insert(output, f("%d %s", hour, lang.pl(lang.time.hour, hour)))
+		end
+		if min>0 then
+			table.insert(output, f("%d %s", min, lang.pl(lang.time.minute, min)))
+		end
+		if sec>0 then
+			table.insert(output, f("%d %s", sec, lang.pl(lang.time.second, sec)))
+		end
+		return table.concat(output, ", ")
 	end
 end
 
@@ -101,15 +98,15 @@ utils.sendEmbedSafe = function(channel, text, color, footer_text, footer_icon, m
 	return utils.sendEmbed(channel, text, color, footer_text, footer_icon, messageContent)
 end
 
-utils.logError = function(guild, err)
+utils.logError = function(guild, lang, err)
 	return guild.client.owner:send{
 		embed = {
-			title = "Bot crashed!",
+			title = lang.error.bot_crashed,
 			description = "```\n"..err.."```",
 			color = discordia.Color.fromHex("ff0000").value,
 			timestamp = discordia.Date():toISO('T', 'Z'),
 			footer = {
-				text = "Guild: "..guild.name.." ("..guild.id..")"
+				text = f(lang.g.guild_str, guild.name, guild.id)
 			}
 		}
 	}
@@ -125,7 +122,13 @@ utils.name = function(user, guild)
 	return user.tag
 end
 
-utils.secondsFromString = function(str)
+utils.secondsFromString = function(str, lang)
+	local timeModifiers = {
+		[lang.time.abbrev.minute] = 60,
+		[lang.time.abbrev.hour] = 3600,
+		[lang.time.abbrev.day] = 86400,
+		[lang.time.abbrev.week] = 604800
+	}
 	local seconds = 0
 	for num, mod in str:gmatch("(%d+)(%a)") do
 		if not (num and mod and timeModifiers[mod]) then
@@ -159,12 +162,8 @@ utils.roleFromString = function(str, guild)
 end
 
 utils.messageFromString = function(str, channel)
-	local id = str:gsub("https://discordapp%.com/channels/%d+/%d+/",""):match("^(%d+)$")
+	local id = str:gsub("https://discord%.com/channels/%d+/%d+/",""):match("^(%d+)$")
 	return id and channel:getMessage(id)
-end
-
-utils.s = function(num)
-	return num==1 and "" or "s"
 end
 
 return utils

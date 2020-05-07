@@ -5,7 +5,7 @@ return {
 	description = "Give back persistent roles when users join who had the roles when they left.",
 	visible = false,
 	disabledByDefault = false,
-	run = function(self, guildSettings, member, conn)
+	run = function(self, guildSettings, lang, member, conn)
 		local entry = conn:exec("SELECT * FROM persistent_roles WHERE guild_id = '"..member.guild.id.."' AND user_id = '"..member.id.."';")
 		if entry then
 			conn:exec("DELETE FROM persistent_roles WHERE guild_id = '"..member.guild.id.."' AND user_id = '"..member.id.."';")

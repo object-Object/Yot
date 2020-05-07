@@ -49,7 +49,7 @@ return {
 	usage = "help [command]", -- usage for help command and errors
 	visible = true, -- whether or not this command shows up in help and is togglable by users
 	permissions = {}, -- required permissions to use the command
-	run = function(self, message, argString, args, guildSettings, conn) -- function called when the command is used
+	run = function(self, message, argString, args, guildSettings, lang, conn) -- function called when the command is used
 		if argString=="" then
 			-- show normal help menu
 			showMainHelp(message, guildSettings, false)
@@ -78,7 +78,7 @@ return {
 			name = "help subcommands",
 			description = "Show the help menu with the subcommands for each command listed.",
 			usage = "help subcommands",
-			run = function(self, message, argString, args, guildSettings, conn)
+			run = function(self, message, argString, args, guildSettings, lang, conn)
 				showMainHelp(message, guildSettings, true)
 			end,
 			subcommands = {}

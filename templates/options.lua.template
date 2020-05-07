@@ -5,6 +5,7 @@ local settings={
 	clientOptions={ -- client options for Discordia
 		cacheAllMembers=true
 	},
+	defaultLanguage="en-CA", -- default strings file to use
 	-- the following settings are defaults used in the database setup
 	-- changing them here after setting up the database WILL NOT affect the values in the database
 	-- they are here because the bot uses them in certain messages to users

@@ -34,7 +34,7 @@ return {
 	usage = "lua <code (may be in a full code block)>",
 	visible = false,
 	permissions = {"yot.botOwner"},
-	run = function(self, message, argString, args, guildSettings)
+	run = function(self, message, argString, args, guildSettings, lang)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
 			return
@@ -56,6 +56,7 @@ return {
 		sandbox.utils = utils
 		sandbox.json = json
 		sandbox.http = http
+		sandbox.lang = lang
 		
 		sandbox.io.write = function(...)
 			table.insert(iolines, printLine(...))

@@ -9,7 +9,7 @@ return {
 	usage = "prefix [new prefix (may be in an inline code block)]",
 	visible = true,
 	permissions = {"administrator"},
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			utils.sendEmbed(message.channel, "Prefix is currently `"..guildSettings.prefix.."`.", "00ff00")
 			return
@@ -32,7 +32,7 @@ return {
 			name = "prefix reset",
 			description = "Reset the command prefix for Yot in this server.",
 			usage = "prefix reset",
-			run = function(self, message, argString, args, guildSettings, conn)
+			run = function(self, message, argString, args, guildSettings, lang, conn)
 				local stmt = conn:prepare("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?;")
 				stmt:reset():bind(options.defaultPrefix, message.guild.id):step()
 				stmt:close()

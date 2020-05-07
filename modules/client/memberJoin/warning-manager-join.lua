@@ -6,7 +6,7 @@ return {
 	description = "Set is_active to 1 and reset end_timestamp when users with warnings rejoin.",
 	visible = false,
 	disabledByDefault = false,
-	run = function(self, guildSettings, member, conn)
+	run = function(self, guildSettings, lang, member, conn)
 		local entry, _ = conn:exec('SELECT * FROM warnings WHERE guild_id = "'..member.guild.id..'" AND user_id = "'..member.id..'";')
 		if entry then
 			entry = utils.formatRow(entry)

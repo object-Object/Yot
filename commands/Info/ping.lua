@@ -7,7 +7,7 @@ return {
 	usage = "ping",
 	visible = true,
 	permissions = {},
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		stopwatch:reset()
 		stopwatch:start()
 		local outputMsg = message.channel:send("Pinging...")

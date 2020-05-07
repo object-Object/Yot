@@ -255,7 +255,7 @@ local settings = {
 	usage = "settings [setting]",
 	visible = true,
 	permissions = {"administrator"},
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			showSettings(message, guildSettings)
 		else
@@ -295,7 +295,7 @@ settings.subcommands.enable = {
 	name = "settings enable",
 	description = "Enable a setting. This is a semi-alias for `&prefix;settings update`. May have arguments, depending on the setting being enabled. Do `&prefix;settings [setting]` to see arguments for a setting.",
 	usage = "settings enable <setting> [arguments]",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
@@ -322,7 +322,7 @@ settings.subcommands.update = {
 	name = "settings update",
 	description = "Update the value of a setting. This is a semi-alias for `&prefix;settings enable`. May have arguments, depending on the setting being updated. Do `&prefix;settings [setting]` to see arguments for a setting.",
 	usage = "settings update <setting> [arguments]",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
@@ -353,7 +353,7 @@ settings.subcommands.disable = {
 	name = "settings disable",
 	description = "Disable a setting.",
 	usage = "settings disable <setting>",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
@@ -380,7 +380,7 @@ settings.subcommands.commands = {
 	name = "settings commands",
 	description = "List all commands, whether they are enabled or disabled, and whether their permissions have been modified or not.",
 	usage = "settings commands",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		local fields = {}
 		for _, categoryString in ipairs(commandHandler.sortedCategoryNames) do
 			local category = commandHandler.sortedCommandNames[categoryString]
@@ -413,7 +413,7 @@ settings.subcommands.commands.subcommands.enable = {
 	name = "settings commands enable",
 	description = "Enable a disabled command.",
 	usage = "settings commands enable <command>",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
@@ -437,7 +437,7 @@ settings.subcommands.commands.subcommands.disable = {
 	name = "settings commands disable",
 	description = "Disable a command.",
 	usage = "settings commands disable <command>",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
@@ -461,7 +461,7 @@ settings.subcommands.commands.subcommands.permissions = {
 	name = "settings commands permissions",
 	description = "Set the permissions required to use a command. Enter just the command to make the command usable by everyone. To view the permissions currently required for a command, use the `&prefix;help` command.",
 	usage = "settings commands permissions <command> [permission1 permission2 permission3 ...]",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
@@ -493,7 +493,7 @@ settings.subcommands.commands.subcommands.permissions.subcommands.list = {
 	name = "settings commands permissions list",
 	description = "List all permissions you can assign to commands.",
 	usage = "settings commands permissions list",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		local output = "```\n"
 		for _, permission in ipairs(commandHandler.sortedPermissionNames) do
 			output = output..permission.."\n"
@@ -514,7 +514,7 @@ settings.subcommands.commands.subcommands.reset = {
 	name = "settings commands reset",
 	description = "Reset a command to its default state. This will enable the command if disabled and set the command permissions back to default.",
 	usage = "settings commands reset <command>",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
@@ -539,7 +539,7 @@ settings.subcommands.modules = {
 	name = "settings modules",
 	description = "List all modules and whether they are enabled or disabled, or show information about a module.",
 	usage = "settings modules [module]",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			showModules(message, guildSettings)
 		else
@@ -568,7 +568,7 @@ settings.subcommands.modules.subcommands.enable = {
 	name = "settings modules enable",
 	description = "Enable a disabled module.",
 	usage = "settings modules enable <module>",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
@@ -591,7 +591,7 @@ settings.subcommands.modules.subcommands.disable = {
 	name = "settings modules disable",
 	description = "Disable an enabled module.",
 	usage = "settings modules disable <module>",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
@@ -614,7 +614,7 @@ settings.subcommands.persistentroles = {
 	name = "settings persistentroles",
 	description = "List all persistent roles. Persistent roles are roles that will be given back to users if they leave while having them. This is different from the muted role, which is handled separately and should not be added as a persistent role.",
 	usage = "settings persistentroles",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		local output = "``` \n"
 		for roleId, _ in pairs(guildSettings.persistent_roles) do
 			local role = guild:getRole(roleId)
@@ -638,7 +638,7 @@ settings.subcommands.persistentroles.subcommands.add = {
 	name = "settings persistentroles add",
 	description = "Add a persistent role by id or role mention.",
 	usage = "settings persistentroles add <role mention (e.g. @Role) or role id>",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
@@ -667,7 +667,7 @@ settings.subcommands.persistentroles.subcommands.remove = {
 	name = "settings persistentroles remove",
 	description = "Remove a persistent role by id or role mention.",
 	usage = "settings persistentroles remove <role mention (e.g. @Role) or role id>",
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return

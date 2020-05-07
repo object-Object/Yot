@@ -8,7 +8,7 @@ return {
 	usage = "mute <ping or id> [length (e.g. 2d4h, 5m, 1w2d3h4m)] [| reason]",
 	visible = true,
 	permissions = {"manageRoles"},
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return

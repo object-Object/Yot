@@ -1,0 +1,122 @@
+{
+	"pl": null,
+
+	"dm": {
+		"message_forwarded": "Your message has been forwarded to the bot developer.",
+		"from": "DM from %s:",
+	},
+
+	"error": {
+		"bot_crashed": "Bot crashed!",
+		"missing_user_permission": {
+			"1": "You may not use this command because you are missing the following required permission: `%s`",
+			"default": "You may not use this command because you are missing the following required permissions: `%s`"
+		},
+		"missing_bot_permission": {
+			"1": "This command cannot be used because Yot is missing the following required permission: `%s`",
+			"default": "This command cannot be used because Yot is missing the following required permissions: `%s`"
+		},
+		"command_disabled": "`%s` is disabled in this server.",
+		"user_not_found": "User %s not found.",
+		"bot_cannot_have_warn": "User %s cannot have warnings because it is a bot.",
+
+		"missing_bot_permission_2": "Yot is missing the `%s` permission.",
+		"user_not_in_guild": "they are not in this server.",
+		"bot_below_user": "Yot's highest role is not higher than their highest role.",
+		"user_is_owner": "they are the server owner.",
+		"user_is_bot": "they are a bot.",
+		"user_no_warnings": "they have no warnings.",
+	},
+
+	"warn": {
+		"user_has_n_warnings": {
+			"1": "%s has %d warning.",
+			"default": "%s has %d warnings."
+		},
+
+		"try_refresh": "Does something seem wrong? Try %swarnings refresh",
+		"refreshed_no_changes": "Successfully refreshed your warnings. No changes were made.",
+		"refreshed_set_active": "Successfully refreshed your warnings. `is_active` was set to true.",
+	},
+
+	"g": {
+		"category": "Category",
+		"required_permissions": "Required permissions",
+		"subcommands": "Subcommands",
+		"usage": "Usage",
+		"usage_str": "Usage: `%s`",
+		"none": "None",
+		"guild": "Guild",
+		"guild_str": "Guild: %s (%s)",
+		"not_applicable": "N/A",
+		"user_id": "User ID: %s",
+		"yes": "yes",
+		"no": "no",
+	},
+
+	"time": {
+		"second": {
+			"1": "second",
+			"default": "seconds"
+		},
+		"minute": {
+			"one": "minute",
+			"default": "minutes"
+		},
+		"hour": {
+			"one": "hour",
+			"default": "hours"
+		},
+		"day": {
+			"one": "day",
+			"default": "days"
+		},
+		"week": {
+			"one": "week",
+			"default": "weeks"
+		},
+		"abbrev": {
+			"second": "s",
+			"minute": "m",
+			"hour": "h",
+			"day": "d",
+			"week": "w"
+		}
+	},
+
+	"footer": {
+		"cmd_usage": "Angled brackets represent required arguments. Square brackets represent optional arguments. Do not include the brackets in the command. All values are case sensitive.",
+		"warn_info": "Time until a warning is removed: %s\nWarnings until kick: %s\nWarnings until ban: %s\nActive: %s",
+		"mute_info": "Time until unmute: %s\nDuration: %s\nActive: %s",
+	},
+
+	"categories": {
+		".Owner": ".Owner",
+		"Config": "Config",
+		"Fun": "Fun",
+		"Info": "Info",
+		"Moderation": "Moderation",
+		"Utility": "Utility",
+	},
+
+	"commands": {
+
+		"template": {
+			"description": "text",
+			"usage": "text"
+		},
+
+		"warnings": {
+			"description": "Show how many warnings you have, or how many someone else has.",
+			"usage": "[ping or id]"
+		},
+		"warnings refresh": {
+			"description": "Use this command if something seems wrong with your warnings, such as being marked as inactive even when you're in the server.",
+			"usage": ""
+		},
+	},
+
+	"modules": {
+
+	}
+}
