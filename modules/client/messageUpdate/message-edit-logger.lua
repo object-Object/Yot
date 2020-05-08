@@ -3,7 +3,6 @@ local discordia = require("discordia")
 
 return {
 	name = "message-edit-logger",
-	description = "Logs edited messages in the staff log channel.",
 	visible = true,
 	disabledByDefault = true,
 	run = function(self, guildSettings, lang, message, conn)
@@ -21,12 +20,12 @@ return {
 		end
 		staffLogChannel:send{
 			embed = {
-				title = "Message edited",
+				title = lang.g.message_edited,
 				fields = {
-					{name = "Old content", value = oldContent},
-					{name = "New content", value = newContent},
-					{name = "Author", value = message.author.mentionString, inline = true},
-					{name = "Channel", value = message.channel.mentionString, inline = true}
+					{name = lang.g.old_content, value = oldContent},
+					{name = lang.g.new_content, value = newContent},
+					{name = lang.g.author, value = message.author.mentionString, inline = true},
+					{name = lang.g.channel, value = message.channel.mentionString, inline = true}
 				},
 				color = discordia.Color.fromHex("ffff00").value,
 				timestamp = discordia.Date():toISO('T', 'Z')

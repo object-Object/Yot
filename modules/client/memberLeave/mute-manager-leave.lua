@@ -2,7 +2,6 @@ local utils = require("miscUtils")
 
 return {
 	name = "mute-manager-leave",
-	description = "Set is_active to 0 when users with mutes leave.",
 	visible = false,
 	disabledByDefault = false,
 	run = function(self, guildSettings, lang, member, conn)

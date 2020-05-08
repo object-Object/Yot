@@ -13,7 +13,7 @@ warnUtils.checkValidKick = function(kickMember, guild, lang)
 	elseif not kickMember then
 		return false, lang.error.user_not_in_guild
 	elseif selfMember.highestRole.position<=kickMember.highestRole.position then
-		return false, lang.error.bot_below_user
+		return false, f(lang.error.bot_below_user, selfMember.highestRole.mentionString, kickMember.highestRole.mentionString)
 	elseif kickMember.id==guild.ownerId then
 		return false, lang.error.user_is_owner
 	end
@@ -28,7 +28,7 @@ warnUtils.checkValidBan = function(banMember, guild, lang)
 	if not selfMember:hasPermission("banMembers") then
 		return false, f(lang.error.missing_bot_permission_2, "banMembers")
 	elseif banMember and selfMember.highestRole.position<=banMember.highestRole.position then
-		return false, lang.error.bot_below_user
+		return false, f(lang.error.bot_below_user, selfMember.highestRole.mentionString, banMember.highestRole.mentionString)
 	elseif banMember and banMember.id==guild.ownerId then
 		return false, lang.error.user_is_owner
 	end

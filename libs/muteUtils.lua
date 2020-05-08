@@ -6,22 +6,22 @@ local muteUtils = {}
 -- returns: success, err, mutedRole
 -- true, nil, mutedRole if mute can proceed
 -- false, err, nil otherwise
-muteUtils.checkValidMute = function(muteMember, muteUser, guild, guildSettings)
+muteUtils.checkValidMute = function(muteMember, muteUser, guild, guildSettings, lang)
 	local selfMember = guild:getMember(guild.client.user.id)
 	if not guildSettings.muted_role then
-		return false, "the `muted_role` setting is not set."
+		return false, f(lang.error.setting_not_set, "muted_role")
 	end
 	local mutedRole = guild:getRole(guildSettings.muted_role)
 	if not mutedRole then
-		return false, "the role set as the `muted_role` setting no longer exists."
+		return false, f(lang.error.setting_object_gone, "muted_role")
 	elseif muteUser.bot then
-		return false, "they are a bot."
+		return false, lang.error.user_is_bot
 	elseif not selfMember:hasPermission("manageRoles") then
-		return false, "Yot does not have the `manageRoles` permission."
+		return false, f(lang.error.missing_bot_permission_2, "manageRoles")
 	elseif selfMember.highestRole.position<=mutedRole.position then
-		return false, "Yot's highest role is not higher than the role set as the `muted_role` setting."
+		return false, f(lang.error.bot_below_role, selfMember.highestRole.mentionString, mutedRole.mentionString)
 	elseif muteMember and muteMember:hasPermission("administrator") then
-		return false, "they have the `administrator` permission."
+		return false, f(lang.error.user_has_permission, "administrator")
 	end
 	return true, nil, mutedRole
 end

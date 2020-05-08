@@ -3,7 +3,6 @@ local discordia = require("discordia")
 
 return {
 	name = "message-delete-logger",
-	description = "Logs deleted messages in the staff log channel.",
 	visible = true,
 	disabledByDefault = true,
 	run = function(self, guildSettings, lang, message, conn)
@@ -13,11 +12,11 @@ return {
 		if not message.content then return end
 		staffLogChannel:send{
 			embed = {
-				title = "Message deleted",
-				description = "**Content**\n"..message.content,
+				title = lang.g.message_deleted,
+				description = "**"..lang.g.content.."**\n"..message.content,
 				fields = {
-					{name = "Author", value = message.author.mentionString, inline = true},
-					{name = "Channel", value = message.channel.mentionString, inline = true}
+					{name = lang.g.author, value = message.author.mentionString, inline = true},
+					{name = lang.g.channel, value = message.channel.mentionString, inline = true}
 				},
 				color = discordia.Color.fromHex("ff0000").value,
 				timestamp = discordia.Date():toISO('T', 'Z')

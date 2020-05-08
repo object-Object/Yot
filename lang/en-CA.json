@@ -19,17 +19,43 @@
 		"command_disabled": "`%s` is disabled in this server.",
 		"user_not_found": "User %s not found.",
 		"bot_cannot_have_warn": "User %s cannot have warnings because it is a bot.",
+		"report_error": "Please report this error to the bot developer by sending Yot a direct message.",
+		"advertising_not_allowed": "Advertising is not allowed on this server!",
+
+		"warn_fail": "%s could not be warned: %s.",
+		"auto_warn_fail": "%s could not be automatically warned: %s.",
+		"kick_warn_fail": {
+			"1": "%s could not be kicked for reaching %d warning: %s.",
+			"default": "%s could not be kicked for reaching %d warnings: %s."
+		},
+		"kick_auto_warn_fail": {
+			"1": "%s could not be kicked for automatically reaching %d warning: %s.",
+			"default": "%s could not be kicked for automatically reaching %d warnings: %s."
+		},
+		"ban_warn_fail": {
+			"1": "%s could not be banned for reaching %d warning: %s.",
+			"default": "%s could not be banned for reaching %d warnings: %s."
+		},
+		"ban_auto_warn_fail": {
+			"1": "%s could not be banned for automatically reaching %d warning: %s.",
+			"default": "%s could not be banned for automatically reaching %d warnings: %s."
+		},
 
 		"missing_bot_permission_2": "Yot is missing the `%s` permission.",
-		"user_not_in_guild": "they are not in this server.",
-		"bot_below_user": "Yot's highest role is not higher than their highest role.",
-		"user_is_owner": "they are the server owner.",
-		"user_is_bot": "they are a bot.",
-		"user_no_warnings": "they have no warnings.",
+		"user_not_in_guild": "They are not in this server.",
+		"bot_below_user": "Yot's highest role (%s) is not higher than their highest role (%s).",
+		"user_is_owner": "They are the server owner.",
+		"user_is_bot": "They are a bot.",
+		"user_no_warnings": "They have no warnings.",
+		"setting_not_set": "The `%s` setting is not set.",
+		"setting_object_gone": "The object set as the `%s` setting has been removed or is no longer visible to Yot.",
+		"bot_below_role": "Yot's highest role (%s) is not higher than %s.",
+		"user_has_permission": "They have the `%s` permission.",
 	},
 
 	"warn": {
 		"user_has_n_warnings": {
+			"0": "%s has no warnings.",
 			"1": "%s has %d warning.",
 			"default": "%s has %d warnings."
 		},
@@ -37,6 +63,30 @@
 		"try_refresh": "Does something seem wrong? Try %swarnings refresh",
 		"refreshed_no_changes": "Successfully refreshed your warnings. No changes were made.",
 		"refreshed_set_active": "Successfully refreshed your warnings. `is_active` was set to true.",
+		"you_warned_auto": {
+			"1": "You have been automatically warned in **%s**. You now have %d warning.",
+			"default": "You have been automatically warned in **%s**. You now have %d warnings."
+		},
+		"user_warned_auto": {
+			"1": "%s has been automatically warned. They now have %d warning.",
+			"default": "%s has been automatically warned. They now have %d warnings."
+		},
+		"you_kicked_auto": {
+			"1": "You have been kicked from **%s** for automatically reaching %d warning.",
+			"default": "You have been kicked from **%s** for automatically reaching %d warnings."
+		},
+		"user_kicked_auto": {
+			"1": "%s has been kicked for automatically reaching %d warning.",
+			"default": "%s has been kicked for automatically reaching %d warnings."
+		},
+		"you_banned_auto": {
+			"1": "You have been banned from **%s** for automatically reaching %d warning.",
+			"default": "You have been banned from **%s** for automatically reaching %d warnings."
+		},
+		"user_banned_auto": {
+			"1": "%s has been banned for automatically reaching %d warning.",
+			"default": "%s has been banned for automatically reaching %d warnings."
+		},
 	},
 
 	"g": {
@@ -44,14 +94,24 @@
 		"required_permissions": "Required permissions",
 		"subcommands": "Subcommands",
 		"usage": "Usage",
-		"usage_str": "Usage: `%s`",
 		"none": "None",
 		"guild": "Guild",
-		"guild_str": "Guild: %s (%s)",
 		"not_applicable": "N/A",
-		"user_id": "User ID: %s",
 		"yes": "yes",
 		"no": "no",
+		"message_edited": "Message edited",
+		"message_deleted": "Message deleted",
+		"old_content": "Old content",
+		"new_content": "New content",
+		"content": "Content",
+		"author": "Author",
+		"channel": "Channel",
+
+		"usage_str": "Usage: `%s`",
+		"guild_str": "Guild: %s (%s)",
+		"reason_str": " (Reason: %s)",
+		"responsible_user_str": "Responsible user: %s",
+		"user_id": "User ID: %s",
 	},
 
 	"time": {
@@ -60,19 +120,19 @@
 			"default": "seconds"
 		},
 		"minute": {
-			"one": "minute",
+			"1": "minute",
 			"default": "minutes"
 		},
 		"hour": {
-			"one": "hour",
+			"1": "hour",
 			"default": "hours"
 		},
 		"day": {
-			"one": "day",
+			"1": "day",
 			"default": "days"
 		},
 		"week": {
-			"one": "week",
+			"1": "week",
 			"default": "weeks"
 		},
 		"abbrev": {
@@ -118,5 +178,27 @@
 
 	"modules": {
 
+		"template": {
+			"description": "text"
+		},
+
+		"message-edit-logger": {
+			"description": "Logs edited messages in the staff log channel."
+		},
+		"message-delete-logger": {
+			"description": "Logs deleted messages in the staff log channel."
+		},
+		"persistent-roles-leave": {
+			"description": "Cache persistent roles when users leave."
+		},
+		"mute-manager-leave": {
+			"description": "Set is_active to 0 when users with mutes leave."
+		},
+		"warning-manager-leave": {
+			"description": "Set is_active to 0 when users with warnings leave."
+		},
+		"youtube-anti-ad": {
+			"description": "Deletes messages containing YouTube video links in which the video uploader's name matches the user's, and warns the users who posted them. A role ignored by this module may be set using the `advertising_allowed_role` setting."
+		},
 	}
 }

@@ -2,7 +2,6 @@ local json = require("json")
 
 return {
 	name = "persistent-roles-leave",
-	description = "Cache persistent roles when users leave.",
 	visible = false,
 	disabledByDefault = false,
 	run = function(self, guildSettings, lang, member, conn)
