@@ -17,90 +17,90 @@ Any number (or really, any value) can be used for the sub-keys.
 		// sent in response to DMs, to notify users that their message has been forwarded
 		"message_forwarded": "Your message has been forwarded to the bot developer.",
 		// sent preceding forwarded DMs
-		//   %s(1): the username of the user who sent the DM being forwarded
-		"from": "DM from %s:",
+		//   %1$s: the username of the user who sent the DM being forwarded
+		"from": "DM from %1$s:",
 	},
 
 	"error": {
 		"bot_crashed": "Bot crashed!",
 		"missing_user_permission": {
-			"1": "You may not use this command because you are missing the following required permission: `%s`",
-			"default": "You may not use this command because you are missing the following required permissions: `%s`"
+			"1": "You may not use this command because you are missing the following required permission: `%1$s`",
+			"default": "You may not use this command because you are missing the following required permissions: `%1$s`"
 		},
 		"missing_bot_permission": {
-			"1": "This command cannot be used because Yot is missing the following required permission: `%s`",
-			"default": "This command cannot be used because Yot is missing the following required permissions: `%s`"
+			"1": "This command cannot be used because Yot is missing the following required permission: `%1$s`",
+			"default": "This command cannot be used because Yot is missing the following required permissions: `%1$s`"
 		},
-		"command_disabled": "`%s` is disabled in this server.",
-		"user_not_found": "User %s not found.",
-		"bot_cannot_have_warn": "User %s cannot have warnings because it is a bot.",
+		"command_disabled": "`%1$s` is disabled in this server.",
+		"user_not_found": "User %1$s not found.",
+		"bot_cannot_have_warn": "User %1$s cannot have warnings because it is a bot.",
 		"report_error": "Please report this error to the bot developer by sending Yot a direct message.",
 		"advertising_not_allowed": "Advertising is not allowed on this server!",
 
-		"warn_fail": "%s could not be warned: %s.",
-		"auto_warn_fail": "%s could not be automatically warned: %s.",
+		"warn_fail": "%1$s could not be warned: %2$s.",
+		"auto_warn_fail": "%1$s could not be automatically warned: %2$s.",
 		"kick_warn_fail": {
-			"1": "%s could not be kicked for reaching %d warning: %s.",
-			"default": "%s could not be kicked for reaching %d warnings: %s."
+			"1": "%1$s could not be kicked for reaching %2$d warning: %3$s.",
+			"default": "%1$s could not be kicked for reaching %2$d warnings: %3$s."
 		},
 		"kick_auto_warn_fail": {
-			"1": "%s could not be kicked for automatically reaching %d warning: %s.",
-			"default": "%s could not be kicked for automatically reaching %d warnings: %s."
+			"1": "%1$s could not be kicked for automatically reaching %2$d warning: %3$s.",
+			"default": "%1$s could not be kicked for automatically reaching %2$d warnings: %3$s."
 		},
 		"ban_warn_fail": {
-			"1": "%s could not be banned for reaching %d warning: %s.",
-			"default": "%s could not be banned for reaching %d warnings: %s."
+			"1": "%1$s could not be banned for reaching %2$d warning: %3$s.",
+			"default": "%1$s could not be banned for reaching %2$d warnings: %3$s."
 		},
 		"ban_auto_warn_fail": {
-			"1": "%s could not be banned for automatically reaching %d warning: %s.",
-			"default": "%s could not be banned for automatically reaching %d warnings: %s."
+			"1": "%1$s could not be banned for automatically reaching %2$d warning: %3$s.",
+			"default": "%1$s could not be banned for automatically reaching %2$d warnings: %3$s."
 		},
 
-		"missing_bot_permission_2": "Yot is missing the `%s` permission.",
+		"missing_bot_permission_2": "Yot is missing the `%1$s` permission.",
 		"user_not_in_guild": "They are not in this server.",
-		"bot_below_user": "Yot's highest role (%s) is not higher than their highest role (%s).",
+		"bot_below_user": "Yot's highest role (%1$s) is not higher than their highest role (%1$s).",
 		"user_is_owner": "They are the server owner.",
 		"user_is_bot": "They are a bot.",
 		"user_no_warnings": "They have no warnings.",
-		"setting_not_set": "The `%s` setting is not set.",
-		"setting_object_gone": "The object set as the `%s` setting has been removed or is no longer visible to Yot.",
-		"bot_below_role": "Yot's highest role (%s) is not higher than %s.",
-		"user_has_permission": "They have the `%s` permission.",
+		"setting_not_set": "The `%1$s` setting is not set.",
+		"setting_object_gone": "The object set as the `%1$s` setting has been removed or is no longer visible to Yot.",
+		"bot_below_role": "Yot's highest role (%1$s) is not higher than %2$s.",
+		"user_has_permission": "They have the `%1$s` permission.",
 	},
 
 	"warn": {
 		"user_has_n_warnings": {
-			"0": "%s has no warnings.",
-			"1": "%s has %d warning.",
-			"default": "%s has %d warnings."
+			"0": "%1$s has no warnings.",
+			"1": "%1$s has %2$d warning.",
+			"default": "%1$s has %2$d warnings."
 		},
 
-		"try_refresh": "Does something seem wrong? Try %swarnings refresh",
+		"try_refresh": "Does something seem wrong? Try %1$swarnings refresh",
 		"refreshed_no_changes": "Successfully refreshed your warnings. No changes were made.",
 		"refreshed_set_active": "Successfully refreshed your warnings. `is_active` was set to true.",
 		"you_warned_auto": {
-			"1": "You have been automatically warned in **%s**. You now have %d warning.",
-			"default": "You have been automatically warned in **%s**. You now have %d warnings."
+			"1": "You have been automatically warned in **%1$s**. You now have %2$d warning.",
+			"default": "You have been automatically warned in **%1$s**. You now have %2$d warnings."
 		},
 		"user_warned_auto": {
-			"1": "%s has been automatically warned. They now have %d warning.",
-			"default": "%s has been automatically warned. They now have %d warnings."
+			"1": "%1$s has been automatically warned. They now have %2$d warning.",
+			"default": "%1$s has been automatically warned. They now have %2$d warnings."
 		},
 		"you_kicked_auto": {
-			"1": "You have been kicked from **%s** for automatically reaching %d warning.",
-			"default": "You have been kicked from **%s** for automatically reaching %d warnings."
+			"1": "You have been kicked from **%1$s** for automatically reaching %2$d warning.",
+			"default": "You have been kicked from **%1$s** for automatically reaching %2$d warnings."
 		},
 		"user_kicked_auto": {
-			"1": "%s has been kicked for automatically reaching %d warning.",
-			"default": "%s has been kicked for automatically reaching %d warnings."
+			"1": "%1$s has been kicked for automatically reaching %2$d warning.",
+			"default": "%1$s has been kicked for automatically reaching %2$d warnings."
 		},
 		"you_banned_auto": {
-			"1": "You have been banned from **%s** for automatically reaching %d warning.",
-			"default": "You have been banned from **%s** for automatically reaching %d warnings."
+			"1": "You have been banned from **%1$s** for automatically reaching %2$d warning.",
+			"default": "You have been banned from **%1$s** for automatically reaching %2$d warnings."
 		},
 		"user_banned_auto": {
-			"1": "%s has been banned for automatically reaching %d warning.",
-			"default": "%s has been banned for automatically reaching %d warnings."
+			"1": "%1$s has been banned for automatically reaching %2$d warning.",
+			"default": "%1$s has been banned for automatically reaching %2$d warnings."
 		},
 	},
 
@@ -122,11 +122,11 @@ Any number (or really, any value) can be used for the sub-keys.
 		"author": "Author",
 		"channel": "Channel",
 
-		"usage_str": "Usage: `%s`",
-		"guild_str": "Guild: %s (%s)",
-		"reason_str": " (Reason: %s)",
-		"responsible_user_str": "Responsible user: %s",
-		"user_id": "User ID: %s",
+		"usage_str": "Usage: `%1$s`",
+		"guild_str": "Guild: %1$s (%2$s)",
+		"reason_str": " (Reason: %1$s)",
+		"responsible_user_str": "Responsible user: %1$s",
+		"user_id": "User ID: %1$s",
 	},
 
 	// all messages in the suggestions channel are reacted to with these emotes for voting
@@ -138,26 +138,26 @@ Any number (or really, any value) can be used for the sub-keys.
 		// example output using these strings:
 		// 2 days, 5 hours, 1 minute
 		// for all of these strings
-		//   $s(1): number representing how many of the respective unit of time there are
+		//   %1$s: number representing how many of the respective unit of time there are
 		"second": {
-			"1": "%s second",
-			"default": "%s seconds"
+			"1": "%1$s second",
+			"default": "%1$s seconds"
 		},
 		"minute": {
-			"1": "%s minute",
-			"default": "%s minutes"
+			"1": "%1$s minute",
+			"default": "%1$s minutes"
 		},
 		"hour": {
-			"1": "%s hour",
-			"default": "%s hours"
+			"1": "%1$s hour",
+			"default": "%1$s hours"
 		},
 		"day": {
-			"1": "%s day",
-			"default": "%s days"
+			"1": "%1$s day",
+			"default": "%1$s days"
 		},
 		"week": {
-			"1": "%s week",
-			"default": "%s weeks"
+			"1": "%1$s week",
+			"default": "%1$s weeks"
 		},
 		// this is used to separate time segments
 		"concat": ", ",
@@ -176,16 +176,16 @@ Any number (or really, any value) can be used for the sub-keys.
 		// Gives information about how to use commands
 		"cmd_usage": "Angled brackets represent required arguments. Square brackets represent optional arguments. Do not include the brackets in the command. All values are case sensitive.",
 		// Gives information about a user's warning entry
-		//   %s(1): a time string made using the time lang object - the amount of time until one warning is removed from the user
-		//   %s(2): a number of warnings, or g.not_applicable - how many more warnings it will take for the user to be kicked from the server
-		//   %s(3): a number of warnings, or g.not_applicable - how many more warnings it will take for the user to be banned from the server
-		//   %s(4): g.yes or g.no - whether or not the user is currently in the server, and therefore if the warning time is decreasing
-		"warn_info": "Time until a warning is removed: %s\nWarnings until kick: %s\nWarnings until ban: %s\nActive: %s",
+		//   %1$s: a time string made using the time lang object - the amount of time until one warning is removed from the user
+		//   %2$s: a number of warnings, or g.not_applicable - how many more warnings it will take for the user to be kicked from the server
+		//   %3$s: a number of warnings, or g.not_applicable - how many more warnings it will take for the user to be banned from the server
+		//   %4$s: g.yes or g.no - whether or not the user is currently in the server, and therefore if the warning time is decreasing
+		"warn_info": "Time until a warning is removed: %1$s\nWarnings until kick: %2$s\nWarnings until ban: %3$s\nActive: %4$s",
 		// Gives information about a user's mute
-		//   %s(1): a time string made using the time lang object - the amount of time until the user is unmuted
-		//   %s(2): a time string made using the time lang object - the initial length of the mute
-		//   %s(3): g.yes or g.no - whether or not the user is currently in the server, and therefore if the mute time is decreasing
-		"mute_info": "Time until unmute: %s\nDuration: %s\nActive: %s",
+		//   %1$s: a time string made using the time lang object - the amount of time until the user is unmuted
+		//   %2$s: a time string made using the time lang object - the initial length of the mute
+		//   %3$s: g.yes or g.no - whether or not the user is currently in the server, and therefore if the mute time is decreasing
+		"mute_info": "Time until unmute: %1$s\nDuration: %2$s\nActive: %3$s",
 	},
 
 	/* Names of the command categories (used in the help menu) */

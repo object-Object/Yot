@@ -1,4 +1,14 @@
-_G.f = string.format -- shorthand for string.format used in almost every file for lang purposes
+-- custom string.format function that handles the parameter field (https://en.wikipedia.org/wiki/Printf_format_string#Parameter_field)
+_G.f = function(str, ...)
+	local args, order = {...}, {}
+
+	str = str:gsub("%%(%d+)%$", function(i)
+		table.insert(order, args[tonumber(i)])
+		return "%"
+	end)
+
+	return str:format(table.unpack(order))
+end
 
 local discordia = require("discordia")
 local http = require("coro-http")
