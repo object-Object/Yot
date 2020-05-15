@@ -33,6 +33,7 @@ utils.divmod = function(a, b)
 end
 
 utils.secondsToTime = function(seconds, lang)
+	-- note: this whole function really needs to be redone to work better with localization
 	seconds = tonumber(seconds)
 	if seconds<=0 then
 		return lang.g.not_applicable
@@ -43,18 +44,18 @@ utils.secondsToTime = function(seconds, lang)
 		day, hour = utils.divmod(hour, 24)
 		local output = {}
 		if day>0 then
-			table.insert(output, f("%d %s", day, lang.pl(lang.time.day, day)))
+			table.insert(output, f(lang.pl(lang.time.day, day), day))
 		end
 		if hour>0 then
-			table.insert(output, f("%d %s", hour, lang.pl(lang.time.hour, hour)))
+			table.insert(output, f(lang.pl(lang.time.hour, hour), hour))
 		end
 		if min>0 then
-			table.insert(output, f("%d %s", min, lang.pl(lang.time.minute, min)))
+			table.insert(output, f(lang.pl(lang.time.minute, min), min))
 		end
 		if sec>0 then
-			table.insert(output, f("%d %s", sec, lang.pl(lang.time.second, sec)))
+			table.insert(output, f(lang.pl(lang.time.second, sec), sec))
 		end
-		return table.concat(output, ", ")
+		return table.concat(output, lang.time.concat)
 	end
 end
 

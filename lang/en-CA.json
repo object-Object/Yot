@@ -1,8 +1,23 @@
+/*
+Plural format:
+"string_key": {
+	"0": "This sentence will be used if the number being checked is 0",
+	"1": "This sentence will be used if the number being checked is 1",
+	"default": "This sentence will be used if none of the other sentences match"
+}
+Any number (or really, any value) can be used for the sub-keys.
+*/
+
 {
+	// this is just a reminder to not name any top-level keys pl, because it's used for the pluralizer function
 	"pl": null,
 
+	/* Strings used in the DM forwarding module */
 	"dm": {
+		// sent in response to DMs, to notify users that their message has been forwarded
 		"message_forwarded": "Your message has been forwarded to the bot developer.",
+		// sent preceding forwarded DMs
+		//   %s(1): the username of the user who sent the DM being forwarded
 		"from": "DM from %s:",
 	},
 
@@ -114,27 +129,39 @@
 		"user_id": "User ID: %s",
 	},
 
+	// all messages in the suggestions channel are reacted to with these emotes for voting
+	// in order: "I like this", "I don't care about this", "I don't like this"
+	"suggestion_emotes": ["👍", "🤷", "👎"],
+
+	/* Strings used for displaying times prettily */
 	"time": {
+		// example output using these strings:
+		// 2 days, 5 hours, 1 minute
+		// for all of these strings
+		//   $s(1): number representing how many of the respective unit of time there are
 		"second": {
-			"1": "second",
-			"default": "seconds"
+			"1": "%s second",
+			"default": "%s seconds"
 		},
 		"minute": {
-			"1": "minute",
-			"default": "minutes"
+			"1": "%s minute",
+			"default": "%s minutes"
 		},
 		"hour": {
-			"1": "hour",
-			"default": "hours"
+			"1": "%s hour",
+			"default": "%s hours"
 		},
 		"day": {
-			"1": "day",
-			"default": "days"
+			"1": "%s day",
+			"default": "%s days"
 		},
 		"week": {
-			"1": "week",
-			"default": "weeks"
+			"1": "%s week",
+			"default": "%s weeks"
 		},
+		// this is used to separate time segments
+		"concat": ", ",
+		// time unit abbreviations, used wherever users have to give a length of time as input
 		"abbrev": {
 			"second": "s",
 			"minute": "m",
@@ -144,12 +171,24 @@
 		}
 	},
 
+	/* Footers used for various embeds */
 	"footer": {
+		// Gives information about how to use commands
 		"cmd_usage": "Angled brackets represent required arguments. Square brackets represent optional arguments. Do not include the brackets in the command. All values are case sensitive.",
+		// Gives information about a user's warning entry
+		//   %s(1): a time string made using the time lang object - the amount of time until one warning is removed from the user
+		//   %s(2): a number of warnings, or g.not_applicable - how many more warnings it will take for the user to be kicked from the server
+		//   %s(3): a number of warnings, or g.not_applicable - how many more warnings it will take for the user to be banned from the server
+		//   %s(4): g.yes or g.no - whether or not the user is currently in the server, and therefore if the warning time is decreasing
 		"warn_info": "Time until a warning is removed: %s\nWarnings until kick: %s\nWarnings until ban: %s\nActive: %s",
+		// Gives information about a user's mute
+		//   %s(1): a time string made using the time lang object - the amount of time until the user is unmuted
+		//   %s(2): a time string made using the time lang object - the initial length of the mute
+		//   %s(3): g.yes or g.no - whether or not the user is currently in the server, and therefore if the mute time is decreasing
 		"mute_info": "Time until unmute: %s\nDuration: %s\nActive: %s",
 	},
 
+	/* Names of the command categories (used in the help menu) */
 	"categories": {
 		".Owner": ".Owner",
 		"Config": "Config",
@@ -159,13 +198,14 @@
 		"Utility": "Utility",
 	},
 
+	/* Descriptions and usages for all commands */
 	"commands": {
-
+		/*
 		"template": {
 			"description": "text",
 			"usage": "text"
 		},
-
+		*/
 		"warnings": {
 			"description": "Show how many warnings you have, or how many someone else has.",
 			"usage": "[ping or id]"
@@ -176,12 +216,13 @@
 		},
 	},
 
+	/* Descriptions for all modules */
 	"modules": {
-
+		/*
 		"template": {
 			"description": "text"
 		},
-
+		*/
 		"message-edit-logger": {
 			"description": "Logs edited messages in the staff log channel."
 		},
@@ -189,16 +230,22 @@
 			"description": "Logs deleted messages in the staff log channel."
 		},
 		"persistent-roles-leave": {
-			"description": "Cache persistent roles when users leave."
+			"description": "Caches persistent roles when users leave."
 		},
 		"mute-manager-leave": {
-			"description": "Set is_active to 0 when users with mutes leave."
+			"description": "Sets is_active to 0 when users with mutes leave."
 		},
 		"warning-manager-leave": {
-			"description": "Set is_active to 0 when users with warnings leave."
+			"description": "Sets is_active to 0 when users with warnings leave."
 		},
 		"youtube-anti-ad": {
 			"description": "Deletes messages containing YouTube video links in which the video uploader's name matches the user's, and warns the users who posted them. A role ignored by this module may be set using the `advertising_allowed_role` setting."
+		},
+		"suggestions-channel": {
+			"description": "Adds voting reactions to messages sent in the server's suggestions channel, if set."
+		},
+		"discord-anti-ad": {
+			"description": "Deletes messages containing Discord invite links and warns the users who posted them. A role ignored by this module may be set using the `advertising_allowed_role` setting. Discord invite links leading to the current server will be ignored, as will invalid invites."
 		},
 	}
 }
