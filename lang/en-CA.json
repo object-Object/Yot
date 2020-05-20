@@ -21,54 +21,105 @@ Any number (or really, any value) can be used for the sub-keys.
 		"from": "DM from %1$s:",
 	},
 
+	/* Strings used when an error happens */
 	"error": {
+		// Sent to the bot owner when a fatal error occurs
 		"bot_crashed": "Bot crashed!",
+		// Sent when a user isn't allowed to use a command because they're missing one or more permissions
+		//   %1$s: name or names of the permissions that are missing
 		"missing_user_permission": {
 			"1": "You may not use this command because you are missing the following required permission: `%1$s`",
 			"default": "You may not use this command because you are missing the following required permissions: `%1$s`"
 		},
+		// Sent when the command can't be used because the bot is missing one or more permissions
+		//   %1$s: name or names of the permissions that are missing
 		"missing_bot_permission": {
 			"1": "This command cannot be used because Yot is missing the following required permission: `%1$s`",
 			"default": "This command cannot be used because Yot is missing the following required permissions: `%1$s`"
 		},
-		"command_disabled": "`%1$s` is disabled in this server.",
+		// Sent when the server admins have disabled a command in the server
+		//   %1$s: name of the command
+		"command_disabled": "`%1$s` has been disabled in this server.",
+		// Sent when the supplied user argument isn't a valid user
+		//   %1$s: the text that the command user input
 		"user_not_found": "User %1$s not found.",
+		// Sent when the supplied user is a bot, and therefore cannot be warned
+		//   %1$s: username
 		"bot_cannot_have_warn": "User %1$s cannot have warnings because it is a bot.",
+		// Sent when a fatal issue happens, for example if the banning of a user fails
 		"report_error": "Please report this error to the bot developer by sending Yot a direct message.",
+		// Used as the reason when a user is warned for advertising
 		"advertising_not_allowed": "Advertising is not allowed on this server!",
 
+		// Sent when a user can't be warned for some reason
+		//   %1$s: username
+		//   %2$s: another sentence that describes the reason that the user can't be warned
 		"warn_fail": "%1$s could not be warned: %2$s.",
+		// See error.warn_fail, but for when the warning is due to an automated action
 		"auto_warn_fail": "%1$s could not be automatically warned: %2$s.",
+		// Sent when a user can't be kicked for reaching a specific warning level for some reason
+		//   %1$s: username
+		//   %2$d: number of warnings
+		//   %3$s: another sentence that describes the reason that the user can't be kicked
 		"kick_warn_fail": {
 			"1": "%1$s could not be kicked for reaching %2$d warning: %3$s.",
 			"default": "%1$s could not be kicked for reaching %2$d warnings: %3$s."
 		},
+		// See error.kick_warn_fail, but for when the kick is due to an automated action
 		"kick_auto_warn_fail": {
 			"1": "%1$s could not be kicked for automatically reaching %2$d warning: %3$s.",
 			"default": "%1$s could not be kicked for automatically reaching %2$d warnings: %3$s."
 		},
+		// See error.kick_warn_fail, but for a ban instead of a kick
 		"ban_warn_fail": {
 			"1": "%1$s could not be banned for reaching %2$d warning: %3$s.",
 			"default": "%1$s could not be banned for reaching %2$d warnings: %3$s."
 		},
+		// See error.kick_auto_warn_fail, but for a ban instead of a kick
 		"ban_auto_warn_fail": {
 			"1": "%1$s could not be banned for automatically reaching %2$d warning: %3$s.",
 			"default": "%1$s could not be banned for automatically reaching %2$d warnings: %3$s."
 		},
 
+		/*
+		  All of the messages in this section are used as reasons in the above section of errors.
+		  When "them" or "they" is used, it refers to the user whose name was given earlier in the message.
+		*/
+		// Used when the bot can't do the action because it is missing a specific permission
+		//   %1$s: name of the missing permission
 		"missing_bot_permission_2": "Yot is missing the `%1$s` permission.",
+		// Used when the user is not currently in the server
 		"user_not_in_guild": "They are not in this server.",
+		// Used when the bot can't affect the user because the bot isn't above them in the role hierarchy
+		//   %1$s: ping of the bot's highest role
+		//   $2$s: ping of the user's highest role
 		"bot_below_user": "Yot's highest role (%1$s) is not higher than their highest role (%1$s).",
+		// Used when the bot can't affect the user because they own the server
 		"user_is_owner": "They are the server owner.",
+		// Used when the bot can't affect the user because the user is a bot
 		"user_is_bot": "They are a bot.",
+		// Used when the user can't be unwarned because they don't have any warnings
 		"user_no_warnings": "They have no warnings.",
+		// Used when a required bot setting isn't set, so the command can't be used
+		//   %1$s: the name of the setting
 		"setting_not_set": "The `%1$s` setting is not set.",
+		// Used when a required bot setting is set, but the object to which it refers (e.g. channel, role) is no longer visible to the bot
+		//   %1$s: the name of the setting
 		"setting_object_gone": "The object set as the `%1$s` setting has been removed or is no longer visible to Yot.",
+		// Used when the bot can't affect the role because the bot isn't above the role in the role hierarchy
+		//   %1$s: ping of the bot's highest role
+		//   $2$s: ping of the role
 		"bot_below_role": "Yot's highest role (%1$s) is not higher than %2$s.",
+		// Used when the bot can't affect the user because they have a specific permission (usually administrator)
+		//   %1$s: the name of the permission
 		"user_has_permission": "They have the `%1$s` permission.",
 	},
 
+	/* Strings used for things related to the warn commands/modules */
 	"warn": {
+		// Used in the $warnings command to say how many warnings a user has
+		//   %1$s: username
+		//   %2$d: number of warnings
 		"user_has_n_warnings": {
 			"0": "%1$s has no warnings.",
 			"1": "%1$s has %2$d warning.",
