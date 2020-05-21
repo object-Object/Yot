@@ -44,7 +44,7 @@ return {
 				if not success then
 					-- kick failed, so continue with normal warn messages
 					if kickedDM then kickedDM:delete() end
-					utils.sendEmbed(message.channel, f(lang.pl(lang.error.kick_auto_warn_fail, entry.level), name, entry.level, err).." "..lang.error.report_error, "ff0000")
+					utils.sendEmbed(message.channel, f(lang.pl(lang.error.kick_auto_warn_fail, entry.level), name, entry.level, "`"..err.."`").." "..lang.error.report_error, "ff0000")
 				else
 					-- kick succeeded, exit early
 					local text = f(lang.pl(lang.warn.user_kicked_auto, entry.level), name, entry.level)..reason
@@ -64,7 +64,7 @@ return {
 				if not success then
 					-- ban failed, so continue with normal warn messages
 					if bannedDM then bannedDM:delete() end
-					utils.sendEmbed(message.channel, f(lang.pl(lang.error.ban_auto_warn_fail, entry.level), name, entry.level, err).." "..lang.error.report_error, "ff0000")
+					utils.sendEmbed(message.channel, f(lang.pl(lang.error.ban_auto_warn_fail, entry.level), name, entry.level, "`"..err.."`").." "..lang.error.report_error, "ff0000")
 				else
 					-- ban succeeded, exit early
 					local text = f(lang.pl(lang.warn.user_banned_auto, entry.level), name, entry.level)..reason

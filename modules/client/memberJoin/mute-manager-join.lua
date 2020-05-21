@@ -4,7 +4,6 @@ local commandHandler = require("commandHandler")
 
 return {
 	name = "mute-manager-join",
-	description = "Set is_active to 1 and reset end_timestamp when users with mutes rejoin.",
 	visible = false,
 	disabledByDefault = false,
 	run = function(self, guildSettings, lang, muteMember, conn)

@@ -6,6 +6,9 @@ Plural format:
 	"default": "This sentence will be used if none of the other sentences match"
 }
 Any number (or really, any value) can be used for the sub-keys.
+The number against which the sub-keys is checked is called the plural variable in the comments.
+If the plural variable matches a sub-key, the respective sentence will be used; otherwise, the sub-key called "default" will be used.
+Sub-keys are always strings (i.e. wrapped in double-quotes).
 */
 
 {
@@ -27,12 +30,14 @@ Any number (or really, any value) can be used for the sub-keys.
 		"bot_crashed": "Bot crashed!",
 		// Sent when a user isn't allowed to use a command because they're missing one or more permissions
 		//   %1$s: name or names of the permissions that are missing
+		//   Plural variable: number of permissions
 		"missing_user_permission": {
 			"1": "You may not use this command because you are missing the following required permission: `%1$s`",
 			"default": "You may not use this command because you are missing the following required permissions: `%1$s`"
 		},
 		// Sent when the command can't be used because the bot is missing one or more permissions
 		//   %1$s: name or names of the permissions that are missing
+		//   Plural variable: number of permissions
 		"missing_bot_permission": {
 			"1": "This command cannot be used because Yot is missing the following required permission: `%1$s`",
 			"default": "This command cannot be used because Yot is missing the following required permissions: `%1$s`"
@@ -61,6 +66,7 @@ Any number (or really, any value) can be used for the sub-keys.
 		//   %1$s: username
 		//   %2$d: number of warnings
 		//   %3$s: another sentence that describes the reason that the user can't be kicked
+		//   Plural variable: number of warnings
 		"kick_warn_fail": {
 			"1": "%1$s could not be kicked for reaching %2$d warning: %3$s.",
 			"default": "%1$s could not be kicked for reaching %2$d warnings: %3$s."
@@ -120,6 +126,7 @@ Any number (or really, any value) can be used for the sub-keys.
 		// Used in the $warnings command to say how many warnings a user has
 		//   %1$s: username
 		//   %2$d: number of warnings
+		//   Plural variable: number of warnings
 		"user_has_n_warnings": {
 			"0": "%1$s has no warnings.",
 			"1": "%1$s has %2$d warning.",
@@ -153,6 +160,26 @@ Any number (or really, any value) can be used for the sub-keys.
 			"1": "%1$s has been banned for automatically reaching %2$d warning.",
 			"default": "%1$s has been banned for automatically reaching %2$d warnings."
 		},
+		// Sent to a user who had previously been warned, then left, and has now rejoined the server
+		//   %1$s: name of the server
+		//   %2$d: number of warnings
+		//   Plural variable: number of warnings
+		"you_rewarned": {
+			"1": "Your warning has been given back in **%1$s**. You had %2$d warning before you left the server.",
+			"default": "Your warnings have been given back in **%1$s**. You had %2$d warnings before you left the server."
+		},
+		// Sent in the public log channel when a user who had previously been warned, then left, rejoins the server
+		//   %1$s: username
+		//   %2$d: number of warnings
+		//   Plural variable: number of warnings
+		"user_rewarned": {
+			"1": "%1$s's warning has been given back. They had %2$d warning before they left the server.",
+			"default": "%1$s's warnings have been given back. They had %2$d warnings before they left the server."
+		}
+	},
+
+	"mute": {
+
 	},
 
 	"g": {
@@ -297,6 +324,12 @@ Any number (or really, any value) can be used for the sub-keys.
 		},
 		"discord-anti-ad": {
 			"description": "Deletes messages containing Discord invite links and warns the users who posted them. A role ignored by this module may be set using the `advertising_allowed_role` setting. Discord invite links leading to the current server will be ignored, as will invalid invites."
+		},
+		"warning-manager-join": {
+			"description": "Sets is_active to 1 and resets end_timestamp when users with warnings rejoin."
+		},
+		"mute-manager-join": {
+			"description": "Sets is_active to 1, gives back muted role, and resets end_timestamp when users with mutes rejoin."
 		},
 	}
 }
