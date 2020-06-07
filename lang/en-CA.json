@@ -59,36 +59,45 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 		// Sent when a user can't be warned for some reason
 		//   %1$s: username
 		//   %2$s: another sentence that describes the reason that the user can't be warned
-		"warn_fail": "%1$s could not be warned: %2$s.",
+		"warn_fail": "%1$s could not be warned: %2$s",
 		// See error.warn_fail, but for when the warning is due to an automated action
-		"auto_warn_fail": "%1$s could not be automatically warned: %2$s.",
+		"auto_warn_fail": "%1$s could not be automatically warned: %2$s",
 		// Sent when a user can't be kicked for reaching a specific warning level for some reason
 		//   %1$s: username
 		//   %2$d: number of warnings
 		//   %3$s: another sentence that describes the reason that the user can't be kicked
 		//   Plural variable: number of warnings
 		"kick_warn_fail": {
-			"1": "%1$s could not be kicked for reaching %2$d warning: %3$s.",
-			"default": "%1$s could not be kicked for reaching %2$d warnings: %3$s."
+			"1": "%1$s could not be kicked for reaching %2$d warning: %3$s",
+			"default": "%1$s could not be kicked for reaching %2$d warnings: %3$s"
 		},
 		// See error.kick_warn_fail, but for when the kick is due to an automated action
 		"kick_auto_warn_fail": {
-			"1": "%1$s could not be kicked for automatically reaching %2$d warning: %3$s.",
-			"default": "%1$s could not be kicked for automatically reaching %2$d warnings: %3$s."
+			"1": "%1$s could not be kicked for automatically reaching %2$d warning: %3$s",
+			"default": "%1$s could not be kicked for automatically reaching %2$d warnings: %3$s"
 		},
 		// See error.kick_warn_fail, but for a ban instead of a kick
 		"ban_warn_fail": {
-			"1": "%1$s could not be banned for reaching %2$d warning: %3$s.",
-			"default": "%1$s could not be banned for reaching %2$d warnings: %3$s."
+			"1": "%1$s could not be banned for reaching %2$d warning: %3$s",
+			"default": "%1$s could not be banned for reaching %2$d warnings: %3$s"
 		},
 		// See error.kick_auto_warn_fail, but for a ban instead of a kick
 		"ban_auto_warn_fail": {
-			"1": "%1$s could not be banned for automatically reaching %2$d warning: %3$s.",
-			"default": "%1$s could not be banned for automatically reaching %2$d warnings: %3$s."
+			"1": "%1$s could not be banned for automatically reaching %2$d warning: %3$s",
+			"default": "%1$s could not be banned for automatically reaching %2$d warnings: %3$s"
 		},
 
+		// Sent when a user could not be re-muted after rejoining
+		//   %1$s: username
+		//   %2$s: another sentence that describes the reason that the user can't be re-muted
+		"remute_fail": "%1$s could not be automatically re-muted: %2$s",
+		// Sent when a user could not be automatically unmuted
+		//   %1$s: username
+		//   %2$s: another sentence that describes the reason that the user can't be unmuted
+		"unmute_fail": "%1$s could not be automatically unmuted: %2$s",
+
 		/*
-		  All of the messages in this section are used as reasons in the above section of errors.
+		  All of the messages in this section are used as reasons in the above sections of errors.
 		  When "them" or "they" is used, it refers to the user whose name was given earlier in the message.
 		*/
 		// Used when the bot can't do the action because it is missing a specific permission
@@ -144,6 +153,14 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 			"1": "%1$s has been automatically warned. They now have %2$d warning.",
 			"default": "%1$s has been automatically warned. They now have %2$d warnings."
 		},
+		"you_unwarned_auto": {
+			"1": "You have been automatically unwarned in **%1$s**. You now have %2$d warning.",
+			"default": "You have been automatically unwarned in **%1$s**. You now have %2$d warnings."
+		},
+		"user_unwarned_auto": {
+			"1": "%1$s has been automatically unwarned. They now have %2$d warning.",
+			"default": "%1$s has been automatically unwarned. They now have %2$d warnings."
+		},
 		"you_kicked_auto": {
 			"1": "You have been kicked from **%1$s** for automatically reaching %2$d warning.",
 			"default": "You have been kicked from **%1$s** for automatically reaching %2$d warnings."
@@ -179,7 +196,56 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 	},
 
 	"mute": {
+		// Sent to a user who had previously been muted, then left, and has now rejoined the server
+		//   %1$s: name of the server
+		"you_remuted": "You have been automatically re-muted in **%1$s**.",
+		// Sent in the public log channel when a user who had previously been muted, then left, rejoins the server
+		//   %1$s: username
+		"user_remuted": "%1$s has been automatically re-muted.",
+		// Sent to a user who has been automatically unmuted
+		//   %1$s: name of the server
+		"you_unmuted_auto": "You have been automatically unmuted in **%1$s**.",
+		// Sent in the public log channel when a user has been automatically unmuted
+		//   %1$s: username
+		"user_unmuted_auto": "%1$s has been automatically unmuted."
+	},
 
+	/* Strings related to persistent roles, i.e. roles given back to a user if they leave & rejoin */
+	"persistent_roles": {
+		// Sent to a user when they rejoin and are given back roles
+		//   %1$s: name of the server
+		//   %2$s: list of roles
+		//   Plural variable: number of roles
+		"you_roles_given": {
+			"1": "You have been given back the following role in **%1$s**: %2$s.",
+			"default": "You have been given back the following roles in **%1$s**: %2$s."
+		},
+		// Sent in the public log channel when a user rejoins and is given back roles
+		//   %1$s: username
+		//   %2$s: list of roles
+		//   Plural variable: number of roles
+		"user_roles_given": {
+			"1": "%1$s has been given back the following role: %2$s.",
+			"default": "%1$s has been given back the following roles: %2$s."
+		},
+		// Used to separate role names in a list of roles
+		"concat": ", "
+	},
+
+	/* Strings for automatic log things like join messages, leave messages, ban messages, etc. */
+	"logs": {
+		// Default message sent in the public log channel when a user is banned
+		//   %1$s: username
+		"user_banned": "%1$s has been banned from this server.",
+
+		// Used as field names in embeds sent in the staff log channel
+		"message_edited": "Message edited",
+		"message_deleted": "Message deleted",
+		"old_content": "Old content",
+		"new_content": "New content",
+		"content": "Content",
+		"author": "Author",
+		"channel": "Channel",
 	},
 
 	"g": {
@@ -192,13 +258,6 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 		"not_applicable": "N/A",
 		"yes": "yes",
 		"no": "no",
-		"message_edited": "Message edited",
-		"message_deleted": "Message deleted",
-		"old_content": "Old content",
-		"new_content": "New content",
-		"content": "Content",
-		"author": "Author",
-		"channel": "Channel",
 
 		"usage_str": "Usage: `%1$s`",
 		"guild_str": "Guild: %1$s (%2$s)",
@@ -330,6 +389,18 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 		},
 		"mute-manager-join": {
 			"description": "Sets is_active to 1, gives back muted role, and resets end_timestamp when users with mutes rejoin."
+		},
+		"persistent-roles-join": {
+			"description": "Gives back persistent roles when users join who had the roles when they left."
+		},
+		"ban-messages": {
+			"description": "Sends a message in the public log channel when a user is banned."
+		},
+		"mute-manager": {
+			"description": "Runs once per minute to remove any active mutes that have expired."
+		},
+		"warning-manager": {
+			"description": "Runs once per minute to remove any active warnings that have expired."
 		},
 	}
 }

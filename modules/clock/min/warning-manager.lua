@@ -6,7 +6,6 @@ local options = discordia.storage.options
 
 return {
 	name = "warning-manager",
-	description = "Runs once per minute to remove any active warnings that have expired.",
 	visible = false,
 	disabledByDefault = false,
 	run = function(self, guildSettings, lang, guild, conn)
@@ -33,13 +32,10 @@ return {
 					local staffLogChannel = guildSettings.staff_log_channel and guild:getChannel(guildSettings.staff_log_channel)
 					local warnFooter = commandHandler.strings.warnFooter(guildSettings, {is_active=true, end_timestamp=end_timestamp, level=level})
 					local name = warnMember.name.."#"..warnUser.discriminator
-					utils.sendEmbed(warnUser:getPrivateChannel(), "You have been automatically unwarned in **"..guild.name.."**. You now have "..level.." warning"..utils.s(level)..".", "ffff00", warnFooter)
-					if publicLogChannel then
-						utils.sendEmbed(publicLogChannel, name.." has been automatically unwarned. They now have "..level.." warning"..utils.s(level)..".", "ffff00", warnFooter)
-					end
-					if staffLogChannel then
-						utils.sendEmbed(staffLogChannel, name.." has been automatically unwarned. They now have "..level.." warning"..utils.s(level)..".", "ffff00", warnFooter)
-					end
+					utils.sendEmbed(warnUser:getPrivateChannel(), f(lang.pl(lang.warn.you_unwarned_auto, level), guild.name, level), "ffff00", warnFooter)
+					local text = f(lang.pl(lang.warn.user_unwarned_auto, level), name, level)
+					utils.sendEmbedSafe(publicLogChannel, text, "ffff00", warnFooter)
+					utils.sendEmbedSafe(staffLogChannel, text, "ffff00", warnFooter)
 				end
 			end
 			decreaseStmt:close()

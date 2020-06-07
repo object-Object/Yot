@@ -17,27 +17,27 @@ return {
 		local publicLogChannel = guildSettings.public_log_channel and muteMember.guild:getChannel(guildSettings.public_log_channel)
 		local staffLogChannel = guildSettings.staff_log_channel and muteMember.guild:getChannel(guildSettings.staff_log_channel)
 
-		local valid, reasonInvalid, mutedRole = muteUtils.checkValidMute(muteMember, muteUser, muteMember.guild, guildSettings)
+		local valid, reasonInvalid, mutedRole = muteUtils.checkValidMute(muteMember, muteUser, muteMember.guild, guildSettings, lang)
 		if not valid then
-			local text = name.."'s mute could not be given back because "..reasonInvalid
+			local text = f(lang.error.remute_fail, name, reasonInvalid)
 			utils.sendEmbedSafe(publicLogChannel, text, "ff0000")
 			utils.sendEmbedSafe(staffLogChannel, text, "ff0000")
 			muteUtils.deleteEntry(muteMember.guild, muteUser, conn)
 			return
 		end
 
-		local muteFooter = commandHandler.strings.muteFooter(guildSettings, entry.length, os.time()+entry.length, true)
+		local muteFooter = commandHandler.strings.muteFooter(guildSettings, lang, entry.length, os.time()+entry.length, true)
 
-		local mutedDM = utils.sendEmbed(muteUser:getPrivateChannel(), "Your mute has been given back in **"..muteMember.guild.name.."**.", "00ff00", muteFooter)
+		local mutedDM = utils.sendEmbed(muteUser:getPrivateChannel(), f(lang.mute.you_remuted, muteMember.guild.name), "00ff00", muteFooter)
 		local success, err = muteUtils.remute(muteMember, muteUser, mutedRole, muteMember.guild, conn, entry.length)
 		if not success then
 			if mutedDM then mutedDM:delete() end
-			local text = name.."'s mute could not be given back: `"..err.."`. Please report this error to the bot developer by sending Yot a direct message."
+			local text = f(lang.error.remute_fail, name, "`"..err.."`").." "..lang.error.report_error
 			utils.sendEmbedSafe(publicLogChannel, text, "ff0000")
 			utils.sendEmbedSafe(staffLogChannel, text, "ff0000")
 			return
 		end
-		local text = name.."'s mute has been given back."
+		local text = f(lang.mute.user_remuted, name)
 		utils.sendEmbedSafe(publicLogChannel, text, "00ff00", muteFooter)
 		utils.sendEmbedSafe(staffLogChannel, text, "00ff00", muteFooter)
 	end,

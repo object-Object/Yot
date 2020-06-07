@@ -12,11 +12,11 @@ return {
 		if not message.content then return end
 		staffLogChannel:send{
 			embed = {
-				title = lang.g.message_deleted,
-				description = "**"..lang.g.content.."**\n"..message.content,
+				title = lang.logs.message_deleted,
+				description = "**"..lang.logs.content.."**\n"..message.content,
 				fields = {
-					{name = lang.g.author, value = message.author.mentionString, inline = true},
-					{name = lang.g.channel, value = message.channel.mentionString, inline = true}
+					{name = lang.logs.author, value = message.author.mentionString, inline = true},
+					{name = lang.logs.channel, value = message.channel.mentionString, inline = true}
 				},
 				color = discordia.Color.fromHex("ff0000").value,
 				timestamp = discordia.Date():toISO('T', 'Z')

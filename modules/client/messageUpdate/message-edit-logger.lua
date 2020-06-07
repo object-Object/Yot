@@ -20,12 +20,12 @@ return {
 		end
 		staffLogChannel:send{
 			embed = {
-				title = lang.g.message_edited,
+				title = lang.logs.message_edited,
 				fields = {
-					{name = lang.g.old_content, value = oldContent},
-					{name = lang.g.new_content, value = newContent},
-					{name = lang.g.author, value = message.author.mentionString, inline = true},
-					{name = lang.g.channel, value = message.channel.mentionString, inline = true}
+					{name = lang.logs.old_content, value = oldContent},
+					{name = lang.logs.new_content, value = newContent},
+					{name = lang.logs.author, value = message.author.mentionString, inline = true},
+					{name = lang.logs.channel, value = message.channel.mentionString, inline = true}
 				},
 				color = discordia.Color.fromHex("ffff00").value,
 				timestamp = discordia.Date():toISO('T', 'Z')

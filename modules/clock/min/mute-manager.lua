@@ -7,7 +7,6 @@ local muteUtils = require("muteUtils")
 
 return {
 	name = "mute-manager",
-	description = "Runs once per minute to remove any active mutes that have expired.",
 	visible = false,
 	disabledByDefault = false,
 	run = function(self, guildSettings, lang, guild, conn)
@@ -28,7 +27,7 @@ return {
 
 			local valid, reasonInvalid, mutedRole = muteUtils.checkValidMute(muteMember, muteUser, guild, guildSettings)
 			if not valid then
-				local text = name.." could not be automatically unmuted because "..reasonInvalid
+				local text = f(lang.error.unmute_fail, name, reasonInvalid)
 				utils.sendEmbedSafe(publicLogChannel, text, "ff0000")
 				utils.sendEmbedSafe(staffLogChannel, text, "ff0000")
 				muteUtils.deleteEntry(guild, muteUser, conn)
@@ -40,16 +39,16 @@ return {
 				goto continue
 			end
 
-			local mutedDM = utils.sendEmbed(muteUser:getPrivateChannel(), "You have been automatically unmuted in **"..guild.name.."**.", "ffff00")
+			local mutedDM = utils.sendEmbed(muteUser:getPrivateChannel(), f(lang.mute.you_unmuted_auto, guild.name), "ffff00")
 			local success, err = muteUtils.unmute(muteMember, muteUser, mutedRole, guild, conn)
 			if not success then
 				if mutedDM then mutedDM:delete() end
-				local text = name.." could not be automatically unmuted: `"..err.."`. Please report this error to the bot developer by sending Yot a direct message."
+				local text = f(lang.error.unmute_fail, name, "`"..err.."`").." "..lang.error.report_error
 				utils.sendEmbedSafe(publicLogChannel, text, "ff0000")
 				utils.sendEmbedSafe(staffLogChannel, text, "ff0000")
 				goto continue
 			end
-			local text = name.." has been automatically unmuted."
+			local text = f(lang.mute.user_unmuted_auto, name)
 			utils.sendEmbedSafe(publicLogChannel, text, "ffff00")
 			utils.sendEmbedSafe(staffLogChannel, text, "ffff00")
 
