@@ -51,6 +51,9 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 		// Sent when the supplied user is a bot, and therefore cannot be warned
 		//   %1$s: username
 		"bot_cannot_have_warn": "User %1$s cannot have warnings because it is a bot.",
+		// Sent when the supplied user cannot be unbanned because they are not banned
+		//   %1$s: username
+		"user_not_banned": "User %1$s is already unbanned.",
 		// Sent when a fatal issue happens, for example if the banning of a user fails
 		"report_error": "Please report this error to the bot developer by sending Yot a direct message.",
 		// Used as the reason when a user is warned for advertising
@@ -95,6 +98,11 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 		//   %1$s: username
 		//   %2$s: another sentence that describes the reason that the user can't be unmuted
 		"unmute_fail": "%1$s could not be automatically unmuted: %2$s",
+
+		// Sent when a user could not be unbanned
+		//   %1$s: username
+		//   %2$s: another sentence that describes the reason that the user can't be unbanned
+		"unban_fail": "%1$s could not be unbanned: %2$s",
 
 		/*
 		  All of the messages in this section are used as reasons in the above sections of errors.
@@ -145,6 +153,15 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 		"try_refresh": "Does something seem wrong? Try %1$swarnings refresh",
 		"refreshed_no_changes": "Successfully refreshed your warnings. No changes were made.",
 		"refreshed_set_active": "Successfully refreshed your warnings. `is_active` was set to true.",
+
+		"you_warned": {
+			"1": "You have been warned in **%1$s**. You now have %2$d warning.",
+			"default": "You have been warned in **%1$s**. You now have %2$d warnings."
+		},
+		"user_warned": {
+			"1": "%1$s has been successfully warned. They now have %2$d warning.",
+			"default": "%1$s has been successfully warned. They now have %2$d warnings."
+		},
 		"you_warned_auto": {
 			"1": "You have been automatically warned in **%1$s**. You now have %2$d warning.",
 			"default": "You have been automatically warned in **%1$s**. You now have %2$d warnings."
@@ -152,6 +169,14 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 		"user_warned_auto": {
 			"1": "%1$s has been automatically warned. They now have %2$d warning.",
 			"default": "%1$s has been automatically warned. They now have %2$d warnings."
+		},
+		"you_unwarned": {
+			"1": "You have been unwarned in **%1$s**. You now have %2$d warning.",
+			"default": "You have been unwarned in **%1$s**. You now have %2$d warnings."
+		},
+		"user_unwarned": {
+			"1": "%1$s has been successfully unwarned. They now have %2$d warning.",
+			"default": "%1$s has been successfully unwarned. They now have %2$d warnings."
 		},
 		"you_unwarned_auto": {
 			"1": "You have been automatically unwarned in **%1$s**. You now have %2$d warning.",
@@ -234,9 +259,12 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 
 	/* Strings for automatic log things like join messages, leave messages, ban messages, etc. */
 	"logs": {
-		// Default message sent in the public log channel when a user is banned
+		// Default message sent in the public and staff log channel when a user is banned
 		//   %1$s: username
 		"user_banned": "%1$s has been banned from this server.",
+		// Message sent in the staff log channel when a user is unbanned
+		// %1$s: username
+		"user_unbanned": "%1$s has been unbanned from this server.",
 
 		// Used as field names in embeds sent in the staff log channel
 		"message_edited": "Message edited",
@@ -335,7 +363,7 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 		"Utility": "Utility",
 	},
 
-	/* Descriptions and usages for all commands */
+	/* Descriptions, usages, and some strings for all commands */
 	"commands": {
 		/*
 		"template": {
@@ -344,13 +372,28 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 		},
 		*/
 		"warnings": {
-			"description": "Show how many warnings you have, or how many someone else has.",
-			"usage": "[ping or id]"
+			"description": "Shows how many warnings you have, or how many someone else has.",
+			"usage": "[user]"
 		},
 		"warnings refresh": {
 			"description": "Use this command if something seems wrong with your warnings, such as being marked as inactive even when you're in the server.",
 			"usage": ""
 		},
+		"unban": {
+			"description": "Unbans a user.",
+			"usage": "<user> [| reason]",
+			// Sent when the command executes successfully and the user is unbanned
+			//   %1$s: username
+			"user_unbanned": "User %1$s has been successfully unbanned.",
+			// Sent to a user who has been unbanned, in case they are in another server with the bot
+			//   %1$s: name of the server
+			"you_unbanned": "You have been unbanned from **%1$s**."
+		},
+		"unwarn": {
+			"description": "Removes one warning from a user.",
+			"usage": "<user> [| reason]"
+		},
+
 	},
 
 	/* Descriptions for all modules */

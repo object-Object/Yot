@@ -4,19 +4,17 @@ local warnUtils = require("warnUtils")
 
 return {
 	name = "unwarn",
-	description = "Unwarn a user.",
-	usage = "unwarn <ping or id> [| reason]",
 	visible = true,
-	permissions = {"kickMembers","banMembers"},
+	permissions = {"kickMembers", "banMembers"},
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 
 		local warnUser = utils.userFromString(args[1], message.client)
 		if not warnUser then
-			utils.sendEmbed(message.channel, "User "..args[1].." not found.", "ff0000")
+			utils.sendEmbed(message.channel, f(lang.error.user_not_found, args[1]), "ff0000")
 			return
 		end
 		local warnMember = utils.memberFromString(args[1], message.guild)
@@ -29,16 +27,16 @@ return {
 		end
 
 		local reason = argString:match("%|%s+(.+)")
-		reason = reason and " (Reason: "..reason..")" or ""
+		reason = reason and f(lang.g.reason_str, reason) or ""
 
 		local staffLogChannel = guildSettings.staff_log_channel and message.guild:getChannel(guildSettings.staff_log_channel)
 
 		local warnFooter = commandHandler.strings.warnFooter(guildSettings, entry)
 
-		utils.sendEmbed(warnUser:getPrivateChannel(), "You have been unwarned in **"..message.guild.name.."**. You now have "..entry.level.." warning"..utils.s(entry.level).."."..reason, "00ff00", warnFooter)
-		local text = name.." has been unwarned. They now have "..entry.level.." warning"..utils.s(entry.level).."."..reason
+		utils.sendEmbed(warnUser:getPrivateChannel(), f(lang.pl(lang.warn.you_unwarned, entry.level), message.guild.name, entry.level)..reason, "00ff00", warnFooter)
+		local text = f(lang.pl(lang.warn.user_unwarned, entry.level), name, entry.level)..reason
 		utils.sendEmbed(message.channel, text, "00ff00", warnFooter)
-		utils.sendEmbedSafe(staffLogChannel, text, "00ff00", "Responsible user: "..utils.name(message.author, message.guild).."\n"..warnFooter)
+		utils.sendEmbedSafe(staffLogChannel, text, "00ff00", f(lang.g.responsible_user_str, utils.name(message.author, message.guild)).."\n"..warnFooter)
 	end,
 	onEnable = function(self, message, guildSettings)
 		return true
