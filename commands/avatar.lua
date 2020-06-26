@@ -1,21 +1,23 @@
 local commandHandler = require("../commandHandler")
+local utils = require("../miscUtils")
 
 return {
 	name = "avatar",
 	description = "Show a user's avatar in full size.",
-	usage = "avatar <ping> [ping 2] [ping 3 ...]",
+	usage = "avatar <user ID or ping>",
 	visible = true,
 	permissions = {},
 	run = function(self, message, argString, args, guildSettings, conn)
-		if not message.mentionedUsers.first then
+		if argString=="" then
 			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
 			return
 		end
-		local output=""
-		for user in message.mentionedUsers:iter() do
-			output=output..user.tag..": "..user:getAvatarURL(1024).."\n"
+		local user = utils.userFromString(args[1], message.client)
+		if not user then
+			utils.sendEmbed(message.channel, "User "..args[1].." not found.", "ff0000")
+		else
+			message:reply("Avatar of **"..utils.name(user, message.guild).."**:\n"..user:getAvatarURL(1024))
 		end
-		message:reply(output)
 	end,
 	onEnable = function(self, message, guildSettings)
 		return true
