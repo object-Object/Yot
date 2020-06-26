@@ -1,9 +1,5 @@
-<<<<<<< HEAD:commands/Utility/avatar.lua
 local commandHandler = require("commandHandler")
-=======
-local commandHandler = require("../commandHandler")
-local utils = require("../miscUtils")
->>>>>>> fix/avatar-command:commands/avatar.lua
+local utils = require("miscUtils")
 
 return {
 	name = "avatar",
@@ -11,15 +7,9 @@ return {
 	usage = "avatar <user ID or ping>",
 	visible = true,
 	permissions = {},
-<<<<<<< HEAD:commands/Utility/avatar.lua
 	run = function(self, message, argString, args, guildSettings, lang, conn)
-		if not message.mentionedUsers.first then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
-=======
-	run = function(self, message, argString, args, guildSettings, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
->>>>>>> fix/avatar-command:commands/avatar.lua
+			commandHandler.sendUsage(message.channel, guildSettings, self)
 			return
 		end
 		local user = utils.userFromString(args[1], message.client)
