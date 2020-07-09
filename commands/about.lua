@@ -14,7 +14,7 @@ return {
 		message.channel:send{
 			embed = {
 				title = "About Yot",
-				description = "• Yot is a general-purpose bot with an emphasis on moderation.\n• It is written, hosted, and maintained by [object Object]#0001.\n• Found a bug? Send a direct message to Yot! Include some information about the bug, like what you were doing when it happened, what you expected to happen, and what actually happened.",
+				description = "• Yot is a moderation and utility bot, written in Lua.\n• It is written, hosted, and maintained by [object Object]#0001.\n• Found a bug? Send a direct message to Yot! Include some information about the bug, like what you were doing when it happened, what you expected to happen, and what actually happened.",
 				color = discordia.Color.fromHex("00ff00").value,
 				fields = {
 					{name = "Servers", value = #message.client.guilds},
