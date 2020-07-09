@@ -3,6 +3,9 @@
 * The settings list is now sorted alphabetically
 * Significant amounts of behind-the-scenes restructuring - be on the lookout for weird bugs!
 
+**v2.2.6** - 2020-07-09
+* Updated the text in `&prefix;about` to match the change to README.md
+
 **v2.2.5** - 2020-06-26
 * Fixed getting the avatar of users by id with `&prefix;avatar`
 - Removed the ability to get the avatar of multiple users in one command, due to spam concerns
