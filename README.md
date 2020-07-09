@@ -1,5 +1,5 @@
 # Yot
-Yot is a general-purpose Discord bot written in Lua with an emphasis on moderation. It is written, hosted, and maintained by @\[object Object]#0001.
+Yot is a moderation and utility Discord bot, written in Lua. It is written, hosted, and maintained by @\[object Object]#0001.
 
 ## Dependencies
 * [Luvit](https://luvit.io/)
