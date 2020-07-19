@@ -20,7 +20,7 @@ return {
 					{name = "Author", value = message.author.mentionString, inline = true},
 					{name = "Channel", value = message.channel.mentionString, inline = true}
 				},
-				color = discordia.Color.fromHex("ff0000").value,
+				color = discordia.Color.fromHex("ffff00").value,
 				timestamp = discordia.Date():toISO('T', 'Z')
 			}
 		}

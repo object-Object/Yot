@@ -21,8 +21,8 @@ return {
 			if #addedRoles==0 then return end
 			local addedRolesStr = table.concat(addedRoles, ", ")
 			local publicLogChannel = member.guild:getChannel(guildSettings.public_log_channel)
-			utils.sendEmbed(member:getPrivateChannel(), "You have been given back the following role"..utils.s(#addedRoles).." in **"..member.guild.name.."**: "..addedRolesStr..".", "00ff00")
-			utils.sendEmbedSafe(publicLogChannel, utils.name(member.user, member.guild).." has been given back the following role"..utils.s(#addedRoles)..": "..addedRolesStr..".", "00ff00")
+			utils.sendEmbed(member:getPrivateChannel(), "You have been given back the following role"..utils.s(#addedRoles).." in **"..member.guild.name.."**: "..addedRolesStr..".", "ffff00")
+			utils.sendEmbedSafe(publicLogChannel, utils.name(member.user, member.guild).." has been given back the following role"..utils.s(#addedRoles)..": "..addedRolesStr..".", "ffff00")
 		end
 	end,
 	onEnable = function(self, message, guildSettings, conn)

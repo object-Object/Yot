@@ -15,12 +15,12 @@ return {
 			entry.end_timestamp = os.time()+guildSettings.warning_length
 			conn:exec('UPDATE warnings SET is_active = 1, end_timestamp = '..entry.end_timestamp..' WHERE guild_id = "'..member.guild.id..'" AND user_id = "'..member.id..'";')
 			local warnFooter = commandHandler.strings.warnFooter(guildSettings, entry)
-			utils.sendEmbed(member:getPrivateChannel(), "Your warnings have been given back in **"..member.guild.name.."**. You have "..entry.level.." warning"..utils.s(entry.level)..".", "00ff00", warnFooter)
+			utils.sendEmbed(member:getPrivateChannel(), "Your warnings have been given back in **"..member.guild.name.."**. You have "..entry.level.." warning"..utils.s(entry.level)..".", "ffff00", warnFooter)
 			local publicLogChannel = guildSettings.public_log_channel and member.guild:getChannel(guildSettings.public_log_channel)
 			local staffLogChannel = guildSettings.staff_log_channel and member.guild:getChannel(guildSettings.staff_log_channel)
 			local text = member.user.tag.."'s warnings have been given back. They have "..entry.level.." warning"..utils.s(entry.level).."."
-			utils.sendEmbedSafe(publicLogChannel, text, "00ff00", warnFooter)
-			utils.sendEmbedSafe(staffLogChannel, text, "00ff00", warnFooter)
+			utils.sendEmbedSafe(publicLogChannel, text, "ffff00", warnFooter)
+			utils.sendEmbedSafe(staffLogChannel, text, "ffff00", warnFooter)
 		end
 	end,
 	onEnable = function(self, message, guildSettings, conn)

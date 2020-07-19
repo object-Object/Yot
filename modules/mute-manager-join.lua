@@ -30,7 +30,7 @@ return {
 
 		local muteFooter = commandHandler.strings.muteFooter(guildSettings, entry.length, os.time()+entry.length, true)
 
-		local mutedDM = utils.sendEmbed(muteUser:getPrivateChannel(), "Your mute has been given back in **"..muteMember.guild.name.."**.", "00ff00", muteFooter)
+		local mutedDM = utils.sendEmbed(muteUser:getPrivateChannel(), "Your mute has been given back in **"..muteMember.guild.name.."**.", "ffff00", muteFooter)
 		local success, err = muteUtils.remute(muteMember, muteUser, mutedRole, muteMember.guild, conn, entry.length)
 		if not success then
 			if mutedDM then mutedDM:delete() end
@@ -40,8 +40,8 @@ return {
 			return
 		end
 		local text = name.."'s mute has been given back."
-		utils.sendEmbedSafe(publicLogChannel, text, "00ff00", muteFooter)
-		utils.sendEmbedSafe(staffLogChannel, text, "00ff00", muteFooter)
+		utils.sendEmbedSafe(publicLogChannel, text, "ffff00", muteFooter)
+		utils.sendEmbedSafe(staffLogChannel, text, "ffff00", muteFooter)
 	end,
 	onEnable = function(self, message, guildSettings, conn)
 		return true
