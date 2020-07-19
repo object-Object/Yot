@@ -3,6 +3,10 @@
 * The settings list is now sorted alphabetically
 * Significant amounts of behind-the-scenes restructuring - be on the lookout for weird bugs!
 
+**v2.2.7** - 2020-07-19
++ Added join and leave messages
+* Fixed the colour of a few automated embeds
+
 **v2.2.6** - 2020-07-09
 * Updated the text in `&prefix;about` to match the change to README.md
 

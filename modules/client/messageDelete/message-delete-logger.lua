@@ -18,7 +18,7 @@ return {
 					{name = lang.logs.author, value = message.author.mentionString, inline = true},
 					{name = lang.logs.channel, value = message.channel.mentionString, inline = true}
 				},
-				color = discordia.Color.fromHex("ff0000").value,
+				color = discordia.Color.fromHex("ffff00").value,
 				timestamp = discordia.Date():toISO('T', 'Z')
 			}
 		}

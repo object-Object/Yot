@@ -19,8 +19,8 @@ return {
 			if #addedRoles==0 then return end
 			local addedRolesStr = table.concat(addedRoles, lang.persistent_roles.concat)
 			local publicLogChannel = member.guild:getChannel(guildSettings.public_log_channel)
-			utils.sendEmbed(member:getPrivateChannel(), f(lang.pl(lang.persistent_roles.you_roles_given, #addedRoles), member.guild.name, addedRolesStr), "00ff00")
-			utils.sendEmbedSafe(publicLogChannel, f(lang.pl(lang.persistent_roles.user_roles_given, #addedRoles), utils.name(member.user, member.guild), addedRolesStr), "00ff00")
+			utils.sendEmbed(member:getPrivateChannel(), f(lang.pl(lang.persistent_roles.you_roles_given, #addedRoles), member.guild.name, addedRolesStr), "ffff00")
+			utils.sendEmbedSafe(publicLogChannel, f(lang.pl(lang.persistent_roles.user_roles_given, #addedRoles), utils.name(member.user, member.guild), addedRolesStr), "ffff00")
 		end
 	end,
 	onEnable = function(self, message, guildSettings, conn)
