@@ -11,6 +11,23 @@ If the plural variable matches a sub-key, the respective sentence will be used; 
 Sub-keys are always strings (i.e. wrapped in double-quotes).
 */
 
+/*
+you/user format:
+Some keys have two forms: a "you" form and a "user" form. These are used for confirmation messages for things like warns or bans.
+
+You:
+"you_warned": {
+	"1": "You have been warned in **%1$s**. You now have %2$d warning.",
+	"default": "You have been warned in **%1$s**. You now have %2$d warnings."
+},
+
+User:
+"user_warned": {
+	"1": "%1$s has been successfully warned. They now have %2$d warning.",
+	"default": "%1$s has been successfully warned. They now have %2$d warnings."
+},
+*/
+
 {
 	// this is just a reminder to not name any top-level keys pl, because it's used for the pluralizer function
 	"pl": null,
@@ -186,6 +203,14 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 			"1": "%1$s has been automatically unwarned. They now have %2$d warning.",
 			"default": "%1$s has been automatically unwarned. They now have %2$d warnings."
 		},
+		"you_kicked": {
+			"1": "You have been kicked from **%1$s** for reaching %2$d warning.",
+			"default": "You have been kicked from **%1$s** for reaching %2$d warnings."
+		},
+		"user_kicked": {
+			"1": "%1$s has been kicked for reaching %2$d warning.",
+			"default": "%1$s has been kicked for reaching %2$d warnings."
+		},
 		"you_kicked_auto": {
 			"1": "You have been kicked from **%1$s** for automatically reaching %2$d warning.",
 			"default": "You have been kicked from **%1$s** for automatically reaching %2$d warnings."
@@ -193,6 +218,14 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 		"user_kicked_auto": {
 			"1": "%1$s has been kicked for automatically reaching %2$d warning.",
 			"default": "%1$s has been kicked for automatically reaching %2$d warnings."
+		},
+		"you_banned": {
+			"1": "You have been banned from **%1$s** for reaching %2$d warning.",
+			"default": "You have been banned from **%1$s** for reaching %2$d warnings."
+		},
+		"user_banned": {
+			"1": "%1$s has been banned for reaching %2$d warning.",
+			"default": "%1$s has been banned for reaching %2$d warnings."
 		},
 		"you_banned_auto": {
 			"1": "You have been banned from **%1$s** for automatically reaching %2$d warning.",
@@ -393,7 +426,10 @@ Sub-keys are always strings (i.e. wrapped in double-quotes).
 			"description": "Removes one warning from a user.",
 			"usage": "<user> [| reason]"
 		},
-
+		"warn": {
+			"description": "Gives a user one warning.",
+			"usage": "<user> [| reason]"
+		},
 	},
 
 	/* Descriptions for all modules */
