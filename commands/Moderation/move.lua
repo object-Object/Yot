@@ -4,15 +4,8 @@ local http = require("coro-http")
 local json = require("json")
 local timer = require("timer")
 
--- create a new webhook in channel and insert it into the database
-local function addWebhook(channel, conn)
-
-end
-
 return {
 	name = "move",
-	description = "Move a specified message, or specified number of recent messages (1 to 100), to another channel. If a specific message is being moved, it must be in the channel in which you are running the command. Optionally, if you're moving multiple messages, you can specify a message to start at. This message defaults to the message before the command message.",
-	usage = "move <message id, link to message, or specified number of messages (1 to 100)> <channel mention (e.g. #general) or id> [link to or id of message to start at, if a number of messages is specified - defaults to the message before the command message]",
 	visible = true,
 	permissions = {"manageMessages"},
 	run = function(self, message, argString, args, guildSettings, lang, conn)
@@ -26,7 +19,7 @@ return {
 		if args[3] then
 			startMessage = utils.messageFromString(args[3], message.channel)
 			if not startMessage then
-				utils.sendEmbed(message.channel, "`"..args[1].."` is not a valid message id or link to a message. Messages being moved must be in the channel in which the command is run.", "ff0000")
+				utils.sendEmbed(message.channel, f(lang.error.invalid_message, "`"..args[1].."`"), "ff0000")
 				return
 			end
 		end
@@ -38,11 +31,8 @@ return {
 			messagesToMove = {selectedMessage}
 		else
 			local num = tonumber(args[1]:match("^(%d+)$"))
-			if not num then
-				utils.sendEmbed(message.channel, "`"..args[1].."` is not a valid message id, link to a message, or number of messages to move. Messages being moved must be in the channel in which the command is run.", "ff0000")
-				return
-			elseif num<1 or num>100 then
-				utils.sendEmbed(message.channel, "Number of messages must be between 1 and 100, inclusive.", "ff0000")
+			if not num or num<1 or num>100 then
+				utils.sendEmbed(message.channel, f(lang.error.invalid_message_2, "`"..args[1].."`"), "ff0000")
 				return
 			end
 			-- need to only get messages before the command message so we don't move it
@@ -63,10 +53,10 @@ return {
 		-- get target channel
 		local targetChannel = utils.channelFromString(args[2], message.guild)
 		if not (targetChannel and targetChannel.guild and targetChannel.guild.id==message.guild.id) then
-			utils.sendEmbed(message.channel, "`"..args[2].."` is not a valid channel mention or id.", "ff0000")
+			utils.sendEmbed(message.channel, f(lang.error.invalid_channel, "`"..args[2].."`"), "ff0000")
 			return
 		elseif targetChannel.id==message.channel.id then
-			utils.sendEmbed(message.channel, "Messages cannot be moved to the channel in which they were sent.", "ff0000")
+			utils.sendEmbed(message.channel, lang.error.cant_move_to_same_channel, "ff0000")
 			return
 		end
 
@@ -85,7 +75,7 @@ return {
 		local webhook = entry and message.client:getWebhook(entry.webhook_id[1])
 		if not webhook then
 			-- if webhook is nil, then either entry didn't exist or the webhook has been deleted
-			webhook = targetChannel:createWebhook("Yot System Webhook")
+			webhook = targetChannel:createWebhook(lang.move.webhook_name)
 			if entry then
 				conn:exec("UPDATE webhooks SET webhook_id = '"..webhook.id.."' WHERE channel_id = '"..targetChannel.id.."';")
 			else
@@ -94,9 +84,8 @@ return {
 		end
 
 		local numMessages = #messagesToMove
-		local s = utils.s(numMessages)
-		utils.sendEmbed(targetChannel, "Moved "..numMessages.." message"..s.." to this channel from "..message.channel.mentionString..":", "00ff00")
-		local movingMessage = utils.sendEmbed(message.channel, "Moving "..numMessages.." message"..s.." to "..targetChannel.mentionString.."...", "00ff00", "Estimated total time to move the messages: "..utils.secondsToTime(numMessages))
+		utils.sendEmbed(targetChannel, f(lang.pl(lang.move.moved_here, numMessages), numMessages, message.channel.mentionString), "00ff00")
+		local movingMessage = utils.sendEmbed(message.channel, f(lang.pl(lang.move.moving_away, numMessages), numMessages, targetChannel.mentionString), "00ff00", f(lang.move.eta, utils.secondsToTime(numMessages)))
 		local API = message.client._api
 		local method = "POST"
 		local endpoint = "/webhooks/"..webhook.id.."/"..webhook.token
@@ -128,7 +117,7 @@ return {
 			timer.sleep(1000)
 		end
 		movingMessage:delete()
-		utils.sendEmbed(message.channel, "Moved "..numMessages.." message"..s.." to "..targetChannel.mentionString..".", "00ff00")
+		utils.sendEmbed(message.channel, f(lang.pl(lang.move.moved_away, numMessages), numMessages, targetChannel.mentionString), "00ff00")
 	end,
 	onEnable = function(self, message, guildSettings)
 		return true

@@ -3,8 +3,6 @@ local utils = require("miscUtils")
 
 return {
 	name = "kick",
-	description = "Kick a user by ping or id.",
-	usage = "kick <ping or id> [| reason]",
 	visible = true,
 	permissions = {"kickMembers"},
 	run = function(self, message, argString, args, guildSettings, lang, conn)
@@ -14,17 +12,13 @@ return {
 		end
 		local kickMember = utils.memberFromString(args[1], message.guild)
 		local kickUser = utils.userFromString(args[1], message.client)
-		if not kickUser then
-			utils.sendEmbed(message.channel, "User "..args[1].." not found.", "ff0000")
+		if not kickMember then
+			utils.sendEmbed(message.channel, f(lang.error.user_not_found, args[1]), "ff0000")
 			return
 		end
 		local name = utils.name(kickUser, message.guild)
-		if not kickMember then
-			utils.sendEmbed(message.channel, name.." could not be kicked because they are not in this server.", "ff0000")
-			return
-		end
 		local plainReason = argString:match("%|%s+(.+)")
-		local reason = plainReason and " (Reason: "..plainReason..")" or ""
+		local reason = plainReason and f(lang.g.reason_str, plainReason) or ""
 		local selfMember = message.guild:getMember(message.client.user.id)
 		local staffMember = message.guild:getMember(message.author.id)
 		local staffLogChannel = guildSettings.staff_log_channel and message.guild:getChannel(guildSettings.staff_log_channel)
@@ -35,11 +29,9 @@ return {
 		elseif kickUser.id==message.guild.ownerId then
 			utils.sendEmbed(message.channel, name.." could not be kicked because they are the server owner.", "ff0000")
 		else
-			utils.sendEmbed(message.channel, name.." has been kicked."..reason, "00ff00")
-			utils.sendEmbed(kickUser:getPrivateChannel(), "You have been kicked from **"..message.guild.name.."**."..reason, "00ff00")
-			if staffLogChannel then
-				utils.sendEmbed(staffLogChannel, name.." has been kicked."..reason, "00ff00", "Responsible user: "..staffMember.name.."#"..staffMember.discriminator)
-			end
+			utils.sendEmbed(message.channel, f(lang.kick.user_kicked, name)..reason, "00ff00")
+			utils.sendEmbed(kickUser:getPrivateChannel(), f(lang.kick.you_kicked, message.guild.name)..reason, "00ff00")
+			utils.sendEmbedSafe(staffLogChannel, f(lang.kick.user_kicked, name)..reason, "00ff00", f(lang.g.responsible_user_str, staffMember.name.."#"..staffMember.discriminator))
 			message.guild:kickUser(kickUser.id, plainReason)
 		end
 	end,

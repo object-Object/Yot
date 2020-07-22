@@ -75,6 +75,16 @@ User:
 		"report_error": "Please report this error to the bot developer by sending Yot a direct message.",
 		// Used as the reason when a user is warned for advertising
 		"advertising_not_allowed": "Advertising is not allowed on this server!",
+		// Used when a message supplied as an argument was invalid
+		//   %1$s: the text the user gave as an arg
+		"invalid_message": "%1$s is not a valid message id or link to a message.",
+		// As above, but also includes a number of messages from 1 to 100 (used for purges and moves).
+		//   %1$s: the text the user gave as an arg
+		"invalid_message_2": "%1$s is not a valid message id, link to a message, or number of messages to move (1-100).",
+		// Used when a channel supplied as an argument was invalid
+		//   %1$s: the text the user gave as an arg
+		"invalid_channel": "%1$s is not a valid channel mention (eg. `#general`) or channel id.",
+		"cant_move_to_same_channel": "Messages cannot be moved to the channel in which they were sent.",
 
 		// Sent when a user can't be warned for some reason
 		//   %1$s: username
@@ -107,14 +117,22 @@ User:
 			"default": "%1$s could not be banned for automatically reaching %2$d warnings: %3$s"
 		},
 
+		// Sent when a user could not be muted
+		//   %1$s: username
+		//   %2$s: another sentence that describes the reason that the user can't be muted
+		"mute_fail": "%1$s could not be muted: %2$s",
 		// Sent when a user could not be re-muted after rejoining
 		//   %1$s: username
 		//   %2$s: another sentence that describes the reason that the user can't be re-muted
 		"remute_fail": "%1$s could not be automatically re-muted: %2$s",
+		// Sent when a user could not be unmuted
+		//   %1$s: username
+		//   %2$s: another sentence that describes the reason that the user can't be unmuted
+		"unmute_fail": "%1$s could not be unmuted: %2$s",
 		// Sent when a user could not be automatically unmuted
 		//   %1$s: username
 		//   %2$s: another sentence that describes the reason that the user can't be unmuted
-		"unmute_fail": "%1$s could not be automatically unmuted: %2$s",
+		"unmute_auto_fail": "%1$s could not be automatically unmuted: %2$s",
 
 		// Sent when a user could not be unbanned
 		//   %1$s: username
@@ -153,6 +171,10 @@ User:
 		// Used when the bot can't affect the user because they have a specific permission (usually administrator)
 		//   %1$s: the name of the permission
 		"user_has_permission": "They have the `%1$s` permission.",
+		// Used when a user is already muted so they can't be muted again
+		"already_muted": "They are already muted.",
+		// Used when a user is not muted so they can't be unmuted
+		"not_muted": "They are not muted.",
 	},
 
 	/* Strings used for things related to the warn commands/modules */
@@ -254,18 +276,57 @@ User:
 	},
 
 	"mute": {
+		// Sent to a user who has been muted
+		//   %1$s: name of the server
+		"you_muted": "You have been muted in **%1$s**.",
+		// Sent when a user is muted
+		//   %1$s: username
+		"user_muted": "%1$s has been successfully muted.",
 		// Sent to a user who had previously been muted, then left, and has now rejoined the server
 		//   %1$s: name of the server
 		"you_remuted": "You have been automatically re-muted in **%1$s**.",
 		// Sent in the public log channel when a user who had previously been muted, then left, rejoins the server
 		//   %1$s: username
 		"user_remuted": "%1$s has been automatically re-muted.",
+		// Sent to a user who has been unmuted
+		//   %1$s: name of the server
+		"you_unmuted": "You have been unmuted in **%1$s**.",
+		// Sent when a user is unmuted
+		//   %1$s: username
+		"user_unmuted": "%1$s has been successfully unmuted.",
 		// Sent to a user who has been automatically unmuted
 		//   %1$s: name of the server
 		"you_unmuted_auto": "You have been automatically unmuted in **%1$s**.",
 		// Sent in the public log channel when a user has been automatically unmuted
 		//   %1$s: username
 		"user_unmuted_auto": "%1$s has been automatically unmuted."
+	},
+
+	"kick": {
+		// Sent when a user is kicked using a command
+		//   %1$s: username
+		"user_kicked": "%1$s has been successfully kicked.",
+		// Sent to a user who is kicked using a command
+		//   %1$s: guild name
+		"you_kicked": "You have been kicked from **%1$s**. You can rejoin if you have an invite link.",
+	},
+
+	"ban": {
+		// Sent when the command executes successfully and the user is banned
+		//   %1$s: username
+		"user_banned": "User %1$s has been successfully banned.",
+		// Sent to a user who has been banned just before they get banned
+		//   %1$s: name of the server
+		"you_banned": "You have been banned from **%1$s**.",
+		// Sent when the command executes successfully and the user is unbanned
+		//   %1$s: username
+		"user_unbanned": "User %1$s has been successfully unbanned.",
+		// Sent to a user who has been unbanned, in case they are in another server with the bot
+		//   %1$s: name of the server
+		"you_unbanned": "You have been unbanned from **%1$s**.",
+		// Used as a footer in ban messages
+		//   %1$d: number of days of messages purged
+		"days_removed": "Days of messages removed: %1$d"
 	},
 
 	/* Strings related to persistent roles, i.e. roles given back to a user if they leave & rejoin */
@@ -288,6 +349,39 @@ User:
 		},
 		// Used to separate role names in a list of roles
 		"concat": ", "
+	},
+
+	/* Strings related to moving messages between channels */
+	"move": {
+		// Sent preceding messages that have been moved to the current channel
+		//   %1$d: number of messages moved
+		//   %2$s: mention of channel they were moved from
+		//   Plural variable: number of messages moved
+		"moved_here": {
+			"1": "Moved %1$d message to this channel from %2$s:",
+			"default": "Moved %1$d messages to this channel from %2$s:"
+		},
+		// Sent in a channel that has had messages moved to another channel
+		//   %1$d: number of messages moved
+		//   %2$s: mention of channel they were moved to
+		//   Plural variable: number of messages moved
+		"moved_away": {
+			"1": "Moved %1$d message to %2$s.",
+			"default": "Moved %1$d messages to %2$s."
+		},
+		// Sent in a channel that is actively having messages moved
+		//   %1$d: number of messages moved
+		//   %2$s: mention of channel they were moved to
+		//   Plural variable: number of messages moved
+		"moving_away": {
+			"1": "Moving %1$d message to %2$s...",
+			"default": "Moving %1$d messages to %2$s..."
+		},
+		// Footer for the above string, to give ETA for the move
+		//   %1$s: estimated total time to completion
+		"eta": "Estimated total time needed: %1$s",
+		// Name of the webhooks created when moving messages
+		"webhook_name": "Yot System Webhook"
 	},
 
 	/* Strings for automatic log things like join messages, leave messages, ban messages, etc. */
@@ -415,12 +509,6 @@ User:
 		"unban": {
 			"description": "Unbans a user.",
 			"usage": "<user> [| reason]",
-			// Sent when the command executes successfully and the user is unbanned
-			//   %1$s: username
-			"user_unbanned": "User %1$s has been successfully unbanned.",
-			// Sent to a user who has been unbanned, in case they are in another server with the bot
-			//   %1$s: name of the server
-			"you_unbanned": "You have been unbanned from **%1$s**."
 		},
 		"unwarn": {
 			"description": "Removes one warning from a user.",
@@ -428,6 +516,26 @@ User:
 		},
 		"warn": {
 			"description": "Gives a user one warning.",
+			"usage": "<user> [| reason]"
+		},
+		"move": {
+			"description": "Moves a specified message, or specified number of recent messages (1 to 100), to another channel. If a specific message is being moved, it must be in the channel in which you are running the command. Optionally, if you're moving multiple messages, you can specify a message to start at. This message defaults to the message before the command message.",
+			"usage": "<message or number of messages (1-100)> <target channel> [starting message]"
+		},
+		"ban": {
+			"description": "Bans a user. Optionally, the number of days of their messages to purge may be specified (defaults to 0).",
+			"usage": "<user> [days] [| reason]"
+		},
+		"mute": {
+			"description": "Mutes a user. Optionally, the mute length may be specified (defaults to 1 hour).",
+			"Usage": "<user> [mute length (e.g. 1w2d3h4m)] [| reason]"
+		},
+		"unmute": {
+			"description": "Unmutes a user.",
+			"Usage": "<user> [| reason]"
+		},
+		"kick": {
+			"description": "Kicks a user.",
 			"usage": "<user> [| reason]"
 		},
 	},

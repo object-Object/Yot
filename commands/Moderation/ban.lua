@@ -3,8 +3,6 @@ local utils = require("miscUtils")
 
 return {
 	name = "ban",
-	description = "Ban a user by ping or id. Optionally, the number of days of their messages to purge may be specified (defaults to 0).",
-	usage = "ban <ping or id> [days of their messages to purge] [| reason]",
 	visible = true,
 	permissions = {"banMembers"},
 	run = function(self, message, argString, args, guildSettings, lang, conn)
@@ -15,15 +13,14 @@ return {
 		local banMember = utils.memberFromString(args[1], message.guild)
 		local banUser = utils.userFromString(args[1], message.client)
 		if not banUser then
-			utils.sendEmbed(message.channel, "User "..args[1].." not found.", "ff0000")
+			utils.sendEmbed(message.channel, f(lang.error.user_not_found, args[1]), "ff0000")
 			return
 		end
 		local name = banMember and banMember.name.."#"..banUser.discriminator or banUser.tag
-		local days = args[2] and args[2]:match("^(%d+)$") or 0
-		days = tonumber(days)
-		local daysRemoved = days>0 and " "..days.." day"..utils.s(days).." of their messages "..(days==1 and "was" or "were").." purged." or ""
+		local days = args[2] and tonumber(args[2]:match("^(%d+)$")) or 0
+		local daysRemoved = f(lang.ban.days_removed, days)
 		local plainReason = argString:match("%|%s+(.+)")
-		local reason = plainReason and " (Reason: "..plainReason..")" or ""
+		local reason = plainReason and f(lang.g.reason_str, plainReason) or ""
 		local selfMember = message.guild:getMember(message.client.user.id)
 		local staffMember = message.guild:getMember(message.author.id)
 		local staffLogChannel = guildSettings.staff_log_channel and message.guild:getChannel(guildSettings.staff_log_channel)
@@ -36,11 +33,9 @@ return {
 		elseif banUser.id==message.guild.ownerId then
 			utils.sendEmbed(message.channel, name.." could not be banned because they are the server owner.", "ff0000")
 		else
-			utils.sendEmbed(message.channel, name.." has been banned."..daysRemoved..reason, "00ff00")
-			utils.sendEmbed(banUser:getPrivateChannel(), "You have been banned from **"..message.guild.name.."**."..reason, "00ff00")
-			if staffLogChannel then
-				utils.sendEmbed(staffLogChannel, name.." has been banned."..daysRemoved..reason, "00ff00", "Responsible user: "..staffMember.name.."#"..staffMember.discriminator)
-			end
+			utils.sendEmbed(message.channel, f(lang.ban.user_banned, name)..reason, "00ff00", daysRemoved)
+			utils.sendEmbed(banUser:getPrivateChannel(), f(lang.ban.you_banned, message.guild.name)..reason, "00ff00")
+			utils.sendEmbedSafe(staffLogChannel, f(lang.ban.user_banned, name)..reason, "00ff00", f(lang.g.responsible_user_str, staffMember.name.."#"..staffMember.discriminator).."\n"..daysRemoved)
 			message.guild:banUser(banUser.id, plainReason, days)
 		end
 	end,
