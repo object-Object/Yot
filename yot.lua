@@ -73,7 +73,8 @@ local function doModulesPcall(event, guild, conn, ...)
 			setupGuild(guild.id)
 			guildSettings = utils.getGuildSettings(guild.id, conn)
 		end
-		moduleHandler.doModules(event, guildSettings, ...)
+		local lang = discordia.storage.langs[guildSettings.language]
+		moduleHandler.doModules(event, guildSettings, lang, ...)
 	end, ...)
 	if not success then
 		utils.logError(guild, defaultLang, err)

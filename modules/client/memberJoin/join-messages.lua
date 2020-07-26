@@ -6,7 +6,7 @@ return {
 	visible = true,
 	event = "client.memberJoin",
 	disabledByDefault = true,
-	run = function(self, guildSettings, member, conn)
+	run = function(self, guildSettings, lang, member, conn)
 		local channel = guildSettings.public_log_channel and member.guild:getChannel(guildSettings.public_log_channel)
 		utils.sendEmbedSafe(channel, member.tag.." has joined the server.", "ffff00")
 	end,

@@ -107,7 +107,8 @@ commandHandler.subcommandFromString = function(command, input)
 end
 
 commandHandler.sendUsage = function(channel, guildSettings, lang, command)
-	return utils.sendEmbed(channel, f(lang.g.usage_str, guildSettings.prefix..command.name.." "..lang.commands[command.name].usage), "ff0000", lang.footer.cmd_usage)
+	local usage = lang.commands[command.name].usage~="" and " "..lang.commands[command.name].usage or ""
+	return utils.sendEmbed(channel, f(lang.g.usage_str, guildSettings.prefix..command.name..usage), "ff0000", lang.footer.cmd_usage)
 end
 
 commandHandler.sendCommandHelp = function(channel, guildSettings, lang, command)
@@ -125,6 +126,7 @@ commandHandler.sendCommandHelp = function(channel, guildSettings, lang, command)
 		table.sort(subcommandsKeys)
 		local permissionsString = #baseCommand.permissions>0 and "`"..table.concat(baseCommand.permissions, ", ").."`" or lang.g.none
 		local subcommandsString = #subcommandsKeys>0 and "`"..table.concat(subcommandsKeys, "`, `").."`" or lang.g.none
+		local usage = lang.commands[command.name].usage~="" and " "..lang.commands[command.name].usage or ""
 		channel:send{
 			embed = {
 				title = guildSettings.prefix..command.name,
@@ -133,7 +135,7 @@ commandHandler.sendCommandHelp = function(channel, guildSettings, lang, command)
 					{name = lang.g.category, value = lang.categories[baseCommand.category]},
 					{name = lang.g.required_permissions, value = permissionsString},
 					{name = lang.g.subcommands, value = subcommandsString},
-					{name = lang.g.usage, value = "`"..guildSettings.prefix..command.name.." "..lang.commands[command.name].usage.."`"}
+					{name = lang.g.usage, value = "`"..guildSettings.prefix..command.name..usage.."`"}
 				},
 				color = discordia.Color.fromHex("00ff00").value,
 				footer = {

@@ -30,7 +30,7 @@ return {
 					end
 					local publicLogChannel = guildSettings.public_log_channel and guild:getChannel(guildSettings.public_log_channel)
 					local staffLogChannel = guildSettings.staff_log_channel and guild:getChannel(guildSettings.staff_log_channel)
-					local warnFooter = commandHandler.strings.warnFooter(guildSettings, {is_active=true, end_timestamp=end_timestamp, level=level})
+					local warnFooter = commandHandler.strings.warnFooter(guildSettings, lang, {is_active=true, end_timestamp=end_timestamp, level=level})
 					local name = warnMember.name.."#"..warnUser.discriminator
 					utils.sendEmbed(warnUser:getPrivateChannel(), f(lang.pl(lang.warn.you_unwarned_auto, level), guild.name, level), "ffff00", warnFooter)
 					local text = f(lang.pl(lang.warn.user_unwarned_auto, level), name, level)
