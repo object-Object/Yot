@@ -3,18 +3,16 @@ local stopwatch = discordia.Stopwatch()
 
 return {
 	name = "ping",
-	description = "Show Yot's ping (API latency).",
-	usage = "ping",
 	visible = true,
 	permissions = {},
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		stopwatch:reset()
 		stopwatch:start()
-		local outputMsg = message.channel:send("Pinging...")
+		local outputMsg = message.channel:send(lang.commands.ping.pinging)
 		stopwatch:stop()
 		outputMsg:update{
 			embed = {
-				description = "Ping: `"..math.floor(stopwatch:getTime():toMilliseconds()+0.5).." ms`",
+				description = f(lang.commands.ping.ping_output, math.floor(stopwatch:getTime():toMilliseconds()+0.5)),
 				color = discordia.Color.fromHex("00ff00").value
 			}
 		}

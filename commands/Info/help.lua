@@ -10,7 +10,7 @@ local function appendSubcommands(str, indent, command)
 	return str
 end
 
-local function showMainHelp(message, guildSettings, showSubcommands)
+local function showMainHelp(message, guildSettings, lang, showSubcommands)
 	local fields = {}
 	for _, categoryString in ipairs(commandHandler.sortedCategoryNames) do
 		local category = commandHandler.sortedCommandNames[categoryString]
@@ -27,17 +27,17 @@ local function showMainHelp(message, guildSettings, showSubcommands)
 			end
 			if output~="```\n" then
 				output = output:gsub("\n$","").."```"
-				table.insert(fields, {name = categoryString, value = output})
+				table.insert(fields, {name = lang.categories[categoryString], value = output})
 			end
 		end
 	end
 	message.channel:send{
 		embed = {
-			title = "Help Menu"..(showSubcommands and " + Subcommands" or ""),
+			title = (showSubcommands and lang.commands.help.title_sub or lang.commands.help.title),
 			fields = fields,
 			color = discordia.Color.fromHex("00ff00").value,
 			footer = {
-				text = "Do "..guildSettings.prefix.."help [command] for more info on a command."
+				text = f(lang.footer.command_info, guildSettings.prefix)
 			}
 		}
 	}
@@ -45,24 +45,22 @@ end
 
 return {
 	name = "help", -- name of the command and what users type to use it
-	description = "Show the help menu or info for a command.", -- description for help command
-	usage = "help [command]", -- usage for help command and errors
 	visible = true, -- whether or not this command shows up in help and is togglable by users
 	permissions = {}, -- required permissions to use the command
 	run = function(self, message, argString, args, guildSettings, lang, conn) -- function called when the command is used
 		if argString=="" then
 			-- show normal help menu
-			showMainHelp(message, guildSettings, false)
+			showMainHelp(message, guildSettings, lang, false)
 		else
 			-- show command-specific help
 			local baseCommandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
 			local command = commandHandler.commands[baseCommandString]
 			if command and command.visible then
 				command = commandHandler.subcommandFromString(command, args)
-				commandHandler.sendCommandHelp(message.channel, guildSettings, command)
+				commandHandler.sendCommandHelp(message.channel, guildSettings, lang, command)
 			else
 				-- command not found
-				showMainHelp(message, guildSettings, false)
+				showMainHelp(message, guildSettings, lang, false)
 			end
 		end
 	end,
@@ -76,10 +74,8 @@ return {
 
 		subcommands = {
 			name = "help subcommands",
-			description = "Show the help menu with the subcommands for each command listed.",
-			usage = "help subcommands",
 			run = function(self, message, argString, args, guildSettings, lang, conn)
-				showMainHelp(message, guildSettings, true)
+				showMainHelp(message, guildSettings, lang, true)
 			end,
 			subcommands = {}
 		}

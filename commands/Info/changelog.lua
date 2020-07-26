@@ -3,7 +3,7 @@ local discordia = require("discordia")
 local fs = require("fs")
 local timer = require("timer")
 
-local function sendChangelog(channel, prefix, latestOnly)
+local function sendChangelog(channel, prefix, lang, latestOnly)
 	local changelog=fs.readFileSync("changelog.txt")
 	changelog=changelog:gsub("%&prefix%;", prefix)
 	if latestOnly then
@@ -26,7 +26,7 @@ local function sendChangelog(channel, prefix, latestOnly)
 		for k,currentPortion in ipairs(splitChangelog) do
 			local title=""
 			if k==1 then
-				title="Changelog"
+				title=lang.commands.changelog.title
 			end
 			channel:send{
 				embed={
@@ -40,7 +40,7 @@ local function sendChangelog(channel, prefix, latestOnly)
 	else
 		channel:send{
 			embed={
-				title="Changelog",
+				title=lang.commands.changelog.title,
 				description=changelog,
 				color=discordia.Color.fromHex("00ff00").value
 			}
@@ -50,12 +50,10 @@ end
 
 return {
 	name = "changelog",
-	description = "Show Yot's changelog.",
-	usage = "changelog",
 	visible = true,
 	permissions = {},
 	run = function(self, message, argString, args, guildSettings, lang, conn)
-		sendChangelog(message.channel, guildSettings.prefix, false)
+		sendChangelog(message.channel, guildSettings.prefix, lang, false)
 	end,
 	onEnable = function(self, message, guildSettings)
 		return true
@@ -67,10 +65,8 @@ return {
 
 		latest = {
 			name = "changelog latest",
-			description = "Show Yot's most recent changelog.",
-			usage = "changelog latest",
 			run = function(self, message, argString, args, guildSettings, lang, conn)
-				sendChangelog(message.channel, guildSettings.prefix, true)
+				sendChangelog(message.channel, guildSettings.prefix, lang, true)
 			end,
 			subcommands = {}
 		}

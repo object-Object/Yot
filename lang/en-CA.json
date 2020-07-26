@@ -413,6 +413,8 @@ User:
 		"not_applicable": "N/A",
 		"yes": "yes",
 		"no": "no",
+		// Used in the about command if the bot's version couldn't be accessed for some reason
+		"version_error": "error",
 
 		"usage_str": "Usage: `%1$s`",
 		"guild_str": "Guild: %1$s (%2$s)",
@@ -478,6 +480,12 @@ User:
 		//   %2$s: a time string made using the time lang object - the initial length of the mute
 		//   %3$s: g.yes or g.no - whether or not the user is currently in the server, and therefore if the mute time is decreasing
 		"mute_info": "Time until unmute: %1$s\nDuration: %2$s\nActive: %3$s",
+		// Tells people how to get more information on a command, used in the help menu
+		//   %1$s: the command prefix in the server
+		"command_info": "Do %1$shelp [command] for more info on a command.",
+		// Gives the bot's version, used in the about command
+		//   %1$s: version number
+		"version": "Version: %1$s",
 	},
 
 	/* Names of the command categories (used in the help menu) */
@@ -537,6 +545,49 @@ User:
 		"kick": {
 			"description": "Kicks a user.",
 			"usage": "<user> [| reason]"
+		},
+		"ping": {
+			"description": "Shows Yot's ping (time to send a message), in milliseconds.",
+			"usage": "",
+			// Sent when the command is used
+			"pinging": "Pinging...",
+			// Outputs the measured ping of the bot, in milliseconds
+			//   %1$d: ping in ms
+			"ping_output": "Ping: `%1$d ms`"
+		},
+		"changelog": {
+			"description": "Shows Yot's full changelog.",
+			"usage": "",
+			// Title of the changelog embed
+			"title": "Changelog"
+		},
+		"changelog latest": {
+			"description": "Shows Yot's changelog for the most recent update.",
+			"usage": "",
+		},
+		"help": {
+			"description": "Shows the help menu, or info for a command.",
+			"usage": "[command]",
+			// Title for the help menu
+			"title": "Help menu",
+			// Title for the help menu when subcommands are being shown
+			"title_sub": "Help menu + subcommands"
+		},
+		"help subcommands": {
+			"description": "Shows the help menu with all of the subcommands.",
+			"usage": ""
+		},
+		"about": {
+			"description": "Shows information about Yot.",
+			"usage": "",
+			// Title of the about embed
+			"title": "About Yot",
+			// Description of the bot
+			"embed_desc": "• Yot is a moderation and utility bot, written in Lua.\n• It is written, hosted, and maintained by [object Object]#0001.\n• Found a bug? Send a direct message to Yot! Include some information about the bug, like what you were doing when it happened, what you expected to happen, and what actually happened.",
+			// Title of embed field showing number of servers the bot is in
+			"servers": "Servers",
+			// Title of embed field giving link to invite the bot to a server
+			"invite_link": "Invite link"
 		},
 	},
 
