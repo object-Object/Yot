@@ -30,8 +30,6 @@ end
 
 return {
 	name = "lua",
-	description = "Execute arbitrary Lua code.",
-	usage = "lua <code (may be in a full code block)>",
 	visible = false,
 	permissions = {"yot.botOwner"},
 	run = function(self, message, argString, args, guildSettings, lang)
@@ -81,7 +79,7 @@ return {
 
 		if #lines>2000 then
 			message:reply{
-				content = "Output from `print()` and/or `p()` exceeded 2000 characters. Output is attached.",
+				content = lang.commands.lua.print_too_long,
 				file = {"print.txt", lines}
 			}
 		elseif lines~="" then
@@ -90,7 +88,7 @@ return {
 
 		if #iolines>2000 then
 			message:reply{
-				content = "Output from `io.write()` exceeded 2000 characters. Output is attached.",
+				content = lang.commands.lua.iowrite_too_long,
 				file = {"iowrite.txt", iolines}
 			}
 		elseif iolines~="" then

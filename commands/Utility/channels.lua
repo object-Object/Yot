@@ -2,8 +2,6 @@ local discordia = require("discordia")
 
 return {
 	name = "channels",
-	description = "Show statistics about the number of channels in the server.",
-	usage = "channels",
 	visible = true,
 	permissions = {},
 	run = function(self, message, argString, args, guildSettings, lang, conn)
@@ -18,10 +16,10 @@ return {
 		message:reply{
 			embed={
 				fields={
-					{name="Text Channels", value=textChannelCount, inline=true},
-					{name="Voice Channels", value=voiceChannelCount, inline=true},
-					{name="Categories", value=categoryCount, inline=true},
-					{name="Usage", value=totalChannelCount.."/500 (".. 500-totalChannelCount.." remaining)", inline=true}
+					{name=lang.commands.channels.text_channels, value=textChannelCount, inline=true},
+					{name=lang.commands.channels.voice_channels, value=voiceChannelCount, inline=true},
+					{name=lang.commands.channels.categories, value=categoryCount, inline=true},
+					{name=lang.commands.channels.total_usage, value=f(lang.commands.channels.channel_usage, totalChannelCount, 500-totalChannelCount), inline=true}
 				},
 				color=discordia.Color.fromRGB(r, g, 0).value
 			}

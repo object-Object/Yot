@@ -3,8 +3,6 @@ local utils = require("miscUtils")
 
 return {
 	name = "mention",
-	description = "Mention (ping) someone using their discriminator (tag - the 4 numbers after the hashtag in their username), part or all of their username, or both. Alternatively, you can use their id.",
-	usage = "mention <[part or all of username][#discriminator] or user id>",
 	visible = true,
 	permissions = {},
 	run = function(self, message, argString, args, guildSettings, lang, conn)
@@ -14,7 +12,7 @@ return {
 		end
 
 		if #message.mentionedUsers>0 then
-			message:reply("User was successfully pinged in the command. No further action is necessary.")
+			utils.sendEmbed(message.channel, lang.commands.mention.ping_worked, "ff0000")
 			return
 		end
 
@@ -43,9 +41,9 @@ return {
 		end)
 
 		if mentionedUser then
-			message:reply("Ping from **"..utils.name(message.author, message.guild).."** using `"..guildSettings.prefix.."mention`: "..mentionedUser.mentionString)
+			message:reply(f(lang.commands.mention.ping, utils.name(message.author, message.guild), guildSettings.prefix, mentionedUser.mentionString))
 		else
-			message:reply("Could not find user `"..argString.."`.")
+			utils.sendEmbed(message.channel, f(lang.error.user_not_found, argString), "ff0000")
 		end
 	end,
 	onEnable = function(self, message, guildSettings)

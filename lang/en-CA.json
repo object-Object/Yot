@@ -607,6 +607,65 @@ User:
 		"prefix reset": {
 			"description": "Resets Yot's command prefix in this server to the global default.",
 			"usage": ""
+		},
+		"avatar": {
+			"description": "Shows a user's avatar in 1024x1024 size.",
+			"usage": "<user>",
+			// Sent when someone uses the command to get someone's avatar
+			//   %1$s: username of the user whose avatar is being shown
+			//   %2$s: link to their avatar
+			"avatar_of": "Avatar of **%1$s**: %2$s"
+		},
+		"members": {
+			"description": "Shows how many members are in the current server.",
+			"usage": "",
+			// Output message for this command
+			//   %1$d: number of members in the server
+			//   Plural variable: number of members in the server
+			"num": {
+				"1": "There is currently **%1$d** member in this server.",
+				"default": "There are currently **%1$d** members in this server."
+			}
+		},
+		"mention": {
+			"description": "Lets you mention (ping) someone using their discriminator (the 4 numbers after the hashtag in their username), part or all of their username, or both. Alternatively, you can use their id.\nThis command is useful if someone has a name that has special characters, so it's difficult to ping.",
+			"usage": "<text to search for user>",
+			// Sent if they actually pinged the user in the command, so they're not pinged twice
+			"ping_worked": "The user was successfully pinged in the command. No further action is necessary.",
+			// Sent to ping a user
+			// Note: don't translate %2$smention, it's a command name
+			//   %1$s: name of the person who ran the command
+			//   %2$s: command prefix
+			//   %3$s: ping
+			"ping": "Ping from %1$s using `%2$smention`: %3$s"
+		},
+		"channels": {
+			"description": "Shows statistics about the number of channels in the current server.",
+			"usage": "",
+			// The following keys are all titles for embed fields in the output message
+			"text_channels": "Text channels",
+			"voice_channels": "Voice channels",
+			"categories": "Categories",
+			"total_usage": "Total usage",
+			// Detailed formatting for the total channel usage
+			// Note: 500 is the maximum amount of channels that can be in a server
+			//   %1$d: number of channels in the server
+			//   %2$d: number of channels remaining (500 - number of channels)
+			"channel_usage": "%1$d/500 (%2$d remaining)"
+		},
+		"lua": {
+			"description": "Executes arbitrary Lua code.",
+			"usage": "<code>",
+			// Sent if output from the print functions exceeded the max message length
+			"print_too_long": "Output from `print()` and/or `p()` exceeded 2000 characters. Output is attached.",
+			// Sent if output from the io.write function exceeded the max message length
+			"iowrite_too_long": "Output from `io.write()` exceeded 2000 characters. Output is attached.",
+		},
+		"restart": {
+			"description": "Restarts Yot.",
+			"usage": "",
+			// Sent when the command is run
+			"restarting": "Restarting."
 		}
 	},
 
@@ -658,6 +717,18 @@ User:
 		},
 		"warning-manager": {
 			"description": "Runs once per minute to remove any active warnings that have expired."
+		},
+		"join-messages": {
+			"description": "Sends a message in the public log channel when a user joins the server.",
+			// Default join message
+			//   %1$s: username
+			"default_message": "%1$s has joined the server."
+		},
+		"leave-messages": {
+			"description": "Sends a message in the public log channel when a user leaves the server.",
+			// Default leave message
+			//   %1$s: username
+			"default_message": "%1$s has left the server."
 		},
 	}
 }
