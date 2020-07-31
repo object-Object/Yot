@@ -589,6 +589,25 @@ User:
 			// Title of embed field giving link to invite the bot to a server
 			"invite_link": "Invite link"
 		},
+		"prefix": {
+			"description": "Shows or sets Yot's command prefix in this server.",
+			"usage": "[new prefix]",
+			// Sent when someone checks what the current prefix is
+			//   %1$s: current prefix
+			"prefix_is": "The current command prefix is `%1$s`.",
+			// Sent when someone changes the prefix
+			//   %1$s: old prefix
+			//   %2$s: new prefix
+			"prefix_set": "The command prefix has been changed from `%1$s` to `%2$s`.",
+			// Sent when someone resets the prefix
+			//   %1$s: old prefix
+			//   %2$s: new prefix
+			"prefix_reset": "The command prefix has been changed from `%1$s` back to the default, `%2$s`.",
+		},
+		"prefix reset": {
+			"description": "Resets Yot's command prefix in this server to the global default.",
+			"usage": ""
+		}
 	},
 
 	/* Descriptions for all modules */
