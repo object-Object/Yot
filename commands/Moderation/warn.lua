@@ -40,7 +40,7 @@ return {
 				if not success then
 					-- kick failed, so continue with normal warn messages
 					if kickedDM then kickedDM:delete() end
-					utils.sendEmbed(message.channel, f(lang.pl(lang.error.kick_warn_fail, entry.level), name, entry.level, "`"..err.."`")..lang.error.report_error, "ff0000")
+					utils.sendEmbed(message.channel, f(lang.pl(lang.error.kick_warn_fail, entry.level), name, entry.level, "`"..err.."`").." "..lang.error.report_error, "ff0000")
 				else
 					-- kick succeeded, exit early
 					local text = f(lang.pl(lang.warn.user_kicked, entry.level), name)..reason
