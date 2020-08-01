@@ -26,6 +26,7 @@ return {
 			mentionedUser = mentionedUser or message.guild.members:find(function(e)
 				return e.discriminator==inputDiscrim and (e.username:lower():find(inputName, 1, true) or e.name:lower():find(inputName, 1, true))
 			end)
+		elseif inputDiscrim then
 			-- check if the discrim matches
 			mentionedUser = mentionedUser or message.guild.members:find(function(e)
 				return e.discriminator==inputDiscrim

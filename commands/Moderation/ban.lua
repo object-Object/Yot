@@ -16,7 +16,7 @@ return {
 			utils.sendEmbed(message.channel, f(lang.error.user_not_found, args[1]), "ff0000")
 			return
 		end
-		local name = banMember and banMember.name.."#"..banUser.discriminator or banUser.tag
+		local name = utils.name(banUser, message.guild)
 		local days = args[2] and tonumber(args[2]:match("^(%d+)$")) or 0
 		local daysRemoved = f(lang.ban.days_removed, days)
 		local plainReason = argString:match("%|%s+(.+)")
@@ -32,6 +32,8 @@ return {
 			utils.sendEmbed(message.channel, name.." could not be banned because Yot's highest role is not higher than their highest role.", "ff0000")
 		elseif banUser.id==message.guild.ownerId then
 			utils.sendEmbed(message.channel, name.." could not be banned because they are the server owner.", "ff0000")
+		elseif message.guild:getBan(banUser.id) then
+			utils.sendEmbed(message.channel, f(lang.error.user_already_banned, name), "ff0000")
 		else
 			utils.sendEmbed(message.channel, f(lang.ban.user_banned, name)..reason, "00ff00", daysRemoved)
 			utils.sendEmbed(banUser:getPrivateChannel(), f(lang.ban.you_banned, message.guild.name)..reason, "00ff00")

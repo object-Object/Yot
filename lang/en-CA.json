@@ -70,7 +70,10 @@ User:
 		"bot_cannot_have_warn": "%1$s cannot have warnings because it is a bot.",
 		// Sent when the supplied user cannot be unbanned because they are not banned
 		//   %1$s: username
-		"user_not_banned": "%1$s is already unbanned.",
+		"user_not_banned": "%1$s is not banned.",
+		// Sent when the supplied user cannot be banned because they are already banned
+		//   %1$s: username
+		"user_already_banned": "%1$s is already banned.",
 		// Sent when a fatal issue happens, for example if the banning of a user fails
 		"report_error": "Please report this error to the bot developer by sending Yot a direct message.",
 		// Used as the reason when a user is warned for advertising
