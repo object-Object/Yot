@@ -89,59 +89,59 @@ User:
 		// Sent when a user can't be warned for some reason
 		//   %1$s: username
 		//   %2$s: another sentence that describes the reason that the user can't be warned
-		"warn_fail": "%1$s could not be warned: %2$s",
+		"warn_fail": "%1$s could not be warned. %2$s",
 		// See error.warn_fail, but for when the warning is due to an automated action
-		"auto_warn_fail": "%1$s could not be automatically warned: %2$s",
+		"auto_warn_fail": "%1$s could not be automatically warned. %2$s",
 		// Sent when a user can't be unwarned for some reason
 		//   %1$s: username
 		//   %2$s: another sentence that describes the reason that the user can't be warned
-		"unwarn_fail": "%1$s could not be unwarned: %2$s",
+		"unwarn_fail": "%1$s could not be unwarned. %2$s",
 		// Sent when a user can't be kicked for reaching a specific warning level for some reason
 		//   %1$s: username
 		//   %2$d: number of warnings
 		//   %3$s: another sentence that describes the reason that the user can't be kicked
 		//   Plural variable: number of warnings
 		"kick_warn_fail": {
-			"1": "%1$s could not be kicked for reaching %2$d warning: %3$s",
-			"default": "%1$s could not be kicked for reaching %2$d warnings: %3$s"
+			"1": "%1$s could not be kicked for reaching %2$d warning. %3$s",
+			"default": "%1$s could not be kicked for reaching %2$d warnings. %3$s"
 		},
 		// See error.kick_warn_fail, but for when the kick is due to an automated action
 		"kick_auto_warn_fail": {
-			"1": "%1$s could not be kicked for automatically reaching %2$d warning: %3$s",
-			"default": "%1$s could not be kicked for automatically reaching %2$d warnings: %3$s"
+			"1": "%1$s could not be kicked for automatically reaching %2$d warning. %3$s",
+			"default": "%1$s could not be kicked for automatically reaching %2$d warnings. %3$s"
 		},
 		// See error.kick_warn_fail, but for a ban instead of a kick
 		"ban_warn_fail": {
-			"1": "%1$s could not be banned for reaching %2$d warning: %3$s",
-			"default": "%1$s could not be banned for reaching %2$d warnings: %3$s"
+			"1": "%1$s could not be banned for reaching %2$d warning. %3$s",
+			"default": "%1$s could not be banned for reaching %2$d warnings. %3$s"
 		},
 		// See error.kick_auto_warn_fail, but for a ban instead of a kick
 		"ban_auto_warn_fail": {
-			"1": "%1$s could not be banned for automatically reaching %2$d warning: %3$s",
-			"default": "%1$s could not be banned for automatically reaching %2$d warnings: %3$s"
+			"1": "%1$s could not be banned for automatically reaching %2$d warning. %3$s",
+			"default": "%1$s could not be banned for automatically reaching %2$d warnings. %3$s"
 		},
 
 		// Sent when a user could not be muted
 		//   %1$s: username
 		//   %2$s: another sentence that describes the reason that the user can't be muted
-		"mute_fail": "%1$s could not be muted: %2$s",
+		"mute_fail": "%1$s could not be muted. %2$s",
 		// Sent when a user could not be re-muted after rejoining
 		//   %1$s: username
 		//   %2$s: another sentence that describes the reason that the user can't be re-muted
-		"remute_fail": "%1$s could not be automatically re-muted: %2$s",
+		"remute_fail": "%1$s could not be automatically re-muted. %2$s",
 		// Sent when a user could not be unmuted
 		//   %1$s: username
 		//   %2$s: another sentence that describes the reason that the user can't be unmuted
-		"unmute_fail": "%1$s could not be unmuted: %2$s",
+		"unmute_fail": "%1$s could not be unmuted. %2$s",
 		// Sent when a user could not be automatically unmuted
 		//   %1$s: username
 		//   %2$s: another sentence that describes the reason that the user can't be unmuted
-		"unmute_auto_fail": "%1$s could not be automatically unmuted: %2$s",
+		"unmute_auto_fail": "%1$s could not be automatically unmuted. %2$s",
 
 		// Sent when a user could not be unbanned
 		//   %1$s: username
 		//   %2$s: another sentence that describes the reason that the user can't be unbanned
-		"unban_fail": "%1$s could not be unbanned: %2$s",
+		"unban_fail": "%1$s could not be unbanned. %2$s",
 
 		/*
 		  All of the messages in this section are used as reasons in the above sections of errors.
