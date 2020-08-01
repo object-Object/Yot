@@ -5,7 +5,7 @@ return {
 	name = "restart",
 	visible = false,
 	permissions = {"yot.botOwner"},
-	run = function(self, message, argString, args, guildSettings, conn)
+	run = function(self, message, argString, args, guildSettings, lang, conn)
 		utils.sendEmbed(message.channel, lang.commands.restart.restarting, "00ff00")
 		os.exit()
 	end,
