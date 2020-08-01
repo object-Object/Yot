@@ -25,7 +25,7 @@ return {
 			local publicLogChannel = guildSettings.public_log_channel and guild:getChannel(guildSettings.public_log_channel)
 			local staffLogChannel = guildSettings.staff_log_channel and guild:getChannel(guildSettings.staff_log_channel)
 
-			local valid, reasonInvalid, mutedRole = muteUtils.checkValidMute(muteMember, muteUser, guild, guildSettings)
+			local valid, reasonInvalid, mutedRole = muteUtils.checkValidMute(muteMember, muteUser, guild, guildSettings, lang)
 			if not valid then
 				local text = f(lang.error.unmute_fail, name, reasonInvalid)
 				utils.sendEmbedSafe(publicLogChannel, text, "ff0000")
