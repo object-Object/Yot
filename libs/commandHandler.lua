@@ -56,13 +56,12 @@ commandHandler.load = function()
 		for _, commandFilename in ipairs(fs.readdirSync("commands/"..category)) do
 			if commandFilename:match("%.lua$") then
 				local command = require("../commands/"..category.."/"..commandFilename)
-				--[[
 				for code, lang in pairs(discordia.storage.langs) do
 					local commandLang = lang.commands[command.name]
 					assert(commandLang~=nil, "Command "..category.."/"..command.name.." has no "..code.." lang entries")
 					assert(commandLang.description~=nil, "Command "..category.."/"..command.name.." has no "..code.." lang description entry")
 					assert(commandLang.usage~=nil, "Command "..category.."/"..command.name.." has no "..code.." lang usage entry")
-				end --]]
+				end
 				applySubcommandReferences(command, command)
 				command.parentCommand = command
 				command.baseCommand = command
