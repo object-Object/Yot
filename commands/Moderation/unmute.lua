@@ -44,8 +44,8 @@ return {
 			utils.sendEmbed(message.channel, f(lang.error.unmute_fail, name, "`"..err.."`").." "..lang.error.report_error, "ff0000")
 			return
 		end
-		utils.sendEmbed(message.channel, f(lang.mute.user_muted, name)..reason, "00ff00")
-		utils.sendEmbedSafe(staffLogChannel, f(lang.mute.user_muted, name)..reason, "00ff00", f(lang.g.responsible_user_str, utils.name(message.author, guild)))
+		utils.sendEmbed(message.channel, f(lang.mute.user_unmuted, name)..reason, "00ff00")
+		utils.sendEmbedSafe(staffLogChannel, f(lang.mute.user_unmuted, name)..reason, "00ff00", f(lang.g.responsible_user_str, utils.name(message.author, guild)))
 	end,
 	onEnable = function(self, message, guildSettings)
 		return true
