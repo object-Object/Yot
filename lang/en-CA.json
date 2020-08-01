@@ -92,6 +92,10 @@ User:
 		"warn_fail": "%1$s could not be warned: %2$s",
 		// See error.warn_fail, but for when the warning is due to an automated action
 		"auto_warn_fail": "%1$s could not be automatically warned: %2$s",
+		// Sent when a user can't be unwarned for some reason
+		//   %1$s: username
+		//   %2$s: another sentence that describes the reason that the user can't be warned
+		"unwarn_fail": "%1$s could not be unwarned: %2$s",
 		// Sent when a user can't be kicked for reaching a specific warning level for some reason
 		//   %1$s: username
 		//   %2$d: number of warnings
@@ -536,11 +540,11 @@ User:
 		},
 		"mute": {
 			"description": "Mutes a user. Optionally, the mute length may be specified (defaults to 1 hour).",
-			"Usage": "<user> [mute length (e.g. 1w2d3h4m)] [| reason]"
+			"usage": "<user> [mute length (e.g. 1w2d3h4m)] [| reason]"
 		},
 		"unmute": {
 			"description": "Unmutes a user.",
-			"Usage": "<user> [| reason]"
+			"usage": "<user> [| reason]"
 		},
 		"kick": {
 			"description": "Kicks a user.",
@@ -666,7 +670,11 @@ User:
 			"usage": "",
 			// Sent when the command is run
 			"restarting": "Restarting."
-		}
+		},
+		"settings": {
+			"description": "Lets you change Yot's settings in this server.",
+			"usage": ""
+		},
 	},
 
 	/* Descriptions for all modules */

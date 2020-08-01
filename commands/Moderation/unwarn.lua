@@ -20,9 +20,9 @@ return {
 		local warnMember = utils.memberFromString(args[1], message.guild)
 		local name = utils.name(warnUser, message.guild)
 
-		local unwarnSuccess, unwarnErr, entry = warnUtils.unwarn(warnUser, message.guild, guildSettings, conn)
+		local unwarnSuccess, unwarnErr, entry = warnUtils.unwarn(warnUser, message.guild, guildSettings, lang, conn)
 		if not unwarnSuccess then
-			utils.sendEmbed(message.channel, name.." could not be unwarned because "..unwarnErr, "ff0000")
+			utils.sendEmbed(message.channel, f(lang.error.unwarn_fail, name, unwarnErr), "ff0000")
 			return
 		end
 
@@ -31,7 +31,7 @@ return {
 
 		local staffLogChannel = guildSettings.staff_log_channel and message.guild:getChannel(guildSettings.staff_log_channel)
 
-		local warnFooter = commandHandler.strings.warnFooter(guildSettings, entry)
+		local warnFooter = commandHandler.strings.warnFooter(guildSettings, lang, entry)
 
 		utils.sendEmbed(warnUser:getPrivateChannel(), f(lang.pl(lang.warn.you_unwarned, entry.level), message.guild.name, entry.level)..reason, "00ff00", warnFooter)
 		local text = f(lang.pl(lang.warn.user_unwarned, entry.level), name, entry.level)..reason
