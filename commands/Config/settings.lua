@@ -297,7 +297,7 @@ settings.subcommands.enable = {
 	usage = "settings enable <setting> [arguments]",
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 		local column = dbSettingsColumns[args[1]]
@@ -324,7 +324,7 @@ settings.subcommands.update = {
 	usage = "settings update <setting> [arguments]",
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 		local column = dbSettingsColumns[args[1]]
@@ -355,7 +355,7 @@ settings.subcommands.disable = {
 	usage = "settings disable <setting>",
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 		local column = dbSettingsColumns[args[1]]
@@ -415,7 +415,7 @@ settings.subcommands.commands.subcommands.enable = {
 	usage = "settings commands enable <command>",
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 		local commandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
@@ -439,7 +439,7 @@ settings.subcommands.commands.subcommands.disable = {
 	usage = "settings commands disable <command>",
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 		local commandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
@@ -463,7 +463,7 @@ settings.subcommands.commands.subcommands.permissions = {
 	usage = "settings commands permissions <command> [permission1 permission2 permission3 ...]",
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 		local commandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
@@ -516,7 +516,7 @@ settings.subcommands.commands.subcommands.reset = {
 	usage = "settings commands reset <command>",
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 		local commandString = commandHandler.stripPrefix(args[1], guildSettings, message.client)
@@ -570,7 +570,7 @@ settings.subcommands.modules.subcommands.enable = {
 	usage = "settings modules enable <module>",
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 		local mod = moduleHandler.modules[argString]
@@ -593,7 +593,7 @@ settings.subcommands.modules.subcommands.disable = {
 	usage = "settings modules disable <module>",
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 		local mod = moduleHandler.modules[argString]
@@ -640,7 +640,7 @@ settings.subcommands.persistentroles.subcommands.add = {
 	usage = "settings persistentroles add <role mention (e.g. @Role) or role id>",
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 		local role = utils.roleFromString(argString, message.guild)
@@ -669,7 +669,7 @@ settings.subcommands.persistentroles.subcommands.remove = {
 	usage = "settings persistentroles remove <role mention (e.g. @Role) or role id>",
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 		local role = utils.roleFromString(argString, message.guild)

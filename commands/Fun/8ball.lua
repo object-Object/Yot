@@ -15,7 +15,7 @@ return {
 	permissions = {},
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 		local responseNumber=math.random(#ballResponses)

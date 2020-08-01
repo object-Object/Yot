@@ -8,7 +8,7 @@ return {
 	permissions = {"manageRoles"},
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings, self)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 

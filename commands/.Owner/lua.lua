@@ -34,7 +34,7 @@ return {
 	permissions = {"yot.botOwner"},
 	run = function(self, message, argString, args, guildSettings, lang)
 		if argString=="" then
-			commandHandler.sendUsage(message.channel, guildSettings.prefix, self.name)
+			commandHandler.sendUsage(message.channel, guildSettings, lang, self)
 			return
 		end
 
