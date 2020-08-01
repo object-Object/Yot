@@ -85,6 +85,9 @@ User:
 		//   %1$s: the text the user gave as an arg
 		"invalid_channel": "%1$s is not a valid channel mention (eg. `#general`) or channel id.",
 		"cant_move_to_same_channel": "Messages cannot be moved to the channel in which they were sent.",
+		// Sent when someone tries to change the prefix to what it already is
+		//   %1$s: the prefix that they tried to set
+		"prefix_already_set": "The command prefix is already `%1$s`.",
 
 		// Sent when a user can't be warned for some reason
 		//   %1$s: username

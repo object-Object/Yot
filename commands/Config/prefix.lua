@@ -13,6 +13,10 @@ return {
 			return
 		end
 		local newPrefix = argString:gsub("%`(.+)%`","%1")
+		if guildSettings.prefix==newPrefix then
+			utils.sendEmbed(message.channel, f(lang.error.prefix_already_set, newPrefix),"ff0000")
+			return
+		end
 		local stmt = conn:prepare("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?;")
 		stmt:reset():bind(newPrefix, message.guild.id):step()
 		stmt:close()
@@ -29,6 +33,10 @@ return {
 		reset = {
 			name = "prefix reset",
 			run = function(self, message, argString, args, guildSettings, lang, conn)
+				if guildSettings.prefix==options.defaultPrefix then
+					utils.sendEmbed(message.channel, f(lang.error.prefix_already_set, options.defaultPrefix),"ff0000")
+					return
+				end
 				local stmt = conn:prepare("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?;")
 				stmt:reset():bind(options.defaultPrefix, message.guild.id):step()
 				stmt:close()
