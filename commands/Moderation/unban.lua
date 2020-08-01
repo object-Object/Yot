@@ -26,9 +26,10 @@ return {
 		elseif not message.guild:getBans():find(function(m) return m.user.id==banUser.id end) then
 			utils.sendEmbed(message.channel, f(lang.error.user_not_banned, name), "ff0000")
 		else
-			utils.sendEmbed(message.channel, f(lang.ban.user_unbanned, name)..reason, "00ff00")
+			local text = f(lang.ban.user_unbanned, name)..reason
+			utils.sendEmbed(message.channel, text, "00ff00")
 			utils.sendEmbed(banUser:getPrivateChannel(), f(lang.ban.you_unbanned, message.guild.name)..reason, "00ff00")
-			utils.sendEmbedSafe(staffLogChannel, f(lang.logs.user_unbanned, name)..reason, "00ff00", f(lang.g.responsible_user_str, staffMember.name.."#"..staffMember.discriminator))
+			utils.sendEmbedSafe(staffLogChannel, text, "00ff00", f(lang.g.responsible_user_str, staffMember.name.."#"..staffMember.discriminator))
 			message.guild:unbanUser(banUser.id, reason)
 		end
 	end,

@@ -20,7 +20,7 @@ return {
 		local muteMember = utils.memberFromString(args[1], message.guild)
 		local name = utils.name(muteUser, message.guild)
 
-		local valid, reasonInvalid, mutedRole = muteUtils.checkValidMute(muteMember, muteUser, message.guild, guildSettings)
+		local valid, reasonInvalid, mutedRole = muteUtils.checkValidMute(muteMember, muteUser, message.guild, guildSettings, lang)
 		if not valid then
 			utils.sendEmbed(message.channel, f(lang.error.unmute_fail, name, reasonInvalid), "ff0000")
 			return

@@ -85,7 +85,7 @@ return {
 
 		local numMessages = #messagesToMove
 		utils.sendEmbed(targetChannel, f(lang.pl(lang.move.moved_here, numMessages), numMessages, message.channel.mentionString), "00ff00")
-		local movingMessage = utils.sendEmbed(message.channel, f(lang.pl(lang.move.moving_away, numMessages), numMessages, targetChannel.mentionString), "00ff00", f(lang.move.eta, utils.secondsToTime(numMessages)))
+		local movingMessage = utils.sendEmbed(message.channel, f(lang.pl(lang.move.moving_away, numMessages), numMessages, targetChannel.mentionString), "00ff00", f(lang.move.eta, utils.secondsToTime(numMessages, lang)))
 		local API = message.client._api
 		local method = "POST"
 		local endpoint = "/webhooks/"..webhook.id.."/"..webhook.token

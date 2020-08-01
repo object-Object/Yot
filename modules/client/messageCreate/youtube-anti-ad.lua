@@ -52,7 +52,7 @@ return {
 		timeout=true
 		timer.setTimeout(1000, function() timeout=false end)
 
-		local warnSuccess, warnErr, entry, doKick, doBan = warnUtils.warn(member, message.author, message.guild, guildSettings, conn)
+		local warnSuccess, warnErr, entry, doKick, doBan = warnUtils.warn(member, message.author, message.guild, guildSettings, lang, conn)
 		if not warnSuccess then
 			utils.sendEmbed(message.channel, f(lang.error.auto_warn_fail, name, warnErr), "ff0000")
 			return
@@ -64,7 +64,7 @@ return {
 		local staffLogChannel = guildSettings.staff_log_channel and message.guild:getChannel(guildSettings.staff_log_channel)
 
 		if doKick then
-			local kickValid, kickErr = warnUtils.checkValidKick(member, message.guild)
+			local kickValid, kickErr = warnUtils.checkValidKick(member, message.guild, lang)
 			if kickValid then
 				local kickedDM = utils.sendEmbed(message.author:getPrivateChannel(), f(lang.pl(lang.warn.you_kicked_auto, entry.level), message.guild.name, entry.level)..reason, "ffff00")
 				local success, err = member:kick()
@@ -84,7 +84,7 @@ return {
 				utils.sendEmbed(message.channel, f(lang.pl(lang.error.kick_auto_warn_fail, entry.level), name, entry.level, kickErr), "ff0000")
 			end
 		elseif doBan then
-			local banValid, banErr = warnUtils.checkValidBan(member, message.guild)
+			local banValid, banErr = warnUtils.checkValidBan(member, message.guild, lang)
 			if banValid then
 				local bannedDM = utils.sendEmbed(message.author:getPrivateChannel(), f(lang.pl(lang.warn.you_banned_auto, entry.level), message.guild.name, entry.level)..reason, "ffff00")
 				local success, err = message.guild:banUser(message.author.id)

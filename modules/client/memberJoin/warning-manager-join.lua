@@ -12,7 +12,7 @@ return {
 			entry.is_active = true
 			entry.end_timestamp = os.time()+guildSettings.warning_length
 			conn:exec('UPDATE warnings SET is_active = 1, end_timestamp = '..entry.end_timestamp..' WHERE guild_id = "'..member.guild.id..'" AND user_id = "'..member.id..'";')
-			local warnFooter = commandHandler.strings.warnFooter(guildSettings, entry)
+			local warnFooter = commandHandler.strings.warnFooter(guildSettings, lang, entry)
 			utils.sendEmbed(member:getPrivateChannel(), f(lang.pl(lang.warn.you_rewarned, entry.level), member.guild.name, entry.level), "ffff00", warnFooter)
 			local publicLogChannel = guildSettings.public_log_channel and member.guild:getChannel(guildSettings.public_log_channel)
 			local staffLogChannel = guildSettings.staff_log_channel and member.guild:getChannel(guildSettings.staff_log_channel)

@@ -21,10 +21,10 @@ return {
 		local name = utils.name(muteUser, message.guild)
 
 		local stringTimes=argString:match(utils.escapePatterns(args[1]).."%s+([^%|]+)") or ""
-		local length = utils.secondsFromString(stringTimes)
+		local length = utils.secondsFromString(stringTimes, lang)
 		length = length>0 and length or guildSettings.default_mute_length
 
-		local valid, reasonInvalid, mutedRole = muteUtils.checkValidMute(muteMember, muteUser, message.guild, guildSettings)
+		local valid, reasonInvalid, mutedRole = muteUtils.checkValidMute(muteMember, muteUser, message.guild, guildSettings, lang)
 		if not valid then
 			utils.sendEmbed(message.channel, f(lang.error.mute_fail, name, reasonInvalid), "ff0000")
 			return
@@ -37,7 +37,7 @@ return {
 
 		local reason = argString:match("%|%s+(.+)")
 		reason = reason and f(lang.g.reason_str, reason) or ""
-		local muteFooter = commandHandler.strings.muteFooter(guildSettings, length, os.time()+length, (muteMember and true))
+		local muteFooter = commandHandler.strings.muteFooter(guildSettings, lang, length, os.time()+length, (muteMember and true))
 
 		local staffLogChannel = guildSettings.staff_log_channel and message.guild:getChannel(guildSettings.staff_log_channel)
 
