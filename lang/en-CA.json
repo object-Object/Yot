@@ -425,6 +425,8 @@ User:
 		"no": "no",
 		// Used in the about command if the bot's version couldn't be accessed for some reason
 		"version_error": "error",
+		// Used for concatenating lists
+		"concat": ", ",
 
 		"usage_str": "Usage: `%1$s`",
 		"guild_str": "Guild: %1$s (%2$s)",

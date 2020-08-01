@@ -123,8 +123,13 @@ commandHandler.sendCommandHelp = function(channel, guildSettings, lang, command)
 	else
 		local subcommandsKeys = table.keys(command.subcommands)
 		table.sort(subcommandsKeys)
-		local permissionsString = #baseCommand.permissions>0 and "`"..table.concat(baseCommand.permissions, ", ").."`" or lang.g.none
-		local subcommandsString = #subcommandsKeys>0 and "`"..table.concat(subcommandsKeys, "`, `").."`" or lang.g.none
+
+		local permissionsString = guildSettings.command_permissions[command.name] and (#guildSettings.command_permissions[command.name]>0 and "`"..table.concat(guildSettings.command_permissions[command.name], lang.g.concat).."`" or lang.g.none)
+			or command.permissions and (#command.permissions>0 and "`"..table.concat(command.permissions, lang.g.concat).."`" or lang.g.none)
+			or guildSettings.command_permissions[baseCommand.name] and (#guildSettings.command_permissions[baseCommand.name]>0 and "`"..table.concat(guildSettings.command_permissions[baseCommand.name], lang.g.concat).."`" or lang.g.none)
+			or (#baseCommand.permissions>0 and "`"..table.concat(baseCommand.permissions, lang.g.concat).."`" or lang.g.none)
+
+		local subcommandsString = #subcommandsKeys>0 and "`"..table.concat(subcommandsKeys, "`"..lang.g.concat.."`").."`" or lang.g.none
 		local usage = lang.commands[command.name].usage~="" and " "..lang.commands[command.name].usage or ""
 		channel:send{
 			embed = {
@@ -146,7 +151,7 @@ commandHandler.sendCommandHelp = function(channel, guildSettings, lang, command)
 end
 
 commandHandler.sendPermissionError = function(channel, commandString, missingPermissions, lang)
-	return utils.sendEmbed(channel, f(lang.error.missing_permissions, utils.s(#missingPermissions), table.concat(missingPermissions,", ")), "ff0000")
+	return utils.sendEmbed(channel, f(lang.pl(lang.error.missing_user_permission, #missingPermissions), table.concat(missingPermissions, lang.g.concat)), "ff0000")
 end
 
 commandHandler.enable = function(commandString, message, guildSettings, conn)
@@ -178,7 +183,14 @@ commandHandler.doCommands = function(message, guildSettings, lang, conn)
 	local commandString = content:match("^(%S+)")
 	local command = commandHandler.commands[commandString]
 	if message.content~=content and command and not guildSettings.disabled_commands[commandString] then
-		local permissions = guildSettings.command_permissions[commandString] or command.permissions
+		local argString, args
+		if command.subcommands~={} then
+			command, argString, args = commandHandler.subcommandFromString(command, content)
+		else
+			argString = content:gsub("^"..commandString.."%s*","")
+			args = argString:split("%s")
+		end
+		local permissions = guildSettings.command_permissions[command.name] or command.permissions or guildSettings.command_permissions[command.baseCommand.name] or command.baseCommand.permissions
 		local missingPermissions = {}
 		for _,permission in pairs(permissions) do
 			if permission:match("^yot%.") then
@@ -192,13 +204,6 @@ commandHandler.doCommands = function(message, guildSettings, lang, conn)
 			end
 		end
 		if #missingPermissions==0 then
-			local argString, args
-			if command.subcommands~={} then
-				command, argString, args = commandHandler.subcommandFromString(command, content)
-			else
-				argString = content:gsub("^"..commandString.."%s*","")
-				args = argString:split("%s")
-			end
 			command:run(message, argString, args, guildSettings, lang, conn)
 		else
 			commandHandler.sendPermissionError(message.channel, commandString, missingPermissions, lang)
