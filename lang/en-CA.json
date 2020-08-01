@@ -478,12 +478,12 @@ User:
 		//   %2$s: a number of warnings, or g.not_applicable - how many more warnings it will take for the user to be kicked from the server
 		//   %3$s: a number of warnings, or g.not_applicable - how many more warnings it will take for the user to be banned from the server
 		//   %4$s: g.yes or g.no - whether or not the user is currently in the server, and therefore if the warning time is decreasing
-		"warn_info": "Time until a warning is removed: %1$s\nWarnings until kick: %2$s\nWarnings until ban: %3$s\nActive: %4$s",
+		"warn_info": "Time until a warning is removed: %1$s\nWarnings until kick: %2$s\nWarnings until ban: %3$s\nIn server: %4$s",
 		// Gives information about a user's mute
 		//   %1$s: a time string made using the time lang object - the amount of time until the user is unmuted
 		//   %2$s: a time string made using the time lang object - the initial length of the mute
 		//   %3$s: g.yes or g.no - whether or not the user is currently in the server, and therefore if the mute time is decreasing
-		"mute_info": "Time until unmute: %1$s\nDuration: %2$s\nActive: %3$s",
+		"mute_info": "Time until unmute: %1$s\nDuration: %2$s\nIn server: %3$s",
 		// Tells people how to get more information on a command, used in the help menu
 		//   %1$s: the command prefix in the server
 		"command_info": "Do %1$shelp [command] for more info on a command.",

@@ -23,7 +23,7 @@ return {
 		if entry then
 			entry = utils.formatRow(entry)
 		else
-			entry = {level = 0, end_timestamp = 0, is_active = true}
+			entry = {level = 0, end_timestamp = 0, is_active = warnMember~=nil}
 		end
 		local name = warnMember and warnMember.name.."#"..warnUser.discriminator or warnUser.tag
 		utils.sendEmbed(message.channel, f(lang.pl(lang.warn.user_has_n_warnings, entry.level), name, entry.level), "00ff00",
