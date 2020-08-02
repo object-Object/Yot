@@ -91,6 +91,10 @@ User:
 		// Sent when someone tries to change the prefix to what it already is
 		//   %1$s: the prefix that they tried to set
 		"prefix_already_set": "The command prefix is already `%1$s`.",
+		// Sent when someone submits an invalid color code in the color command
+		"invalid_color": "Invalid color code! Codes must be 6 digits long and in hexadecimal (using only the numbers 0-9 and/or letters a-f). They may optionally have a # symbol at the start.",
+		// Sent when the color url couldn't be fetched
+		"could_not_get_color": "Couldn't get the color image. Try again later.",
 
 		// Sent when a user can't be warned for some reason
 		//   %1$s: username
@@ -687,6 +691,10 @@ User:
 			"description": "Lets you change Yot's settings in this server.",
 			"usage": ""
 		},
+		"color": {
+			"description": "Shows a 100x100 image of the given hex color code.",
+			"usage": "<hex color code>"
+		}
 	},
 
 	/* Descriptions for all modules */
