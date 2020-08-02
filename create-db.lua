@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS guild_settings (
 	disabled_modules TEXT DEFAULT "{}",
 	command_permissions TEXT DEFAULT "{}",
 	prefix TEXT DEFAULT "]]..options.defaultPrefix..[[",
-	language TEXT DEFAULT "]]..options.defaultLanguage..[["
+	language TEXT DEFAULT "]]..options.defaultLanguage..[[",
 	warning_length REAL DEFAULT ]]..options.warningLength..[[,
 	default_mute_length REAL DEFAULT ]]..options.muteLength..[[,
 	warning_kick_level REAL DEFAULT ]]..options.warningKickLevel..[[,
@@ -52,6 +52,10 @@ CREATE TABLE IF NOT EXISTS persistent_roles (
 CREATE TABLE IF NOT EXISTS webhooks (
 	channel_id TEXT PRIMARY KEY,
 	webhook_id TEXT
+);
+CREATE TABLE IF NOT EXISTS colors (
+	code TEXT PRIMARY KEY,
+	url TEXT
 );
 ]])
 print("Done.")
