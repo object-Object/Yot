@@ -1,6 +1,5 @@
 return {
 	name = "",
-	description = "",
 	visible = true,
 	disabledByDefault = false,
 	run = function(self, guildSettings, lang, )

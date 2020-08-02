@@ -1,9 +1,5 @@
-local commandHandler = require("commandHandler")
-
 return {
 	name = "command",
-	description = "",
-	usage = "",
 	visible = true,
 	permissions = {},
 	run = function(self, message, argString, args, guildSettings, lang, conn)
@@ -19,8 +15,6 @@ return {
 
 		subcommand = {
 			name = "command subcommand",
-			description = "",
-			usage = "",
 			run = function(self, message, argString, args, guildSettings, lang, conn)
 				
 			end,
