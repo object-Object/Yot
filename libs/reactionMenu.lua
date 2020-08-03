@@ -110,7 +110,7 @@ local showPage = function(message, authorId, menu, page, lang, isFirstPage)
 end
 
 rm.send = function(channel, authorId, menu, lang)
-	menu.timeout = menu.timeout or 120000 -- 2 minutes
+	assert(menu.type=="Menu")
 	local message = utils.sendEmbed(channel, lang.reaction_menu.setting_up, "00ff00")
 	local history = {}
 	local currentPage = menu.startPage
@@ -124,6 +124,44 @@ rm.send = function(channel, authorId, menu, lang)
 		currentPage = nextPage
 		nextPage = showPage(message, authorId, menu, nextPage, lang, #history==0)
 	end
+end
+
+-- validation functions
+rm.Menu = function(menu)
+	assert(menu.startPage, "menu.startPage must be provided")
+	if menu.timeout then
+		assert(type(menu.timeout)=="number" and menu.timeout>=1000, "menu.timeout must be a number at least 1000 (milliseconds)")
+	else
+		menu.timeout = 120000
+	end
+	menu.storage = menu.storage or {}
+	menu.type = "Menu"
+	return menu
+end
+
+rm.Page = function(page)
+	assert(page.title, "page.title must be provided")
+	if page.description then
+		assert(type(page.description)=="string", "page.description must be a string")
+	end
+	if page.choices then
+		assert(type(page.choices)=="table" and #page.choices<=9, "page.choices must be a table containing at most 9 Choice objects")
+	end
+	if page.isPrompt then
+		assert(page.onPrompt, "page.onPrompt must be provided if page.isPrompt is true")
+	end
+	page.type = "Page"
+	return page
+end
+
+rm.Choice = function(choice)
+	assert(choice.name, "choice.name must be provided")
+	assert((choice.destination or choice.onChoose) and not (choice.destination and choice.onChoose), "exactly one of choice.destination or choice.onChoose must be provided")
+	if choice.value then
+		assert(type(choice.value)=="function", "choice.value must be a function")
+	end
+	choice.type = "Choice"
+	return choice
 end
 
 return rm
