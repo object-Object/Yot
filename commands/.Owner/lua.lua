@@ -5,7 +5,7 @@ local json = require("json")
 local utils = require("miscUtils")
 local discordia = require("discordia")
 local timer = require("timer")
-local reactionMenu = require("reactionMenu")
+local rm = require("reactionMenu")
 
 local function printLine(...)
 	local ret = {}
@@ -56,7 +56,7 @@ return {
 		sandbox.json = json
 		sandbox.http = http
 		sandbox.lang = lang
-		sandbox.reactionMenu = reactionMenu
+		sandbox.rm = rm
 		
 		sandbox.io.write = function(...)
 			table.insert(iolines, printLine(...))
