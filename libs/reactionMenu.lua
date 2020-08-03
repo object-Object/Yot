@@ -41,10 +41,11 @@ local timeout = function(message, lang)
 end
 
 -- returns the next page to go to
-local showPage = function(message, authorId, menu, page, lang, isFirstPage)
+local showPage = function(message, author, menu, page, lang, isFirstPage)
 	message:clearReactions()
 	local embed = {
-		color = discordia.Color.fromHex("00ff00").value
+		color = discordia.Color.fromHex("00ff00").value,
+		footer = {text=f(lang.reaction_menu.footer, utils.name(author, message.guild))}
 	}
 	embed.title = page.title
 
@@ -75,7 +76,7 @@ local showPage = function(message, authorId, menu, page, lang, isFirstPage)
 	while true do
 		if page.isPrompt then
 			eventName, object1, object2 = utils.waitForAny(message.client, "messageCreate", "reactionAdd", menu.timeout, 
-				function(m) return m.author.id==authorId and m.channel.id==message.channel.id end,
+				function(m) return m.author.id==author.id and m.channel.id==message.channel.id end,
 				function(r, a) return r.message.id==message.id and a~=r.client.user.id end)
 		else
 			local success
@@ -91,7 +92,7 @@ local showPage = function(message, authorId, menu, page, lang, isFirstPage)
 			object1:delete() -- delete the user's message to keep things pretty
 			return page:onPrompt(menu, lang, object1)
 		elseif eventName=="reactionAdd" then
-			if not rm.validReactions[object1.emojiName] or object2~=authorId or (isFirstPage and object1.emojiName==rm.reactions.back) then
+			if not rm.validReactions[object1.emojiName] or object2~=author.id or (isFirstPage and object1.emojiName==rm.reactions.back) then
 				object1:delete(object2) -- delete the extraneous reaction and keep waiting for a good one
 			elseif object1.emojiName==rm.reactions.exit then
 				exit(message, lang)
@@ -109,12 +110,12 @@ local showPage = function(message, authorId, menu, page, lang, isFirstPage)
 	end
 end
 
-rm.send = function(channel, authorId, menu, lang)
+rm.send = function(channel, author, menu, lang)
 	assert(menu.type=="Menu")
 	local message = utils.sendEmbed(channel, lang.reaction_menu.setting_up, "00ff00")
 	local history = {}
 	local currentPage = menu.startPage
-	local nextPage = showPage(message, authorId, menu, currentPage, lang, true)
+	local nextPage = showPage(message, author, menu, currentPage, lang, true)
 	while nextPage do
 		if nextPage==true then
 			nextPage = table.remove(history) or menu.startPage
@@ -122,7 +123,7 @@ rm.send = function(channel, authorId, menu, lang)
 			table.insert(history, currentPage)
 		end
 		currentPage = nextPage
-		nextPage = showPage(message, authorId, menu, nextPage, lang, #history==0)
+		nextPage = showPage(message, author, menu, nextPage, lang, #history==0)
 	end
 end
 
