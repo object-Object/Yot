@@ -22,8 +22,26 @@ rm.reactions = {
 
 rm.validReactions = {["🛑"]=true, ["⬅"]=true, ["1️⃣"]=true, ["2️⃣"]=true, ["3️⃣"]=true, ["4️⃣"]=true, ["5️⃣"]=true, ["6️⃣"]=true, ["7️⃣"]=true, ["8️⃣"]=true, ["9️⃣"]=true}
 
+local exit = function(message, lang)
+	message:clearReactions()
+	message:setEmbed{
+		title = lang.reaction_menu.exit_title,
+		description = lang.reaction_menu.exit_desc,
+		color = discordia.Color.fromHex("00ff00").value
+	}
+end
+
+local timeout = function(message, lang)
+	message:clearReactions()
+	message:setEmbed{
+		title = lang.reaction_menu.timed_out_title,
+		description = lang.reaction_menu.timed_out_desc,
+		color = discordia.Color.fromHex("ff0000").value
+	}
+end
+
 -- returns the next page to go to
-rm.showPage = function(message, authorId, menu, page, lang, isFirstPage)
+local showPage = function(message, authorId, menu, page, lang, isFirstPage)
 	message:clearReactions()
 	local embed = {
 		color = discordia.Color.fromHex("00ff00").value
@@ -67,23 +85,23 @@ rm.showPage = function(message, authorId, menu, page, lang, isFirstPage)
 		end
 
 		if not eventName then
-			rm.timeout(message, lang)
+			timeout(message, lang)
 			return false
 		elseif eventName=="messageCreate" then
 			object1:delete() -- delete the user's message to keep things pretty
-			return page:onPrompt(menu, lang, conn, object1)
+			return page:onPrompt(menu, lang, object1)
 		elseif eventName=="reactionAdd" then
 			if not rm.validReactions[object1.emojiName] or object2~=authorId or (isFirstPage and object1.emojiName==rm.reactions.back) then
 				object1:delete(object2) -- delete the extraneous reaction and keep waiting for a good one
 			elseif object1.emojiName==rm.reactions.exit then
-				rm.exit(message, lang)
+				exit(message, lang)
 				return false
 			elseif object1.emojiName==rm.reactions.back then
 				return true
 			else
 				for num, reaction in ipairs(rm.reactions.choices) do
 					if object1.emojiName==reaction then
-						return page.choices[num].onChoose and page.choices[num]:onChoose(menu, lang, conn) or page.choices[num].destination
+						return page.choices[num].onChoose and page.choices[num]:onChoose(menu, lang) or page.choices[num].destination
 					end
 				end
 			end
@@ -91,30 +109,12 @@ rm.showPage = function(message, authorId, menu, page, lang, isFirstPage)
 	end
 end
 
-rm.exit = function(message, lang)
-	message:clearReactions()
-	message:setEmbed{
-		title = lang.reaction_menu.exit_title,
-		description = lang.reaction_menu.exit_desc,
-		color = discordia.Color.fromHex("00ff00").value
-	}
-end
-
-rm.timeout = function(message, lang)
-	message:clearReactions()
-	message:setEmbed{
-		title = lang.reaction_menu.timed_out_title,
-		description = lang.reaction_menu.timed_out_desc,
-		color = discordia.Color.fromHex("ff0000").value
-	}
-end
-
 rm.send = function(channel, authorId, menu, lang)
 	menu.timeout = menu.timeout or 120000 -- 2 minutes
 	local message = utils.sendEmbed(channel, lang.reaction_menu.setting_up, "00ff00")
 	local history = {}
 	local currentPage = menu.startPage
-	local nextPage = rm.showPage(message, authorId, menu, currentPage, lang, true)
+	local nextPage = showPage(message, authorId, menu, currentPage, lang, true)
 	while nextPage do
 		if nextPage==true then
 			nextPage = table.remove(history) or menu.startPage
@@ -122,7 +122,7 @@ rm.send = function(channel, authorId, menu, lang)
 			table.insert(history, currentPage)
 		end
 		currentPage = nextPage
-		nextPage = rm.showPage(message, authorId, menu, nextPage, lang, #history==0)
+		nextPage = showPage(message, authorId, menu, nextPage, lang, #history==0)
 	end
 end
 
