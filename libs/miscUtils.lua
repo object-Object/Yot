@@ -1,5 +1,6 @@
 local discordia = require("discordia")
 local json = require("json")
+local timer = require("timer")
 local options = discordia.storage.options
 
 local utils = {}
@@ -165,6 +166,41 @@ end
 utils.messageFromString = function(str, channel)
 	local id = str:gsub("https://discord%.com/channels/%d+/%d+/",""):match("^(%d+)$")
 	return id and channel:getMessage(id)
+end
+
+-- Like Emitter:waitFor, but waits for either of two events
+-- If there is a timeout and it's reached, returns false; otherwise returns the name of the event that was emitted
+utils.waitForAny = function(client, nameA, nameB, timeout, predicateA, predicateB)
+	local thread = coroutine.running()
+	local fnA, fnB
+
+	fnA = client:onSync(nameA, function(...)
+		if predicateA and not predicateA(...) then return end
+		if timeout then
+			timer.clearTimeout(timeout)
+		end
+		client:removeListener(nameA, fnA)
+		client:removeListener(nameB, fnB)
+		return assert(coroutine.resume(thread, nameA, ...))
+	end)
+
+	fnB = client:onSync(nameB, function(...)
+		if predicateB and not predicateB(...) then return end
+		if timeout then
+			timer.clearTimeout(timeout)
+		end
+		client:removeListener(nameA, fnA)
+		client:removeListener(nameB, fnB)
+		return assert(coroutine.resume(thread, nameB, ...))
+	end)
+
+	timeout = timeout and timer.setTimeout(timeout, function()
+		client:removeListener(nameA, fnA)
+		client:removeListener(nameB, fnB)
+		return assert(coroutine.resume(thread, false))
+	end)
+
+	return coroutine.yield()
 end
 
 return utils

@@ -343,6 +343,22 @@ User:
 		"days_removed": "Days of messages removed: %1$d"
 	},
 
+	/* Strings used in reaction menus */
+	"reaction_menu": {
+		// sent when the menu is being set up initially
+		"setting_up": "Setting up...",
+		// name of the choice to close the menu
+		"exit": "Exit",
+		// name of the choice to go back to the previous page
+		"back": "Back",
+		// the message that shows up when no one has used the page for some length of time (the page has timed out)
+		"timed_out_title": "Timed out!",
+		"timed_out_desc": "You haven't used this menu for a while, so it has now closed. Run the command again to open a new one.",
+		// the message that shows up when the menu is closed
+		"exit_title": "Done!",
+		"exit_desc": "You've chosen to exit this menu. Run the command again to open a new one."
+	},
+
 	/* Strings related to persistent roles, i.e. roles given back to a user if they leave & rejoin */
 	"persistent_roles": {
 		// Sent to a user when they rejoin and are given back roles
