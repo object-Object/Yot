@@ -343,6 +343,15 @@ User:
 		"days_removed": "Days of messages removed: %1$d"
 	},
 
+	/* Strings used in the settings menu */
+	"settings": {
+		"main_title": "Settings",
+		"main_desc": "This is the main page of the settings menu. Please choose what you would like to configure.",
+		"settings_choice": "Settings",
+		"commands_choice": "Commands",
+		"modules_choice": "Modules"
+	},
+
 	/* Strings used in reaction menus */
 	"reaction_menu": {
 		// sent when the menu is being set up initially
@@ -356,7 +365,10 @@ User:
 		"timed_out_desc": "You haven't used this menu for a while, so it has now closed. Run the command again to open a new one.",
 		// the message that shows up when the menu is closed
 		"exit_title": "Done!",
-		"exit_desc": "You've chosen to exit this menu. Run the command again to open a new one."
+		"exit_desc": "You've chosen to exit this menu. Run the command again to open a new one.",
+		// footer of every menu embed; says who used the command to open it
+		//   %1$s: username
+		"footer": "User: %1$s"
 	},
 
 	/* Strings related to persistent roles, i.e. roles given back to a user if they leave & rejoin */
@@ -706,6 +718,10 @@ User:
 		"settings": {
 			"description": "Lets you change Yot's settings in this server.",
 			"usage": ""
+		},
+		"settings-manual": {
+			"description": "**You should probably be using `&prefix;settings` instead! This command will receive no updates or internationalization, and may be removed without notice!** The old command for changing Yot's settings in this server.",
+			"usage": "[setting]"
 		},
 		"color": {
 			"description": "Shows a 100x100 image of the given hex color code.",
