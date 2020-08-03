@@ -25,7 +25,7 @@ return {
 		else
 			entry = {level = 0, end_timestamp = 0, is_active = warnMember~=nil}
 		end
-		local name = warnMember and warnMember.name.."#"..warnUser.discriminator or warnUser.tag
+		local name = utils.name(warnUser, message.guild)
 		utils.sendEmbed(message.channel, f(lang.pl(lang.warn.user_has_n_warnings, entry.level), name, entry.level), "00ff00",
 			(warnUser==message.author and f(lang.warn.try_refresh, guildSettings.prefix).."\n" or "")..commandHandler.strings.warnFooter(guildSettings, lang, entry))
 	end,
