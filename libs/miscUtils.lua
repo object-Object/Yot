@@ -115,11 +115,9 @@ utils.logError = function(guild, lang, err)
 end
 
 utils.name = function(user, guild)
-	if guild then
-		local member = guild:getMember(user.id)
-		if member then
-			return member.name.."#"..user.discriminator
-		end
+	local member = guild and guild:getMember(user.id)
+	if member then
+		return member.name~=user.name and member.name.." ("..user.tag..")" or user.tag
 	end
 	return user.tag
 end
