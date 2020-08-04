@@ -349,7 +349,14 @@ User:
 		"main_desc": "This is the main page of the settings menu. Please choose what you would like to configure.",
 		"settings_choice": "Settings",
 		"commands_choice": "Commands",
-		"modules_choice": "Modules"
+		"modules_choice": "Modules",
+		"enable_disable_choice": "Enable/disable",
+		"disabled": "disabled",
+		"enabled": "enabled",
+		"command_now_disabled": "The command was successfully disabled.",
+		"command_now_enabled": "The command was successfully enabled.",
+		"command_list_title": "Command list",
+		"command_list_desc": "Select a command to change its settings or the settings of its subcommands.",
 	},
 
 	/* Strings used in reaction menus */
@@ -368,7 +375,11 @@ User:
 		"exit_desc": "You've chosen to exit this menu. Run the command again to open a new one.",
 		// footer of every menu embed; says who used the command to open it
 		//   %1$s: username
-		"footer": "User: %1$s"
+		"footer": "User: %1$s",
+		// used in pagination to go to the next page
+		"next_page": "Next Page",
+		// used in pagination to go to the previous page
+		"last_page": "Previous Page",
 	},
 
 	/* Strings related to persistent roles, i.e. roles given back to a user if they leave & rejoin */
