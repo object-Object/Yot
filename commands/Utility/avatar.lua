@@ -17,10 +17,10 @@ return {
 			message:reply(f(lang.commands.avatar.avatar_of, utils.name(user, message.guild), user:getAvatarURL(1024)))
 		end
 	end,
-	onEnable = function(self, message, guildSettings)
+	onEnable = function(self, guildSettings, lang, conn)
 		return true
 	end,
-	onDisable = function(self, message, guildSettings)
+	onDisable = function(self, guildSettings, lang, conn)
 		return true
 	end,
 	subcommands = {}

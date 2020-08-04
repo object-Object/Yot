@@ -119,10 +119,10 @@ return {
 		movingMessage:delete()
 		utils.sendEmbed(message.channel, f(lang.pl(lang.move.moved_away, numMessages), numMessages, targetChannel.mentionString), "00ff00")
 	end,
-	onEnable = function(self, message, guildSettings)
+	onEnable = function(self, guildSettings, lang, conn)
 		return true
 	end,
-	onDisable = function(self, message, guildSettings)
+	onDisable = function(self, guildSettings, lang, conn)
 		return true
 	end,
 	subcommands = {}

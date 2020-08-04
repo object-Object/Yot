@@ -29,10 +29,10 @@ return {
 		utils.sendEmbed(message.channel, f(lang.pl(lang.warn.user_has_n_warnings, entry.level), name, entry.level), "00ff00",
 			(warnUser==message.author and f(lang.warn.try_refresh, guildSettings.prefix).."\n" or "")..commandHandler.strings.warnFooter(guildSettings, lang, entry))
 	end,
-	onEnable = function(self, message, guildSettings)
+	onEnable = function(self, guildSettings, lang, conn)
 		return true
 	end,
-	onDisable = function(self, message, guildSettings)
+	onDisable = function(self, guildSettings, lang, conn)
 		return true
 	end,
 	subcommands = {

@@ -47,10 +47,10 @@ return {
 			utils.sendEmbed(message.channel, f(lang.error.user_not_found, argString), "ff0000")
 		end
 	end,
-	onEnable = function(self, message, guildSettings)
+	onEnable = function(self, guildSettings, lang, conn)
 		return true
 	end,
-	onDisable = function(self, message, guildSettings)
+	onDisable = function(self, guildSettings, lang, conn)
 		return true
 	end,
 	subcommands = {}

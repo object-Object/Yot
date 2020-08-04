@@ -64,10 +64,10 @@ return {
 			end
 		end
 	end,
-	onEnable = function(self, message, guildSettings) -- function called when this command is enabled, return true if enabling can proceed
+	onEnable = function(self, guildSettings, lang, conn) -- function called when this command is enabled, return true if enabling can proceed
 		return true
 	end,
-	onDisable = function(self, message, guildSettings) -- function called when this command is disabled, return true if disabling can proceed
+	onDisable = function(self, guildSettings, lang, conn) -- function called when this command is disabled, return true if disabling can proceed
 		return true
 	end,
 	subcommands = {

@@ -55,10 +55,10 @@ return {
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		sendChangelog(message.channel, guildSettings.prefix, lang, false)
 	end,
-	onEnable = function(self, message, guildSettings)
+	onEnable = function(self, guildSettings, lang, conn)
 		return true
 	end,
-	onDisable = function(self, message, guildSettings)
+	onDisable = function(self, guildSettings, lang, conn)
 		return true
 	end,
 	subcommands = {

@@ -38,10 +38,10 @@ return {
 		utils.sendEmbed(message.channel, text, "00ff00", warnFooter)
 		utils.sendEmbedSafe(staffLogChannel, text, "00ff00", f(lang.g.responsible_user_str, utils.name(message.author, message.guild)).."\n"..warnFooter)
 	end,
-	onEnable = function(self, message, guildSettings)
+	onEnable = function(self, guildSettings, lang, conn)
 		return true
 	end,
-	onDisable = function(self, message, guildSettings)
+	onDisable = function(self, guildSettings, lang, conn)
 		return true
 	end,
 	subcommands = {}

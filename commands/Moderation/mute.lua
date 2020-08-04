@@ -51,10 +51,10 @@ return {
 		utils.sendEmbed(message.channel, f(lang.mute.user_muted, name)..reason, "00ff00", muteFooter)
 		utils.sendEmbedSafe(staffLogChannel, f(lang.mute.user_muted, name)..reason, "00ff00", f(lang.g.responsible_user_str, utils.name(message.author, guild)).."\n"..muteFooter)
 	end,
-	onEnable = function(self, message, guildSettings)
+	onEnable = function(self, guildSettings, lang, conn)
 		return true
 	end,
-	onDisable = function(self, message, guildSettings)
+	onDisable = function(self, guildSettings, lang, conn)
 		return true
 	end,
 	subcommands = {}

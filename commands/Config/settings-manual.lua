@@ -281,10 +281,10 @@ local settings = {
 			end
 		end
 	end,
-	onEnable = function(self, message, guildSettings)
+	onEnable = function(self, guildSettings, lang, conn)
 		return true
 	end,
-	onDisable = function(self, message, guildSettings)
+	onDisable = function(self, guildSettings, lang, conn)
 		utils.sendEmbed(message.channel, "Disabling `"..guildSettings.prefix..self.name.."` is not permitted.", "ff0000")
 		return false
 	end,
@@ -427,7 +427,7 @@ settings.subcommands.commands.subcommands.enable = {
 			utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already enabled.", "ff0000")
 			return
 		end
-		if not commandHandler.enable(commandString, message, guildSettings, conn) then return end
+		if not commandHandler.enable(commandString, message, guildSettings, lang, conn) then return end
 		utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is now enabled.", "00ff00")
 	end,
 	subcommands = {}
@@ -451,7 +451,7 @@ settings.subcommands.commands.subcommands.disable = {
 			utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is already disabled.", "ff0000")
 			return
 		end
-		if not commandHandler.disable(commandString, message, guildSettings, conn) then return end
+		if not commandHandler.disable(commandString, message, guildSettings, lang, conn) then return end
 		utils.sendEmbed(message.channel, "`"..guildSettings.prefix..commandString.."` is now disabled.", "00ff00")
 	end,
 	subcommands = {}

@@ -10,10 +10,10 @@ return {
 	run = function(self, message, argString, args, guildSettings, lang, conn)
 		utils.sendEmbed(message.channel, f(lang.commands.prefix.prefix_is, guildSettings.prefix), "00ff00")
 	end,
-	onEnable = function(self, message, guildSettings)
+	onEnable = function(self, guildSettings, lang, conn)
 		return true
 	end,
-	onDisable = function(self, message, guildSettings)
+	onDisable = function(self, guildSettings, lang, conn)
 		return true
 	end,
 	subcommands = {
