@@ -22,6 +22,8 @@ rm.reactions = {
 
 rm.validReactions = {["🛑"]=true, ["⬅"]=true, ["1️⃣"]=true, ["2️⃣"]=true, ["3️⃣"]=true, ["4️⃣"]=true, ["5️⃣"]=true, ["6️⃣"]=true, ["7️⃣"]=true, ["8️⃣"]=true, ["9️⃣"]=true}
 
+rm.choiceReactions = {["1️⃣"]=1, ["2️⃣"]=2, ["3️⃣"]=3, ["4️⃣"]=4, ["5️⃣"]=5, ["6️⃣"]=6, ["7️⃣"]=7, ["8️⃣"]=8, ["9️⃣"]=9}
+
 local exit = function(message, lang)
 	message:clearReactions()
 	message:setEmbed{
@@ -42,15 +44,18 @@ end
 
 -- returns the next page to go to
 local showPage = function(message, author, menu, page, lang, isFirstPage)
-	message:clearReactions()
 	local embed = {
-		color = discordia.Color.fromHex("00ff00").value,
+		title = page.title,
+		color = discordia.Color.fromHex(page.color).value,
 		footer = {text=f(lang.reaction_menu.footer, utils.name(author, message.guild))}
 	}
-	embed.title = page.title
 
 	local description = {}
-	if page.description then table.insert(description, page.description.."\n") end
+	if page.getDescription then
+		table.insert(description, page:getDescription(menu, lang).."\n")
+	elseif page.description then
+		table.insert(description, page.description.."\n")
+	end
 	if not isFirstPage then table.insert(description, rm.reactions.back.." "..lang.reaction_menu.back) end
 	table.insert(description, rm.reactions.exit.." "..lang.reaction_menu.exit)
 	if page.choices then
@@ -62,14 +67,6 @@ local showPage = function(message, author, menu, page, lang, isFirstPage)
 	embed.description = table.concat(description, "\n")
 
 	message:setEmbed(embed)
-
-	if not isFirstPage then message:addReaction(rm.reactions.back) end
-	message:addReaction(rm.reactions.exit)
-	if page.choices then
-		for num=1, #page.choices do
-			message:addReaction(rm.reactions.choices[num])
-		end
-	end
 
 	local eventName, object1, object2
 
@@ -92,38 +89,21 @@ local showPage = function(message, author, menu, page, lang, isFirstPage)
 			object1:delete() -- delete the user's message to keep things pretty
 			return page:onPrompt(menu, lang, object1)
 		elseif eventName=="reactionAdd" then
-			if not rm.validReactions[object1.emojiName] or object2~=author.id or (isFirstPage and object1.emojiName==rm.reactions.back) then
-				object1:delete(object2) -- delete the extraneous reaction and keep waiting for a good one
-			elseif object1.emojiName==rm.reactions.exit then
-				exit(message, lang)
-				return false
-			elseif object1.emojiName==rm.reactions.back then
-				return true
-			else
-				for num, reaction in ipairs(rm.reactions.choices) do
-					if object1.emojiName==reaction then
+			object1:delete(object2) -- delete their reaction
+			if object2==author.id then
+				if object1.emojiName==rm.reactions.exit then
+					exit(message, lang)
+					return false
+				elseif object1.emojiName==rm.reactions.back and not isFirstPage then
+					return true
+				elseif rm.choiceReactions[object1.emojiName] then
+					local num = rm.choiceReactions[object1.emojiName]
+					if page.choices[num] then
 						return page.choices[num].onChoose and page.choices[num]:onChoose(menu, lang) or page.choices[num].destination
 					end
 				end
 			end
 		end
-	end
-end
-
-rm.send = function(channel, author, menu, lang)
-	assert(menu.type=="Menu")
-	local message = utils.sendEmbed(channel, lang.reaction_menu.setting_up, "00ff00")
-	local history = {}
-	local currentPage = menu.startPage
-	local nextPage = showPage(message, author, menu, currentPage, lang, true)
-	while nextPage do
-		if nextPage==true then
-			nextPage = table.remove(history) or menu.startPage
-		elseif not currentPage.isPrompt and currentPage~=nextPage then
-			table.insert(history, currentPage)
-		end
-		currentPage = nextPage
-		nextPage = showPage(message, author, menu, nextPage, lang, #history==0)
 	end
 end
 
@@ -142,15 +122,15 @@ end
 
 rm.Page = function(page)
 	assert(page.title, "page.title must be provided")
-	if page.description then
-		assert(type(page.description)=="string", "page.description must be a string")
-	end
+	assert(not (page.description and page.getDescription), "page.description or page.getDescription may be provided, but not both")
 	if page.choices then
 		assert(type(page.choices)=="table" and #page.choices<=9, "page.choices must be a table containing at most 9 Choice objects")
 	end
 	if page.isPrompt then
 		assert(page.onPrompt, "page.onPrompt must be provided if page.isPrompt is true")
 	end
+	page.color = page.color or "00ff00"
+	assert(type(page.color)=="string" and #page.color==6, "page.color must be a 6 digit hex number")
 	page.type = "Page"
 	return page
 end
@@ -163,6 +143,61 @@ rm.Choice = function(choice)
 	end
 	choice.type = "Choice"
 	return choice
+end
+
+-- pagination functions
+rm.paginateChoices = function(choices, title, description, lang)
+	local pages = {
+		rm.Page{
+			title = title.." (1)",
+			description = description,
+			choices = {}
+		}
+	}
+	for num, choice in ipairs(choices) do
+		if #(pages[#pages].choices)==8 then
+			table.insert(pages, rm.Page{
+				title = title.." ("..#pages+1 ..")",
+				description = description,
+				type = "Page",
+				choices = {
+					rm.Choice{
+						name = lang.reaction_menu.last_page,
+						destination = pages[#pages]
+					}
+				}
+			})
+			table.insert(pages[#pages-1].choices, rm.Choice{
+				name = lang.reaction_menu.next_page,
+				destination = pages[#pages]
+			})
+		end
+		table.insert(pages[#pages].choices, choice)
+	end
+	return pages[1]
+end
+
+-- big bad send function
+rm.send = function(channel, author, menu, lang)
+	assert(menu.type=="Menu")
+	local message = utils.sendEmbed(channel, lang.reaction_menu.setting_up, "00ff00")
+	message:addReaction(rm.reactions.back)
+	message:addReaction(rm.reactions.exit)
+	for _, reaction in ipairs(rm.reactions.choices) do
+		message:addReaction(reaction)
+	end
+	local history = {}
+	local currentPage = menu.startPage
+	local nextPage = showPage(message, author, menu, currentPage, lang, true)
+	while nextPage do
+		if nextPage==true then
+			nextPage = table.remove(history) or menu.startPage
+		elseif not currentPage.isPrompt and currentPage~=nextPage then
+			table.insert(history, currentPage)
+		end
+		currentPage = nextPage
+		nextPage = showPage(message, author, menu, nextPage, lang, #history==0)
+	end
 end
 
 return rm
