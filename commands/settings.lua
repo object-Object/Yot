@@ -610,7 +610,7 @@ settings.subcommands.persistentroles = {
 		if commandHandler.doSubcommands(message, argString, args, guildSettings, conn, self.name) then return end
 		local output = "``` \n"
 		for roleId, _ in pairs(guildSettings.persistent_roles) do
-			local role = guild:getRole(roleId)
+			local role = message.guild:getRole(roleId)
 			if role then
 				output = output..role.name.." ("..roleId..")\n"
 			end
