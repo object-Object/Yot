@@ -1,7 +1,7 @@
 **v2.3.0** - DATE HERE
 * Commands are now sorted by category in the help menu
 * The settings list is now sorted alphabetically
-* Significant amounts of behind-the-scenes restructuring - be on the lookout for weird bugs!
+* Significant amounts of behind-the-scenes restructuring - be on the lookout for weird bugs! 
 
 **v2.2.7** - 2020-07-19
 + Added join and leave messages
